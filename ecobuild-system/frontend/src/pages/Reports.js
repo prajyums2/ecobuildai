@@ -804,49 +804,121 @@ function MaterialSummaryTab({ boq }) {
 
 // ============================================
 // SUPPLIERS TAB COMPONENT
-// Shows suppliers from database
+// Shows suppliers connected to materials in the project
 // ============================================
 
-function SuppliersTab() {
+function SuppliersTab({ boq }) {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [district, setDistrict] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('Thrissur');
+  const [costIndex, setCostIndex] = useState(135.59);
+  
+  const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
 
   useEffect(() => {
-    fetchSuppliers();
-  }, [district]);
+    fetchData();
+  }, [selectedDistrict]);
 
-  const fetchSuppliers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const url = district 
-        ? `/api/material-suppliers?district=${district}`
-        : '/api/material-suppliers';
-      const response = await fetch(`https://ecobuildai-production-1f9d.up.railway.app${url}`);
-      const data = await response.json();
-      setSuppliers(data.suppliers || []);
+      // Fetch suppliers
+      const suppliersRes = await fetch(`${API_URL}/api/material-suppliers?district=${selectedDistrict}`);
+      const suppliersData = await suppliersRes.json();
+      setSuppliers(suppliersData.suppliers || []);
+      
+      // Fetch cost index
+      const costIndexRes = await fetch(`${API_URL}/api/location-cost-indices/${selectedDistrict}`);
+      const costIndexData = await costIndexRes.json();
+      setCostIndex(costIndexData['cost index to be applied to DSR 2016 with base 102'] || 100);
+      
       setLoading(false);
     } catch (err) {
-      setError('Failed to fetch suppliers');
+      console.error('Failed to fetch data:', err);
       setLoading(false);
     }
   };
+
+  // Clean rate display
+  const cleanRate = (rate) => {
+    if (!rate) return 'N/A';
+    // Remove garbled characters and clean up
+    return rate
+      .replace(/â‚¹/g, '₹')
+      .replace(/â€"/g, '–')
+      .replace(/Ã—/g, '×')
+      .replace(/â€™/g, "'")
+      .replace(/Â/g, '');
+  };
+
+  // Get materials from BoQ
+  const getMaterials = () => {
+    if (!boq?.categories) return [];
+    const materials = [];
+    boq.categories.forEach(cat => {
+      cat.items?.forEach(item => {
+        if (item.quantity > 0) {
+          materials.push({
+            category: cat.name,
+            name: item.description?.substring(0, 50) || 'Material',
+            quantity: item.quantity,
+            unit: item.unit,
+            baseRate: item.rate,
+            amount: item.amount
+          });
+        }
+      });
+    });
+    return materials;
+  };
+
+  // Find best supplier for a material
+  const findBestSupplier = (materialName) => {
+    if (!suppliers.length) return null;
+    
+    const searchTerms = materialName.toLowerCase();
+    
+    // Find matching suppliers
+    const matchingSuppliers = suppliers.filter(s => {
+      const supplied = (s['Materials Supplied'] || '').toLowerCase();
+      return searchTerms.includes(supplied) || supplied.includes(searchTerms.split(' ')[0]);
+    });
+    
+    if (matchingSuppliers.length === 0) return null;
+    
+    // Sort by distance (closest first)
+    return matchingSuppliers.sort((a, b) => {
+      const distA = a['Distance from Thrissur (km)'] || 999;
+      const distB = b['Distance from Thrissur (km)'] || 999;
+      return distA - distB;
+    })[0];
+  };
+
+  // Calculate transportation cost (₹ per km per ton)
+  const calculateTransportCost = (supplier, quantity, unit) => {
+    const distance = supplier['Distance from Thrissur (km)'] || 0;
+    // Transport rate: ₹5-10 per km per ton
+    const transportRatePerKmPerTon = 7;
+    
+    // Estimate weight in tons
+    let weightInTons = 0;
+    if (unit === 'kg') weightInTons = quantity / 1000;
+    else if (unit === 'cft') weightInTons = quantity * 0.02; // ~20kg per cft
+    else if (unit === 'cum') weightInTons = quantity * 2.5; // ~2.5 tons per cum
+    else if (unit === 'nos') weightInTons = quantity * 0.005; // ~5kg per piece
+    else weightInTons = quantity / 1000; // default
+    
+    return Math.round(distance * transportRatePerKmPerTon * weightInTons);
+  };
+
+  const materials = getMaterials();
+  const districts = ['Thrissur', 'Ernakulam', 'Palakkad', 'Kozhikode', 'Thiruvananthapuram'];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <FaSpinner className="animate-spin text-2xl text-primary mr-3" />
         <span>Loading suppliers...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700">
-        <FaExclamationTriangle className="inline mr-2" />
-        {error}
       </div>
     );
   }
@@ -858,66 +930,119 @@ function SuppliersTab() {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
             <FaIndustry className="text-blue-500" />
-            Kerala Suppliers Database
+            Material Procurement & Suppliers
           </h3>
-          <span className="text-sm text-foreground-secondary">{suppliers.length} suppliers</span>
+          <span className="text-sm text-foreground-secondary">Cost Index: {(costIndex / 102 * 100).toFixed(1)}%</span>
         </div>
         
-        {/* Filter */}
+        {/* District Selection */}
         <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="Filter by district (e.g., Thrissur)"
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
-            className="flex-1 input text-sm"
-          />
+          <label className="text-sm text-foreground-secondary">Select District:</label>
+          <select 
+            value={selectedDistrict} 
+            onChange={(e) => setSelectedDistrict(e.target.value)}
+            className="input text-sm w-48"
+          >
+            {districts.map(d => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Suppliers Table */}
+      {/* Materials with Suppliers */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <h4 className="font-semibold text-foreground">Materials & Recommended Suppliers</h4>
+          <p className="text-sm text-foreground-secondary mt-1">
+            Suppliers auto-selected based on distance from {selectedDistrict}
+          </p>
+        </div>
         <div className="p-0">
           <table className="w-full">
             <thead>
               <tr className="text-left text-xs text-foreground-secondary border-b border-gray-200 dark:border-gray-700">
-                <th className="p-3 font-medium">Supplier Name</th>
-                <th className="p-3 font-medium">Location</th>
-                <th className="p-3 font-medium">Materials Supplied</th>
-                <th className="p-3 font-medium">Rate Range</th>
-                <th className="p-3 font-medium text-right">Distance (km)</th>
+                <th className="p-3 font-medium">Material</th>
+                <th className="p-3 font-medium">Category</th>
+                <th className="p-3 font-medium text-right">Quantity</th>
+                <th className="p-3 font-medium">Supplier</th>
+                <th className="p-3 font-medium text-right">Distance</th>
+                <th className="p-3 font-medium text-right">Transport Cost</th>
               </tr>
             </thead>
             <tbody>
-              {suppliers.length === 0 ? (
+              {materials.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-foreground-secondary">
-                    No suppliers found
+                  <td colSpan={6} className="p-8 text-center text-foreground-secondary">
+                    No materials in BoQ. Generate BoQ first.
                   </td>
                 </tr>
               ) : (
-                suppliers.map((supplier, idx) => (
-                  <tr key={idx} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50">
-                    <td className="p-3 text-foreground font-medium">
-                      {supplier['Supplier Name'] || 'N/A'}
-                    </td>
-                    <td className="p-3 text-foreground-secondary">
-                      {supplier['City / Area'] || 'N/A'}
-                    </td>
-                    <td className="p-3 text-foreground-secondary text-sm">
-                      {supplier['Materials Supplied'] || 'N/A'}
-                    </td>
-                    <td className="p-3 font-mono text-foreground">
-                      {supplier['Indicative Rate Range (Academic)'] || 'N/A'}
-                    </td>
-                    <td className="p-3 text-right font-mono text-foreground-secondary">
-                      {supplier['Distance from Thrissur (km)'] || 'N/A'}
-                    </td>
-                  </tr>
-                ))
+                materials.slice(0, 15).map((mat, idx) => {
+                  const bestSupplier = findBestSupplier(mat.name);
+                  const transportCost = bestSupplier ? calculateTransportCost(bestSupplier, mat.quantity, mat.unit) : 0;
+                  
+                  return (
+                    <tr key={idx} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+                      <td className="p-3 text-foreground font-medium text-sm">
+                        {mat.name.substring(0, 40)}
+                      </td>
+                      <td className="p-3 text-foreground-secondary text-sm">
+                        {mat.category}
+                      </td>
+                      <td className="p-3 text-right font-mono text-foreground">
+                        {mat.quantity.toFixed(1)} {mat.unit}
+                      </td>
+                      <td className="p-3 text-foreground-secondary text-sm">
+                        {bestSupplier ? (
+                          <div>
+                            <div className="font-medium">{bestSupplier['Supplier Name']}</div>
+                            <div className="text-xs text-foreground-muted">{bestSupplier['City / Area']}</div>
+                          </div>
+                        ) : (
+                          <span className="text-foreground-muted">No supplier found</span>
+                        )}
+                      </td>
+                      <td className="p-3 text-right font-mono text-foreground-secondary">
+                        {bestSupplier ? `${bestSupplier['Distance from Thrissur (km)'] || 0} km` : 'N/A'}
+                      </td>
+                      <td className="p-3 text-right font-mono text-foreground">
+                        {transportCost > 0 ? `₹${transportCost.toLocaleString()}` : 'N/A'}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
+            {materials.length > 0 && (
+              <tfoot>
+                <tr className="bg-gray-50 dark:bg-gray-900">
+                  <td colSpan={5} className="p-3 text-right font-semibold text-foreground">Total Transportation Cost</td>
+                  <td className="p-3 text-right font-mono font-bold text-foreground">
+                    ₹{materials.reduce((sum, mat) => {
+                      const supplier = findBestSupplier(mat.name);
+                      return sum + (supplier ? calculateTransportCost(supplier, mat.quantity, mat.unit) : 0);
+                    }, 0).toLocaleString()}
+                  </td>
+                </tr>
+              </tfoot>
+            )}
           </table>
+        </div>
+      </div>
+
+      {/* Supplier Contact List */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        <h4 className="font-semibold text-foreground mb-4">All Suppliers in {selectedDistrict} ({suppliers.length})</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {suppliers.slice(0, 12).map((sup, idx) => (
+            <div key={idx} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="font-medium text-foreground text-sm">{sup['Supplier Name']}</div>
+              <div className="text-xs text-foreground-secondary mt-1">{sup['City / Area']}</div>
+              <div className="text-xs text-foreground-muted mt-1">{sup['Materials Supplied']}</div>
+              <div className="text-xs text-foreground-muted mt-1">{cleanRate(sup['Indicative Rate Range (Academic)'])}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -1408,7 +1533,7 @@ function Reports() {
         </div>
 
         <div data-tab-content="suppliers" style={{ display: activeTab === 'suppliers' ? 'block' : 'none' }} className="print:block">
-          <SuppliersTab />
+          <SuppliersTab boq={boq} />
         </div>
 
         <div data-tab-content="staad" style={{ display: activeTab === 'staad' ? 'block' : 'none' }} className="print:block">
