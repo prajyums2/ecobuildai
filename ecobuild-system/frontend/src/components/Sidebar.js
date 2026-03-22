@@ -14,8 +14,7 @@ import {
   FaFolder,
   FaUser,
   FaBox,
-  FaLock,
-  FaCalculator
+  FaLock
 } from 'react-icons/fa';
 
 function Sidebar() {
@@ -31,7 +30,6 @@ function Sidebar() {
     { path: '/materials', icon: FaBox, label: 'Materials DB', feature: 'materials' },
     { path: '/optimizer', icon: FaLayerGroup, label: 'Material Optimizer', feature: 'optimizer' },
     { path: '/bim', icon: FaCube, label: 'BIM Integration', feature: 'bim' },
-    { path: '/structural', icon: FaCalculator, label: 'Structural Design', feature: 'bim' },
     { path: '/reports', icon: FaFileAlt, label: 'Reports', feature: 'reports' },
   ];
 

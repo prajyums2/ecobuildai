@@ -14,7 +14,6 @@ import ProjectSetup from './pages/ProjectSetup';
 import Materials from './pages/Materials';
 import ProjectManager from './pages/ProjectManager';
 import EngineerProfile from './pages/EngineerProfile';
-import StructuralDesign from './pages/StructuralDesign';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import LLMSidebar from './components/LLMSidebar';
@@ -74,7 +73,6 @@ function App() {
                         <Route path="/optimizer" element={<MaterialOptimizer />} />
                         <Route path="/bim" element={<BIMIntegration />} />
                         <Route path="/reports" element={<Reports />} />
-                        <Route path="/structural" element={<StructuralDesign />} />
                         <Route path="/projects" element={<ProjectManager />} />
                         <Route path="/profile" element={<EngineerProfile />} />
                       </Routes>
