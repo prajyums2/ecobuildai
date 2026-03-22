@@ -802,6 +802,128 @@ function MaterialSummaryTab({ boq }) {
   );
 }
 
+// ============================================
+// SUPPLIERS TAB COMPONENT
+// Shows suppliers from database
+// ============================================
+
+function SuppliersTab() {
+  const [suppliers, setSuppliers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [district, setDistrict] = useState('');
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, [district]);
+
+  const fetchSuppliers = async () => {
+    try {
+      setLoading(true);
+      const url = district 
+        ? `/api/material-suppliers?district=${district}`
+        : '/api/material-suppliers';
+      const response = await fetch(`https://ecobuildai-production-1f9d.up.railway.app${url}`);
+      const data = await response.json();
+      setSuppliers(data.suppliers || []);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch suppliers');
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <FaSpinner className="animate-spin text-2xl text-primary mr-3" />
+        <span>Loading suppliers...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700">
+        <FaExclamationTriangle className="inline mr-2" />
+        {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <FaIndustry className="text-blue-500" />
+            Kerala Suppliers Database
+          </h3>
+          <span className="text-sm text-foreground-secondary">{suppliers.length} suppliers</span>
+        </div>
+        
+        {/* Filter */}
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Filter by district (e.g., Thrissur)"
+            value={district}
+            onChange={(e) => setDistrict(e.target.value)}
+            className="flex-1 input text-sm"
+          />
+        </div>
+      </div>
+
+      {/* Suppliers Table */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="p-0">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left text-xs text-foreground-secondary border-b border-gray-200 dark:border-gray-700">
+                <th className="p-3 font-medium">Supplier Name</th>
+                <th className="p-3 font-medium">Location</th>
+                <th className="p-3 font-medium">Materials Supplied</th>
+                <th className="p-3 font-medium">Rate Range</th>
+                <th className="p-3 font-medium text-right">Distance (km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {suppliers.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-foreground-secondary">
+                    No suppliers found
+                  </td>
+                </tr>
+              ) : (
+                suppliers.map((supplier, idx) => (
+                  <tr key={idx} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+                    <td className="p-3 text-foreground font-medium">
+                      {supplier['Supplier Name'] || 'N/A'}
+                    </td>
+                    <td className="p-3 text-foreground-secondary">
+                      {supplier['City / Area'] || 'N/A'}
+                    </td>
+                    <td className="p-3 text-foreground-secondary text-sm">
+                      {supplier['Materials Supplied'] || 'N/A'}
+                    </td>
+                    <td className="p-3 font-mono text-foreground">
+                      {supplier['Indicative Rate Range (Academic)'] || 'N/A'}
+                    </td>
+                    <td className="p-3 text-right font-mono text-foreground-secondary">
+                      {supplier['Distance from Thrissur (km)'] || 'N/A'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Reports() {
   const navigate = useNavigate();
   const { project, completeBOQGeneration } = useProject();
@@ -1205,6 +1327,17 @@ function Reports() {
           Material Summary
         </button>
         <button
+          onClick={() => setActiveTab('suppliers')}
+          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === 'suppliers'
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-foreground-secondary hover:text-foreground'
+          }`}
+        >
+          <FaIndustry />
+          Suppliers
+        </button>
+        <button
           onClick={() => setActiveTab('sustainability')}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === 'sustainability'
@@ -1272,6 +1405,10 @@ function Reports() {
 
         <div data-tab-content="materialsummary" style={{ display: activeTab === 'materialsummary' ? 'block' : 'none' }} className="print:block">
           <MaterialSummaryTab boq={boq} />
+        </div>
+
+        <div data-tab-content="suppliers" style={{ display: activeTab === 'suppliers' ? 'block' : 'none' }} className="print:block">
+          <SuppliersTab />
         </div>
 
         <div data-tab-content="staad" style={{ display: activeTab === 'staad' ? 'block' : 'none' }} className="print:block">
