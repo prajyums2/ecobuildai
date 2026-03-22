@@ -1484,22 +1484,89 @@ function Reports() {
   }
 
   const handlePrint = () => {
-    // Add a class to body to trigger print-specific styles
-    document.body.classList.add("printing");
-
+    // Show only the active tab for printing
+    const printStyles = document.createElement('style');
+    printStyles.id = 'print-styles';
+    printStyles.innerHTML = `
+      @media print {
+        /* Hide everything except the report content */
+        * { visibility: hidden !important; }
+        
+        /* Show only print containers */
+        .print-container,
+        .print-container * { visibility: visible !important; }
+        
+        /* Hide other tabs */
+        [data-tab-content]:not([data-tab-content="${activeTab}"]) { display: none !important; }
+        [data-tab-content="${activeTab}"] { display: block !important; }
+        
+        /* Hide navigation and buttons */
+        .print\\:hidden { display: none !important; }
+        
+        /* Page setup */
+        body { 
+          font-size: 10pt !important;
+          line-height: 1.4 !important;
+        }
+        
+        /* Report styling */
+        table { font-size: 9pt !important; }
+        th { font-weight: bold !important; }
+      }
+    `;
+    document.head.appendChild(printStyles);
+    
     // Trigger print
     window.print();
-
-    // Remove the class after printing
+    
+    // Clean up
     setTimeout(() => {
-      document.body.classList.remove("printing");
+      document.getElementById('print-styles')?.remove();
     }, 1000);
   };
 
   const handleExportPDF = () => {
     setExporting(true);
+    
+    // Add print styles for PDF export
+    const printStyles = document.createElement('style');
+    printStyles.id = 'print-styles';
+    printStyles.innerHTML = `
+      @media print {
+        /* Hide everything except the report content */
+        * { visibility: hidden !important; }
+        
+        /* Show only print containers */
+        .print-container,
+        .print-container * { visibility: visible !important; }
+        
+        /* Hide other tabs */
+        [data-tab-content]:not([data-tab-content="${activeTab}"]) { display: none !important; }
+        [data-tab-content="${activeTab}"] { display: block !important; }
+        
+        /* Hide navigation and buttons */
+        .print\\:hidden { display: none !important; }
+        
+        /* Page setup */
+        body { 
+          font-size: 10pt !important;
+          line-height: 1.4 !important;
+        }
+        
+        /* Report styling */
+        table { font-size: 9pt !important; }
+        th { font-weight: bold !important; }
+        
+        /* Colors for print */
+        .text-blue-500, .text-green-500, .text-red-500 { color: black !important; }
+        .bg-blue-50, .bg-green-50, .bg-red-50 { background-color: white !important; }
+      }
+    `;
+    document.head.appendChild(printStyles);
+    
     setTimeout(() => {
       window.print();
+      document.getElementById('print-styles')?.remove();
       setExporting(false);
     }, 500);
   };
@@ -1673,7 +1740,7 @@ function Reports() {
             Sustainability Assessment reports
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 print:hidden">
           <button onClick={handlePrint} className="btn btn-secondary">
             <FaPrint className="mr-2" />
             Print
@@ -1698,7 +1765,7 @@ function Reports() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 dark:border-gray-700 print:hidden">
         <button
           onClick={() => setActiveTab("staad")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
@@ -1797,7 +1864,7 @@ function Reports() {
         <div
           data-tab-content="boq"
           style={{ display: activeTab === "boq" ? "block" : "none" }}
-          className="print:block"
+          className="print:hidden"
         >
           <BillOfQuantities />
         </div>
@@ -1807,7 +1874,7 @@ function Reports() {
           style={{
             display: activeTab === "materialsummary" ? "block" : "none",
           }}
-          className="print:block"
+          className="print:hidden"
         >
           <MaterialSummaryTab boq={boq} project={project} />
         </div>
@@ -1815,7 +1882,7 @@ function Reports() {
         <div
           data-tab-content="suppliers"
           style={{ display: activeTab === "suppliers" ? "block" : "none" }}
-          className="print:block"
+          className="print:hidden"
         >
           <SuppliersTab boq={boq} project={project} />
         </div>
@@ -3048,7 +3115,7 @@ function Reports() {
         <div
           data-tab-content="ai"
           style={{ display: activeTab === "ai" ? "block" : "none" }}
-          className="print:block"
+          className="print:hidden"
         >
           <AIRecommendationsTab
             project={project}
@@ -3061,7 +3128,7 @@ function Reports() {
         <div
           data-tab-content="sustainability-explanation"
           style={{ display: activeTab === "sustainability" ? "block" : "none" }}
-          className="print:block"
+          className="print:hidden"
         >
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
