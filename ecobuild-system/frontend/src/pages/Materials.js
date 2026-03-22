@@ -30,23 +30,16 @@ import {
 } from "react-icons/fa";
 
 const MATERIAL_CATEGORIES = [
-  { id: "cement", label: "Cement & Binders" },
-  { id: "steel", label: "Steel & Reinforcement" },
-  { id: "masonry", label: "Masonry Units" },
-  { id: "aggregates", label: "Aggregates" },
-  { id: "finish", label: "Finishes" },
-  { id: "insulation", label: "Insulation" },
-  { id: "composite", label: "Composites" },
-  { id: "roof", label: "Roofing" },
-  { id: "glass", label: "Glass" },
-  { id: "adhesive", label: "Adhesives & Sealants" },
-  { id: "coating", label: "Paints & Coatings" },
-  { id: "door", label: "Doors" },
-  { id: "window", label: "Windows" },
-  { id: "plumbing", label: "Plumbing" },
-  { id: "electrical", label: "Electrical" },
-  { id: "wood", label: "Wood" },
-  { id: "other", label: "Other" },
+  { id: "Concrete", label: "Concrete & RCC" },
+  { id: "Cement", label: "Cement & Binders" },
+  { id: "Steel", label: "Steel & Reinforcement" },
+  { id: "Blocks/Bricks", label: "Blocks & Bricks" },
+  { id: "Aggregates", label: "Aggregates & Sand" },
+  { id: "Masonry", label: "Masonry Systems" },
+  { id: "Flooring", label: "Flooring & Tiles" },
+  { id: "Timber", label: "Timber & Wood" },
+  { id: "Hardwood", label: "Hardwood" },
+  { id: "Softwood", label: "Softwood" },
 ];
 
 const UNIT_TYPES = [
@@ -371,15 +364,57 @@ function Materials() {
   const fetchMaterials = async () => {
     try {
       setLoading(true);
+      
+      // Fetch from backend
       const response = await ecoBuildAPI.getMaterials({
-        limit: 200, // Get all materials for client-side filtering
+        limit: 200,
       });
-      const mats = response.data.materials || [];
-      setMaterials(mats);
-      setFilteredMaterials(mats);
+      const dbMaterials = response.data.materials || [];
+      
+      // Transform database materials to include required fields
+      const transformedDbMaterials = dbMaterials.map((mat) => ({
+        _id: mat._id,
+        name: mat.MaterialName || 'Unnamed Material',
+        category: mat.Category || 'other',
+        description: mat.Description || mat.Applications || '',
+        brand: mat['BIS Code'] || mat.GradeOrModel || '',
+        manufacturer: '',
+        unit: mat.Unit || 'kg',
+        status: 'active',
+        isDatabase: true, // Mark as database material
+        
+        // Extract from database
+        financial_properties: {
+          cost_per_unit: 0,
+          currency: 'INR',
+          unit_type: mat.Unit || 'kg',
+          gst_rate: mat.Category === 'Cement' ? 28 : mat.Category === 'steel' || mat.Category === 'Steel' ? 18 : 5,
+        },
+        environmental_properties: {
+          embodied_carbon: 0,
+          recycled_content: 0,
+        },
+        physical_properties: {},
+        civil_properties: {
+          is_code: mat['BIS Code'] || '',
+        },
+      }));
+      
+      // Load local custom materials from localStorage
+      const localMaterials = JSON.parse(localStorage.getItem('ecobuild_custom_materials') || '[]');
+      
+      // Combine both
+      const allMaterials = [...transformedDbMaterials, ...localMaterials];
+      
+      setMaterials(allMaterials);
+      setFilteredMaterials(allMaterials);
     } catch (err) {
       console.error("Error fetching materials:", err);
-      setError("Failed to load materials");
+      // Load from localStorage only
+      const localMaterials = JSON.parse(localStorage.getItem('ecobuild_custom_materials') || '[]');
+      setMaterials(localMaterials);
+      setFilteredMaterials(localMaterials);
+      setError("Using local materials (could not connect to database)");
     } finally {
       setLoading(false);
     }
@@ -399,6 +434,15 @@ function Materials() {
       // Process form data
       const processedData = {
         ...formData,
+        _id: formData._id || 'local_' + Date.now(),
+        name: formData.name,
+        category: formData.category,
+        description: formData.description,
+        brand: formData.brand,
+        manufacturer: formData.manufacturer,
+        unit: formData.financial_properties.unit_type,
+        status: 'active',
+        isDatabase: false,
         tags: formData.tags
           ? formData.tags.split(",").map((t) => t.trim())
           : [],
@@ -440,16 +484,24 @@ function Materials() {
         financial_properties: {
           ...formData.financial_properties,
         },
-        supplier: {
-          ...formData.supplier,
-        },
       };
 
-      if (editingMaterial) {
-        await ecoBuildAPI.updateMaterial(editingMaterial._id, processedData);
-      } else {
-        await ecoBuildAPI.createMaterial(processedData);
+      // Load existing local materials
+      const localMaterials = JSON.parse(localStorage.getItem('ecobuild_custom_materials') || '[]');
+      
+      if (editingMaterial && !editingMaterial.isDatabase) {
+        // Update existing local material
+        const index = localMaterials.findIndex(m => m._id === editingMaterial._id);
+        if (index !== -1) {
+          localMaterials[index] = processedData;
+        }
+      } else if (!editingMaterial) {
+        // Add new local material
+        localMaterials.push(processedData);
       }
+      
+      // Save to localStorage
+      localStorage.setItem('ecobuild_custom_materials', JSON.stringify(localMaterials));
 
       setShowCreateModal(false);
       setEditingMaterial(null);
@@ -466,7 +518,15 @@ function Materials() {
       return;
 
     try {
-      await ecoBuildAPI.deleteMaterial(id);
+      // Check if it's a local material
+      if (id.startsWith('local_')) {
+        const localMaterials = JSON.parse(localStorage.getItem('ecobuild_custom_materials') || '[]');
+        const updated = localMaterials.filter(m => m._id !== id);
+        localStorage.setItem('ecobuild_custom_materials', JSON.stringify(updated));
+      } else {
+        await ecoBuildAPI.deleteMaterial(id);
+      }
+      
       fetchMaterials();
     } catch (err) {
       console.error("Error deleting material:", err);
