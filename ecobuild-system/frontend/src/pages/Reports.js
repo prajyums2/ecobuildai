@@ -2091,19 +2091,20 @@ function Reports() {
                             {cat.toUpperCase()}
                           </td>
                           <td className="border border-black p-2">
-                            {mat.name}
+                            {mat.name || mat.id || 'Selected Material'}
                           </td>
                           <td className="border border-black p-2 text-right">
-                            {mat.quantity || 1}
+                            {mat.qty || mat.quantity || '-'}
                           </td>
                           <td className="border border-black p-2">
-                            {mat.unit || "EACH"}
+                            {mat.unit || mat.unit_type || '-'}
                           </td>
                           <td className="border border-black p-2 text-right">
-                            {mat.embodied_carbon}
+                            {mat.carbon || mat.embodied_carbon || '-'}
                           </td>
                           <td className="border border-black p-2 text-right">
-                            {mat.cost_per_unit}
+                            {mat.rate || mat.cost_per_unit ? 
+                              'Rs ' + (mat.rate || mat.cost_per_unit).toLocaleString() : '-'}
                           </td>
                         </tr>
                       ),
