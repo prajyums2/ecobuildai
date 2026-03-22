@@ -1525,50 +1525,146 @@ function Reports() {
     }, 1000);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     setExporting(true);
     
-    // Add print styles for PDF export
-    const printStyles = document.createElement('style');
-    printStyles.id = 'print-styles';
-    printStyles.innerHTML = `
-      @media print {
-        /* Hide everything except the report content */
-        * { visibility: hidden !important; }
-        
-        /* Show only print containers */
-        .print-container,
-        .print-container * { visibility: visible !important; }
-        
-        /* Hide other tabs */
-        [data-tab-content]:not([data-tab-content="${activeTab}"]) { display: none !important; }
-        [data-tab-content="${activeTab}"] { display: block !important; }
-        
-        /* Hide navigation and buttons */
-        .print\\:hidden { display: none !important; }
-        
-        /* Page setup */
-        body { 
-          font-size: 10pt !important;
-          line-height: 1.4 !important;
-        }
-        
-        /* Report styling */
-        table { font-size: 9pt !important; }
-        th { font-weight: bold !important; }
-        
-        /* Colors for print */
-        .text-blue-500, .text-green-500, .text-red-500 { color: black !important; }
-        .bg-blue-50, .bg-green-50, .bg-red-50 { background-color: white !important; }
-      }
-    `;
-    document.head.appendChild(printStyles);
-    
-    setTimeout(() => {
+    try {
+      // Dynamic import of jsPDF
+      const { default: jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      
+      // Set up document
+      doc.setFont('helvetica');
+      
+      // Title Block
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ECOBUILD SUSTAINABILITY ANALYSIS', 105, 15, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('LIFECYCLE DECISION SUPPORT SYSTEM', 105, 22, { align: 'center' });
+      doc.text('GEC THRISSUR | DEPARTMENT OF CIVIL ENGINEERING', 105, 28, { align: 'center' });
+      
+      // Project Info
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text('PROJECT: ' + (project.name || 'UNNAMED').toUpperCase(), 15, 40);
+      doc.text('JOB NO: EB-' + (project.id?.slice(-6) || '000000').toUpperCase(), 15, 47);
+      doc.text('DATE: ' + new Date().toLocaleDateString(), 140, 40);
+      doc.text('ENGINEER: ECOBUILD AI', 140, 47);
+      
+      // Section 1: Project Parameters
+      let yPos = 60;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text('1. PROJECT PARAMETERS', 15, yPos);
+      doc.line(15, yPos + 2, 195, yPos + 2);
+      yPos += 10;
+      
+      // Table headers
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('PARAMETER', 15, yPos);
+      doc.text('VALUE', 120, yPos);
+      doc.text('UNIT', 170, yPos);
+      yPos += 7;
+      
+      // Table data
+      doc.setFont('helvetica', 'normal');
+      const params = [
+        ['LOCATION', project.location?.district || 'Thrissur', 'Kerala'],
+        ['PLOT AREA', (project.buildingParams?.plotArea || 0).toString(), 'SQ.M'],
+        ['BUILT-UP AREA', (project.buildingParams?.builtUpArea || 0).toString(), 'SQ.M'],
+        ['NO. OF FLOORS', (project.buildingParams?.numFloors || 1).toString(), 'NOS'],
+        ['BUILDING HEIGHT', (project.buildingParams?.height || 0).toString(), 'M'],
+        ['FAR', (project.buildingParams?.builtUpArea / project.buildingParams?.plotArea || 0).toFixed(3), '-'],
+      ];
+      
+      params.forEach(([param, value, unit]) => {
+        doc.text(param, 15, yPos);
+        doc.text(value, 120, yPos);
+        doc.text(unit, 170, yPos);
+        yPos += 6;
+      });
+      
+      // Section 2: Material Quantities
+      yPos += 10;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text('2. MATERIAL QUANTITIES', 15, yPos);
+      doc.line(15, yPos + 2, 195, yPos + 2);
+      yPos += 10;
+      
+      // Table headers
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('MATERIAL', 15, yPos);
+      doc.text('QTY', 80, yPos);
+      doc.text('UNIT', 120, yPos);
+      doc.text('RATE', 145, yPos);
+      doc.text('AMOUNT', 170, yPos);
+      yPos += 7;
+      
+      // Material data
+      doc.setFont('helvetica', 'normal');
+      const materials = [
+        ['Cement', materialQuantities.cementBags?.toFixed(0) || '0', 'bags', '370', ((materialQuantities.cementBags || 0) * 370).toLocaleString()],
+        ['Steel', materialQuantities.steelKg?.toFixed(0) || '0', 'kg', '72', ((materialQuantities.steelKg || 0) * 72).toLocaleString()],
+        ['Sand', materialQuantities.sandCft?.toFixed(0) || '0', 'cft', '58', ((materialQuantities.sandCft || 0) * 58).toLocaleString()],
+        ['Aggregate', materialQuantities.aggregateCft?.toFixed(0) || '0', 'cft', '42', ((materialQuantities.aggregateCft || 0) * 42).toLocaleString()],
+      ];
+      
+      materials.forEach(([mat, qty, unit, rate, amount]) => {
+        doc.text(mat, 15, yPos);
+        doc.text(qty, 80, yPos);
+        doc.text(unit, 120, yPos);
+        doc.text(rate, 145, yPos);
+        doc.text(amount, 170, yPos);
+        yPos += 6;
+      });
+      
+      // Section 3: Sustainability Scores
+      yPos += 10;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text('3. SUSTAINABILITY ASSESSMENT', 15, yPos);
+      doc.line(15, yPos + 2, 195, yPos + 2);
+      yPos += 10;
+      
+      // Scores
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      
+      doc.text('GRIHA Score: ' + grihaScore + '/100 (' + grihaRating + ')', 15, yPos);
+      yPos += 7;
+      doc.text('IGBC Score: ' + igbcScore + '/100 (' + igbcRating + ')', 15, yPos);
+      yPos += 7;
+      doc.text('LEED Score: ' + leedScore + '/110 (' + leedRating + ')', 15, yPos);
+      yPos += 7;
+      doc.text('Sustainability Score: ' + sustainabilityScore + '/100', 15, yPos);
+      yPos += 10;
+      
+      doc.text('Embodied Carbon: ' + (embodiedCarbon.total || 0).toFixed(0) + ' kg CO2', 15, yPos);
+      yPos += 7;
+      doc.text('Carbon Reduction: ' + carbonReductionPercent.toFixed(1) + '%', 15, yPos);
+      
+      // Footer
+      doc.setFontSize(8);
+      doc.text('Generated by EcoBuild System | Government Engineering College, Thrissur', 105, 285, { align: 'center' });
+      doc.text('Date: ' + new Date().toLocaleString(), 105, 290, { align: 'center' });
+      
+      // Save PDF
+      const fileName = (project.name || 'EcoBuild').replace(/\s+/g, '_') + '_Report.pdf';
+      doc.save(fileName);
+      
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      // Fallback to window.print if jsPDF fails
       window.print();
-      document.getElementById('print-styles')?.remove();
+    } finally {
       setExporting(false);
-    }, 500);
+    }
   };
 
   const handleExportExcel = async () => {
