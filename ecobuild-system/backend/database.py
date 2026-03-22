@@ -6,12 +6,18 @@ import os
 try:
     from dotenv import load_dotenv
     load_dotenv()
+    print("[OK] Loaded .env file")
 except ImportError:
-    pass
+    print("[WARN] python-dotenv not installed, using environment variables")
+except Exception as e:
+    print(f"[WARN] Could not load .env file: {e}")
 
 # MongoDB connection
 MONGO_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
 DB_NAME = os.getenv('DB_NAME', 'ecobuild')
+
+print(f"[INFO] MONGODB_URI configured: {'YES' if 'mongodb+srv://' in MONGO_URI else 'NO'}")
+print(f"[INFO] DB_NAME: {DB_NAME}")
 
 class Database:
     def __init__(self):
