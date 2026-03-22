@@ -202,14 +202,7 @@ function BIMIntegration() {
       }
     };
   }, []);
-    
-    return () => {
-      if (ifcViewerRef.current) {
-        ifcViewerRef.current.unmount();
-      }
-    };
-  }, []);
-
+  
   const handleFileUpload = async (e) => {
     const uploadedFile = e.target.files[0];
     if (!uploadedFile) return;

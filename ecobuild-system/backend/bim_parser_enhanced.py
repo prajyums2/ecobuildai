@@ -148,7 +148,7 @@ class EnhancedBIMParser:
         Returns:
             BIMProjectData with elements, quantities, and costs
         """
-            try:
+        try:
             import ifcopenshell
             import ifcopenshell.geom
             
