@@ -544,10 +544,89 @@ function generateRecommendations(project, boq, carbon) {
 
 // ============================================
 // MATERIAL SUMMARY TAB COMPONENT
-// Shows material quantities needed for procurement
+// Shows material quantities with supplier details
 // ============================================
 
-function MaterialSummaryTab({ boq }) {
+function MaterialSummaryTab({ boq, project }) {
+  const [suppliers, setSuppliers] = useState([]);
+  const [loadingSuppliers, setLoadingSuppliers] = useState(true);
+  
+  const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
+  const projectLat = project?.location?.lat || 10.5167;
+  const projectLon = project?.location?.lon || 76.2167;
+  
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
+
+  const fetchSuppliers = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/material-suppliers`);
+      const data = await res.json();
+      setSuppliers(data.suppliers || []);
+      setLoadingSuppliers(false);
+    } catch (err) {
+      console.error('Failed to fetch suppliers:', err);
+      setLoadingSuppliers(false);
+    }
+  };
+
+  // Haversine formula
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  const districtCoords = {
+    'Thrissur': { lat: 10.5167, lon: 76.2167 },
+    'Ernakulam': { lat: 9.9312, lon: 76.2673 },
+    'Palakkad': { lat: 10.7867, lon: 76.6548 },
+    'Kozhikode': { lat: 11.2588, lon: 75.7804 },
+    'Thiruvananthapuram': { lat: 8.5241, lon: 76.9366 },
+    'Kollam': { lat: 8.8932, lon: 76.6141 },
+    'Kottayam': { lat: 9.5916, lon: 76.5222 },
+    'Kannur': { lat: 11.8745, lon: 75.3704 },
+  };
+
+  // Find best supplier for a material type
+  const findSupplier = (keywords) => {
+    const matching = suppliers.filter(s => {
+      const supplied = (s['Materials Supplied'] || '').toLowerCase();
+      return keywords.some(kw => supplied.includes(kw));
+    });
+    
+    if (matching.length === 0) return null;
+    
+    // Calculate distances and sort
+    const withDistance = matching.map(s => {
+      const location = s['City / Area'] || '';
+      let coord = null;
+      for (const [district, c] of Object.entries(districtCoords)) {
+        if (location.toLowerCase().includes(district.toLowerCase())) {
+          coord = c;
+          break;
+        }
+      }
+      if (!coord) coord = { lat: 10.5167, lon: 76.2167 };
+      const dist = calculateDistance(projectLat, projectLon, coord.lat, coord.lon);
+      return { ...supplier: s, distance: Math.round(dist * 10) / 10 };
+    });
+    
+    return withDistance.sort((a, b) => a.distance - b.distance)[0];
+  };
+
+  // Clean rate display
+  const cleanRate = (rate) => {
+    if (!rate) return 'Contact';
+    return rate.replace(/â‚¹/g, '₹').replace(/â€"/g, '–').replace(/Ã—/g, '×').replace(/Â/g, '');
+  };
+
   if (!boq || !boq.categories) {
     return (
       <div className="p-8 text-center text-foreground-secondary">
@@ -560,95 +639,137 @@ function MaterialSummaryTab({ boq }) {
   // Extract material quantities from BoQ
   const extractMaterials = () => {
     const materials = {
-      cement: { name: 'Cement', unit: 'bags', qty: 0, items: [] },
-      steel: { name: 'Steel (TMT Bars)', unit: 'kg', qty: 0, items: [] },
-      sand: { name: 'Sand (M-Sand/River Sand)', unit: 'cft', qty: 0, items: [] },
-      aggregate: { name: 'Aggregate (20mm)', unit: 'cft', qty: 0, items: [] },
-      aacBlocks: { name: 'AAC Blocks (600x200x200mm)', unit: 'nos', qty: 0, items: [] },
-      vitrifiedTiles: { name: 'Vitrified Tiles (600x600mm)', unit: 'sqft', qty: 0, items: [] },
-      ceramicTiles: { name: 'Ceramic Tiles (300x300mm)', unit: 'sqft', qty: 0, items: [] },
-      wallTiles: { name: 'Wall Tiles', unit: 'sqft', qty: 0, items: [] },
-      paint: { name: 'Paint (Interior)', unit: 'litres', qty: 0, items: [] },
-      exteriorPaint: { name: 'Paint (Exterior)', unit: 'litres', qty: 0, items: [] },
-      primer: { name: 'Primer', unit: 'litres', qty: 0, items: [] },
-      putty: { name: 'Wall Putty', unit: 'kg', qty: 0, items: [] },
-      steelWire: { name: 'Binding Wire', unit: 'kg', qty: 0, items: [] },
-      concrete: { name: 'Ready Mix Concrete (RMC)', unit: 'cum', qty: 0, items: [] },
+      cement: { name: 'Cement', unit: 'bags', qty: 0, rate: 370, supplier: findSupplier(['cement', 'ppc', 'opc', 'ultratech', 'acc', 'ramco']) },
+      steel: { name: 'Steel (TMT Bars)', unit: 'kg', qty: 0, rate: 72, supplier: findSupplier(['steel', 'tmt', 'tata', 'jsw', 'kalliyath']) },
+      sand: { name: 'Sand (M-Sand)', unit: 'cft', qty: 0, rate: 58, supplier: findSupplier(['sand', 'm-sand']) },
+      aggregate: { name: 'Aggregate (20mm)', unit: 'cft', qty: 0, rate: 42, supplier: findSupplier(['aggregate', 'blue metal', '20mm']) },
+      blocks: { name: 'AAC Blocks', unit: 'nos', qty: 0, rate: 78, supplier: findSupplier(['aac', 'block']) },
     };
 
-    // Parse each category's remarks to extract quantities
     boq.categories.forEach(category => {
       category.items.forEach(item => {
         const desc = item.description?.toLowerCase() || '';
         const remarks = item.remarks?.toLowerCase() || '';
         
-        // Extract cement bags from remarks
-        const cementMatch = remarks.match(/cement:\s*([\d,.]+)\s*bags/i) || 
-                          remarks.match(/cement:\s*([\d,.]+)/i);
-        if (cementMatch) {
-          materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, ''));
-        }
+        const cementMatch = remarks.match(/cement:\s*([\d,.]+)\s*bags/i);
+        if (cementMatch) materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, ''));
         
-        // Extract sand from remarks
         const sandMatch = remarks.match(/sand:\s*([\d,.]+)\s*cft/i);
-        if (sandMatch) {
-          materials.sand.qty += parseFloat(sandMatch[1].replace(/,/g, ''));
-        }
+        if (sandMatch) materials.sand.qty += parseFloat(sandMatch[1].replace(/,/g, ''));
         
-        // Extract aggregate from remarks
         const aggMatch = remarks.match(/aggregate:\s*([\d,.]+)\s*cft/i);
-        if (aggMatch) {
-          materials.aggregate.qty += parseFloat(aggMatch[1].replace(/,/g, ''));
-        }
+        if (aggMatch) materials.aggregate.qty += parseFloat(aggMatch[1].replace(/,/g, ''));
         
-        // Steel
         if (desc.includes('steel') && desc.includes('tmt') && item.unit === 'kg') {
           materials.steel.qty += parseFloat(item.quantity) || 0;
         }
-        
-        // Binding wire
-        if (desc.includes('binding wire')) {
-          materials.steelWire.qty += parseFloat(item.quantity) || 0;
-        }
-        
-        // AAC Blocks
         if (desc.includes('aac block') && item.unit === 'nos') {
-          materials.aacBlocks.qty += parseFloat(item.quantity) || 0;
-        }
-        
-        // Tiles
-        if (desc.includes('vitrified') && item.unit === 'sqft') {
-          materials.vitrifiedTiles.qty += parseFloat(item.quantity) || 0;
-        }
-        if (desc.includes('ceramic') && !desc.includes('wall') && item.unit === 'sqft') {
-          materials.ceramicTiles.qty += parseFloat(item.quantity) || 0;
-        }
-        if (desc.includes('wall tile') && item.unit === 'sqft') {
-          materials.wallTiles.qty += parseFloat(item.quantity) || 0;
-        }
-        
-        // Paint
-        if (desc.includes('interior') && desc.includes('paint') && item.unit === 'litre') {
-          materials.paint.qty += parseFloat(item.quantity) || 0;
-        }
-        if (desc.includes('exterior') && desc.includes('paint') && item.unit === 'litre') {
-          materials.exteriorPaint.qty += parseFloat(item.quantity) || 0;
-        }
-        if (desc.includes('primer') && item.unit === 'litre') {
-          materials.primer.qty += parseFloat(item.quantity) || 0;
-        }
-        if (desc.includes('putty') && item.unit === 'kg') {
-          materials.putty.qty += parseFloat(item.quantity) || 0;
-        }
-        
-        // Concrete volume
-        if (desc.includes('rcc') || desc.includes('pcc')) {
-          if (item.unit === 'cum') {
-            materials.concrete.qty += parseFloat(item.quantity) || 0;
-          }
+          materials.blocks.qty += parseFloat(item.quantity) || 0;
         }
       });
     });
+
+    Object.keys(materials).forEach(key => {
+      materials[key].qty = Math.round(materials[key].qty * 10) / 10;
+    });
+
+    return materials;
+  };
+
+  const materials = extractMaterials();
+  const materialList = Object.values(materials).filter(m => m.qty > 0);
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <FaIndustry className="text-blue-500" />
+            Material Quantities & Suppliers
+          </h3>
+          <span className="text-sm text-foreground-secondary">{materialList.length} materials</span>
+        </div>
+        <p className="text-foreground-secondary text-sm">
+          Quantities extracted from BoQ with recommended suppliers
+        </p>
+      </div>
+
+      {/* Materials with Suppliers */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="p-0">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left text-xs text-foreground-secondary border-b border-gray-200 dark:border-gray-700">
+                <th className="p-3 font-medium">Material</th>
+                <th className="p-3 font-medium text-right">Quantity</th>
+                <th className="p-3 font-medium">Unit</th>
+                <th className="p-3 font-medium text-right">Rate (₹)</th>
+                <th className="p-3 font-medium text-right">Amount (₹)</th>
+                <th className="p-3 font-medium">Best Supplier</th>
+                <th className="p-3 font-medium text-right">Distance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {materialList.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-foreground-secondary">
+                    No materials found. Generate BoQ first.
+                  </td>
+                </tr>
+              ) : (
+                materialList.map((mat, idx) => (
+                  <tr key={idx} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+                    <td className="p-3 text-foreground font-medium">{mat.name}</td>
+                    <td className="p-3 text-right font-mono text-foreground font-bold">{mat.qty.toLocaleString()}</td>
+                    <td className="p-3 text-foreground-secondary">{mat.unit}</td>
+                    <td className="p-3 text-right font-mono text-foreground-secondary">₹{mat.rate}</td>
+                    <td className="p-3 text-right font-mono text-foreground font-semibold">₹{(mat.qty * mat.rate).toLocaleString()}</td>
+                    <td className="p-3 text-foreground-secondary text-sm">
+                      {mat.supplier ? (
+                        <div>
+                          <div className="font-medium">{mat.supplier['Supplier Name']}</div>
+                          <div className="text-xs text-foreground-muted">{cleanRate(mat.supplier['Indicative Rate Range (Academic)'])}</div>
+                        </div>
+                      ) : (
+                        <span className="text-foreground-muted">No supplier found</span>
+                      )}
+                    </td>
+                    <td className="p-3 text-right font-mono text-foreground-secondary">
+                      {mat.supplier ? `${mat.supplier.distance || 0} km` : 'N/A'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+            {materialList.length > 0 && (
+              <tfoot>
+                <tr className="bg-gray-50 dark:bg-gray-900">
+                  <td colSpan={4} className="p-3 text-right font-semibold text-foreground">Total Material Cost</td>
+                  <td className="p-3 text-right font-mono font-bold text-foreground">
+                    ₹{materialList.reduce((sum, m) => sum + m.qty * m.rate, 0).toLocaleString()}
+                  </td>
+                  <td colSpan={2}></td>
+                </tr>
+              </tfoot>
+            )}
+          </table>
+        </div>
+      </div>
+
+      {/* Procurement Notes */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+        <h4 className="font-semibold text-foreground mb-4">Procurement Notes</h4>
+        <ul className="space-y-2 text-sm text-foreground-secondary">
+          <li>• Quantities include wastage as per IS 3861:1966 standards</li>
+          <li>• Rates based on Kerala market 2026 prices</li>
+          <li>• Suppliers auto-selected based on distance from project location</li>
+          <li>• GST will be applied separately (Cement: 28%, Steel: 18%, Blocks: 5%)</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
 
     // Round all quantities
     Object.keys(materials).forEach(key => {
@@ -1497,7 +1618,7 @@ function Reports() {
         </div>
 
         <div data-tab-content="materialsummary" style={{ display: activeTab === 'materialsummary' ? 'block' : 'none' }} className="print:block">
-          <MaterialSummaryTab boq={boq} />
+          <MaterialSummaryTab boq={boq} project={project} />
         </div>
 
         <div data-tab-content="suppliers" style={{ display: activeTab === 'suppliers' ? 'block' : 'none' }} className="print:block">
