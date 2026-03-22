@@ -142,15 +142,18 @@ async def register(user_data: UserCreate):
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
         
+        # Hash password
+        hashed_pw = get_password_hash(user_data.password)
+        
         # Create user
         user_id = str(ObjectId())
         user_dict = {
             "_id": user_id,
             "email": user_data.email,
             "full_name": user_data.full_name,
-            "company": user_data.company,
-            "phone": user_data.phone,
-            "hashed_password": get_password_hash(user_data.password),
+            "company": getattr(user_data, 'company', None),
+            "phone": getattr(user_data, 'phone', None),
+            "hashed_password": hashed_pw,
             "is_active": True,
             "created_at": datetime.utcnow(),
             "last_login": None
@@ -168,8 +171,8 @@ async def register(user_data: UserCreate):
                 id=user_id,
                 email=user_data.email,
                 full_name=user_data.full_name,
-                company=user_data.company,
-                phone=user_data.phone,
+                company=user_dict.get("company"),
+                phone=user_dict.get("phone"),
                 is_active=True,
                 created_at=user_dict["created_at"]
             )
@@ -177,11 +180,9 @@ async def register(user_data: UserCreate):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Registration error: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
-            created_at=user_dict["created_at"]
-        )
-    )
 
 @app.post("/api/auth/login", response_model=Token)
 async def login(credentials: UserLogin):
