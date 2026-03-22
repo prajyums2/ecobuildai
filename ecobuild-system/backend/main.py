@@ -78,6 +78,20 @@ async def health_check():
     db = database.get_db()
     return {"status": "healthy", "database": "connected" if db is not None else "disconnected"}
 
+@app.get("/debug/env")
+async def debug_env():
+    """Debug endpoint to check environment variables"""
+    import os
+    mongodb_uri = os.getenv('MONGODB_URI', 'NOT SET')
+    # Mask password for security
+    masked_uri = mongodb_uri[:50] + '...' if len(mongodb_uri) > 50 else mongodb_uri
+    return {
+        "mongodb_uri_set": "YES" if mongodb_uri != 'NOT SET' else "NO",
+        "mongodb_uri_masked": masked_uri,
+        "db_name": os.getenv('DB_NAME', 'NOT SET'),
+        "port": os.getenv('PORT', 'NOT SET'),
+    }
+
 # Initialize database connection
 @app.on_event("startup")
 async def startup_event():
