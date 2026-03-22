@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Build files
+frontend/build/
+
+# Environment files
+backend/.env
+frontend/.env
+
+# Logs
+*.log
+server.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+nul
+Thumbs.db
+.DS_Store
+
+# Python
+*.egg-info/
+dist/
+*.egg
+.pytest_cache/

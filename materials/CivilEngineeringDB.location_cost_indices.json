@@ -1,0 +1,112 @@
+[{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f14e"
+  },
+  "State": "Kerala",
+  "District": "Thiruvananthapuram",
+  "cost index to be applied to DSR 2016 with base 102": 135.59
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f14f"
+  },
+  "State": "Kerala",
+  "District": "Kollam",
+  "cost index to be applied to DSR 2016 with base 102": 138.14
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f150"
+  },
+  "State": "Kerala",
+  "District": "Pathanamthitta",
+  "cost index to be applied to DSR 2016 with base 102": 137.29
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f151"
+  },
+  "State": "Kerala",
+  "District": "Alappuzha",
+  "cost index to be applied to DSR 2016 with base 102": 141.53
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f152"
+  },
+  "State": "Kerala",
+  "District": "Kottayam",
+  "cost index to be applied to DSR 2016 with base 102": 136.44
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f153"
+  },
+  "State": "Kerala",
+  "District": "Idukki",
+  "cost index to be applied to DSR 2016 with base 102": 141.53
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f154"
+  },
+  "State": "Kerala",
+  "District": "Ernakulam",
+  "cost index to be applied to DSR 2016 with base 102": 135.59
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f155"
+  },
+  "State": "Kerala",
+  "District": "Thrissur",
+  "cost index to be applied to DSR 2016 with base 102": 135.59
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f156"
+  },
+  "State": "Kerala",
+  "District": "Palakkad",
+  "cost index to be applied to DSR 2016 with base 102": 134.75
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f157"
+  },
+  "State": "Kerala",
+  "District": "Malappuram",
+  "cost index to be applied to DSR 2016 with base 102": 136.44
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f158"
+  },
+  "State": "Kerala",
+  "District": "Kozhikode",
+  "cost index to be applied to DSR 2016 with base 102": 136.44
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f159"
+  },
+  "State": "Kerala",
+  "District": "Wayanad",
+  "cost index to be applied to DSR 2016 with base 102": 136.44
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f15a"
+  },
+  "State": "Kerala",
+  "District": "Kannur",
+  "cost index to be applied to DSR 2016 with base 102": 133.9
+},
+{
+  "_id": {
+    "$oid": "69bd6ee1bfe97aa5c991f15b"
+  },
+  "State": "Kerala",
+  "District": "Kasaragod",
+  "cost index to be applied to DSR 2016 with base 102": 133.05
+}]

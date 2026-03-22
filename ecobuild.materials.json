@@ -1,0 +1,6584 @@
+[{
+  "_id": "6991911df633e5af951e2607",
+  "name": "OPC 53 Grade Cement",
+  "description": "Ordinary Portland Cement Grade 53 as per IS 269:2015. High strength cement suitable for all types of construction.",
+  "category": "cement",
+  "subcategory": "Portland Cement",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1440,
+    "specific_gravity": 3.15,
+    "compressive_strength": 53,
+    "thermal_conductivity": 0.29
+  },
+  "civil_properties": {
+    "structural_grade": "53 Grade",
+    "design_strength": 53,
+    "characteristic_strength": 53,
+    "durability_years": 50,
+    "weather_resistance": "High",
+    "chemical_resistance": [
+      "Mild acids",
+      "Sulfates"
+    ],
+    "workability": "Good",
+    "curing_time": 28,
+    "standard_sizes": [
+      "50 kg bag"
+    ],
+    "thickness_options": [],
+    "wastage_percentage": 3,
+    "is_code": "IS 269:2015",
+    "eco_mark": false,
+    "green_building_cert": [],
+    "quality_grade": "Standard",
+    "color_options": []
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.95,
+    "embodied_energy": 5.6,
+    "recycled_content": 0,
+    "recyclable": false,
+    "biodegradable": false,
+    "renewable": false,
+    "epd_available": true,
+    "carbon_footprint_certified": false,
+    "fsc_certified": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 380,
+    "unit_type": "bag",
+    "currency": "INR",
+    "retail_price": 390,
+    "wholesale_price": 370,
+    "bulk_price": 360,
+    "minimum_order_quantity": 100,
+    "material_cost": 380,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 0,
+    "warranty_period": 6,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "cement",
+    "opc",
+    "high-strength",
+    "structural"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.340Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T12:23:33.167Z"
+  },
+  "documents": [],
+  "images": [],
+  "is_active": true,
+  "updated_by": "699086707a0d82b852d8f7ee"
+},
+{
+  "_id": "6991911df633e5af951e2608",
+  "name": "PPC Fly Ash Cement",
+  "description": "Portland Pozzolana Cement with fly ash as per IS 1489 (Part 1):2015. Better workability and durability.",
+  "category": "cement",
+  "subcategory": "Pozzolana Cement",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1400,
+    "specific_gravity": 2.9,
+    "compressive_strength": 43,
+    "thermal_conductivity": 0.27,
+    "setting_time": 45
+  },
+  "civil_properties": {
+    "structural_grade": "43 Grade",
+    "design_strength": 43,
+    "characteristic_strength": 43,
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "chemical_resistance": [
+      "Acids",
+      "Sulfates",
+      "Chlorides"
+    ],
+    "workability": "Excellent",
+    "curing_time": 28,
+    "standard_sizes": [
+      "50 kg bag"
+    ],
+    "wastage_percentage": 3,
+    "is_code": "IS 1489 (Part 1):2015",
+    "quality_grade": "Standard",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC"
+    ]
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.65,
+    "embodied_energy": 4.2,
+    "recycled_content": 35,
+    "recyclable": false,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 360,
+    "unit_type": "bag",
+    "retail_price": 370,
+    "wholesale_price": 350,
+    "bulk_price": 340,
+    "minimum_order_quantity": 100,
+    "material_cost": 360,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 28,
+    "warranty_period": 6,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Sri Vallaba Building Materials",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8.5
+  },
+  "tags": [
+    "cement",
+    "ppc",
+    "fly-ash",
+    "eco-friendly"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.382Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.068Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2609",
+  "name": "PSC Slag Cement",
+  "description": "Portland Slag Cement as per IS 455:2015. Excellent for marine environments and mass concrete.",
+  "category": "cement",
+  "subcategory": "Slag Cement",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1420,
+    "specific_gravity": 2.95,
+    "compressive_strength": 43,
+    "thermal_conductivity": 0.28,
+    "setting_time": 60
+  },
+  "civil_properties": {
+    "structural_grade": "43 Grade",
+    "design_strength": 43,
+    "characteristic_strength": 43,
+    "durability_years": 60,
+    "weather_resistance": "Excellent",
+    "chemical_resistance": [
+      "Seawater",
+      "Sulfates",
+      "Chlorides"
+    ],
+    "workability": "Excellent",
+    "curing_time": 28,
+    "standard_sizes": [
+      "50 kg bag"
+    ],
+    "wastage_percentage": 3,
+    "is_code": "IS 455:2015",
+    "quality_grade": "Premium",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC",
+      "LEED"
+    ]
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.55,
+    "embodied_energy": 3.8,
+    "recycled_content": 50,
+    "recyclable": false,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 375,
+    "unit_type": "bag",
+    "retail_price": 385,
+    "wholesale_price": 365,
+    "bulk_price": 355,
+    "minimum_order_quantity": 100,
+    "material_cost": 375,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 28,
+    "warranty_period": 6,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "cement",
+    "psc",
+    "slag",
+    "marine-grade"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.383Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.070Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260a",
+  "name": "TMT Steel Bars Fe 500",
+  "description": "Thermo-Mechanically Treated bars Fe 500 grade as per IS 1786:2008. High strength reinforcement steel.",
+  "category": "steel",
+  "subcategory": "TMT Bars",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7850,
+    "specific_gravity": 7.85,
+    "tensile_strength": 545,
+    "yield_strength": 500,
+    "thermal_conductivity": 50,
+    "thermal_expansion": 12,
+    "modulus_of_elasticity": 200
+  },
+  "civil_properties": {
+    "structural_grade": "Fe 500",
+    "design_strength": 500,
+    "characteristic_strength": 500,
+    "yield_strength": 500,
+    "ultimate_strength": 545,
+    "durability_years": 75,
+    "weather_resistance": "High",
+    "corrosion_resistance": "Medium",
+    "workability": "Good",
+    "standard_sizes": [
+      "8mm",
+      "10mm",
+      "12mm",
+      "16mm",
+      "20mm",
+      "25mm",
+      "32mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 1786:2008",
+    "bis_certification": "ISI Marked",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.85,
+    "embodied_energy": 20.1,
+    "recycled_content": 25,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 72,
+    "unit_type": "kg",
+    "retail_price": 74,
+    "wholesale_price": 70,
+    "bulk_price": 68,
+    "minimum_order_quantity": 1000,
+    "material_cost": 72,
+    "labor_cost": 5,
+    "installation_cost": 8,
+    "price_volatility": "High",
+    "price_trend": "Fluctuating",
+    "gst_rate": 18,
+    "warranty_period": 0,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "steel",
+    "tmt",
+    "reinforcement",
+    "fe500"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.384Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.072Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260b",
+  "name": "TMT Steel Bars Fe 550",
+  "description": "High strength TMT bars Fe 550 grade for heavy structural work as per IS 1786:2008.",
+  "category": "steel",
+  "subcategory": "TMT Bars",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7850,
+    "specific_gravity": 7.85,
+    "tensile_strength": 585,
+    "yield_strength": 550,
+    "thermal_conductivity": 50,
+    "thermal_expansion": 12,
+    "modulus_of_elasticity": 200
+  },
+  "civil_properties": {
+    "structural_grade": "Fe 550",
+    "design_strength": 550,
+    "characteristic_strength": 550,
+    "yield_strength": 550,
+    "ultimate_strength": 585,
+    "durability_years": 75,
+    "weather_resistance": "High",
+    "corrosion_resistance": "Medium",
+    "workability": "Good",
+    "standard_sizes": [
+      "8mm",
+      "10mm",
+      "12mm",
+      "16mm",
+      "20mm",
+      "25mm",
+      "32mm",
+      "40mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 1786:2008",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.9,
+    "embodied_energy": 20.5,
+    "recycled_content": 25,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 75,
+    "unit_type": "kg",
+    "retail_price": 77,
+    "wholesale_price": 73,
+    "bulk_price": 71,
+    "minimum_order_quantity": 1000,
+    "material_cost": 75,
+    "labor_cost": 5,
+    "installation_cost": 8,
+    "price_volatility": "High",
+    "price_trend": "Fluctuating",
+    "gst_rate": 18,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "steel",
+    "tmt",
+    "reinforcement",
+    "fe550",
+    "high-strength"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.385Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.074Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260c",
+  "name": "TMT Steel Fe 500D",
+  "description": "Ductile TMT bars Fe 500D for earthquake-resistant structures as per IS 1786:2008.",
+  "category": "steel",
+  "subcategory": "TMT Bars",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7850,
+    "specific_gravity": 7.85,
+    "tensile_strength": 565,
+    "yield_strength": 500,
+    "thermal_conductivity": 50,
+    "modulus_of_elasticity": 200
+  },
+  "civil_properties": {
+    "structural_grade": "Fe 500D",
+    "design_strength": 500,
+    "characteristic_strength": 500,
+    "yield_strength": 500,
+    "ultimate_strength": 565,
+    "durability_years": 75,
+    "weather_resistance": "High",
+    "corrosion_resistance": "Medium",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "8mm",
+      "10mm",
+      "12mm",
+      "16mm",
+      "20mm",
+      "25mm",
+      "32mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 1786:2008",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.85,
+    "embodied_energy": 20.1,
+    "recycled_content": 30,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 74,
+    "unit_type": "kg",
+    "retail_price": 76,
+    "wholesale_price": 72,
+    "bulk_price": 70,
+    "minimum_order_quantity": 1000,
+    "material_cost": 74,
+    "labor_cost": 5,
+    "installation_cost": 8,
+    "price_volatility": "High",
+    "price_trend": "Fluctuating",
+    "gst_rate": 18,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "steel",
+    "tmt",
+    "ductile",
+    "fe500d",
+    "earthquake-resistant"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.385Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.076Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260d",
+  "name": "AAC Blocks (600x200x300)",
+  "description": "Autoclaved Aerated Concrete blocks. Lightweight, thermally efficient masonry units.",
+  "category": "masonry",
+  "subcategory": "AAC Blocks",
+  "brand": "Bharathi",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 650,
+    "compressive_strength": 4.5,
+    "thermal_conductivity": 0.16,
+    "fire_rating": "4 hours",
+    "sound_absorption": 0.45
+  },
+  "civil_properties": {
+    "structural_grade": "Grade 1",
+    "design_strength": 4.5,
+    "compressive_strength": 4.5,
+    "durability_years": 60,
+    "weather_resistance": "Excellent",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "600x200x300mm",
+      "600x200x200mm",
+      "600x200x100mm"
+    ],
+    "thickness_options": [
+      100,
+      150,
+      200,
+      250,
+      300
+    ],
+    "coverage_per_unit": 0.36,
+    "wastage_percentage": 5,
+    "is_code": "IS 2185 (Part 3):1984",
+    "bis_certification": "ISI Marked",
+    "quality_grade": "Standard",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC"
+    ]
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.25,
+    "embodied_energy": 3.5,
+    "recycled_content": 65,
+    "recyclable": true,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 42,
+    "unit_type": "piece",
+    "retail_price": 45,
+    "wholesale_price": 40,
+    "bulk_price": 38,
+    "minimum_order_quantity": 500,
+    "material_cost": 42,
+    "labor_cost": 15,
+    "installation_cost": 25,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 12,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Bharathi AAC Block Industries",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 8.5
+  },
+  "tags": [
+    "aac",
+    "blocks",
+    "lightweight",
+    "thermal",
+    "eco-friendly"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.386Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.078Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260e",
+  "name": "Clay Bricks (Kerala)",
+  "description": "Traditional Kerala clay bricks (burned bricks) for masonry work.",
+  "category": "masonry",
+  "subcategory": "Clay Bricks",
+  "brand": "Local Kilns",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1920,
+    "compressive_strength": 10,
+    "thermal_conductivity": 0.7,
+    "water_absorption": 20,
+    "porosity": 35
+  },
+  "civil_properties": {
+    "structural_grade": "Class 7.5",
+    "design_strength": 10,
+    "compressive_strength": 10,
+    "durability_years": 100,
+    "weather_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "230x110x75mm"
+    ],
+    "coverage_per_unit": 0.025,
+    "wastage_percentage": 8,
+    "is_code": "IS 1077:1992",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.38,
+    "embodied_energy": 3,
+    "recycled_content": 0,
+    "recyclable": true,
+    "biodegradable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 8.5,
+    "unit_type": "piece",
+    "retail_price": 9,
+    "wholesale_price": 8,
+    "bulk_price": 7.5,
+    "minimum_order_quantity": 5000,
+    "material_cost": 8.5,
+    "labor_cost": 4,
+    "installation_cost": 8,
+    "price_volatility": "Low",
+    "price_trend": "Increasing",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Chalakudy Brick Kilns",
+    "supplier_location": "Chalakudy",
+    "lead_time_days": 1,
+    "reliability_rating": 7
+  },
+  "tags": [
+    "bricks",
+    "clay",
+    "traditional",
+    "kerala"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.387Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.080Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e260f",
+  "name": "Fly Ash Bricks",
+  "description": "Compressed fly ash bricks. Eco-friendly alternative to clay bricks.",
+  "category": "masonry",
+  "subcategory": "Fly Ash Bricks",
+  "brand": "Eco Bricks",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1800,
+    "compressive_strength": 7.5,
+    "thermal_conductivity": 0.45,
+    "water_absorption": 15
+  },
+  "civil_properties": {
+    "structural_grade": "Class 5",
+    "design_strength": 7.5,
+    "compressive_strength": 7.5,
+    "durability_years": 50,
+    "weather_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "230x110x75mm"
+    ],
+    "coverage_per_unit": 0.025,
+    "wastage_percentage": 6,
+    "is_code": "IS 12894:2002",
+    "quality_grade": "Standard",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC"
+    ]
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.18,
+    "embodied_energy": 1.8,
+    "recycled_content": 70,
+    "recyclable": true,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 6.5,
+    "unit_type": "piece",
+    "retail_price": 7,
+    "wholesale_price": 6,
+    "bulk_price": 5.5,
+    "minimum_order_quantity": 5000,
+    "material_cost": 6.5,
+    "labor_cost": 4,
+    "installation_cost": 8,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Eco Bricks Thrissur",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "bricks",
+    "fly-ash",
+    "eco-friendly",
+    "green"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.387Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.081Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2610",
+  "name": "Laterite Stone (Kerala)",
+  "description": "Traditional Kerala laterite stone for masonry and cladding.",
+  "category": "masonry",
+  "subcategory": "Laterite Stone",
+  "brand": "Local Quarries",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2100,
+    "compressive_strength": 5,
+    "thermal_conductivity": 0.8,
+    "porosity": 30
+  },
+  "civil_properties": {
+    "structural_grade": "Class 3.5",
+    "design_strength": 5,
+    "compressive_strength": 5,
+    "durability_years": 150,
+    "weather_resistance": "Excellent",
+    "workability": "Medium",
+    "standard_sizes": [
+      "400x200x200mm",
+      "Custom"
+    ],
+    "wastage_percentage": 15,
+    "is_code": "IS 3620:1979",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.15,
+    "embodied_energy": 1.2,
+    "recycled_content": 0,
+    "recyclable": true,
+    "biodegradable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 45,
+    "unit_type": "piece",
+    "retail_price": 50,
+    "wholesale_price": 40,
+    "bulk_price": 38,
+    "minimum_order_quantity": 500,
+    "material_cost": 45,
+    "labor_cost": 25,
+    "installation_cost": 35,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala Laterite Quarries",
+    "supplier_location": "Kasaragod",
+    "lead_time_days": 3,
+    "reliability_rating": 7.5
+  },
+  "tags": [
+    "laterite",
+    "stone",
+    "kerala",
+    "traditional",
+    "cladding"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.388Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.082Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2611",
+  "name": "Manufactured Sand (M-Sand)",
+  "description": "Manufactured sand from crushed granite. IS 383:2016 compliant.",
+  "category": "aggregates",
+  "subcategory": "Fine Aggregate",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1650,
+    "specific_gravity": 2.65,
+    "bulk_density": 1600,
+    "porosity": 40
+  },
+  "civil_properties": {
+    "structural_grade": "Zone II",
+    "workability": "Good",
+    "standard_sizes": [
+      "0-4.75mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 383:2016",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.12,
+    "embodied_energy": 0.5,
+    "recycled_content": 0,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 45,
+    "unit_type": "cu.ft",
+    "retail_price": 48,
+    "wholesale_price": 42,
+    "bulk_price": 40,
+    "minimum_order_quantity": 100,
+    "material_cost": 45,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Sri Vallaba Building Materials",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "sand",
+    "m-sand",
+    "aggregate",
+    "fine"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.389Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.083Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2612",
+  "name": "20mm Coarse Aggregate",
+  "description": "Crushed stone aggregate 20mm size for concrete and RCC work.",
+  "category": "aggregates",
+  "subcategory": "Coarse Aggregate",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1600,
+    "specific_gravity": 2.7,
+    "bulk_density": 1550
+  },
+  "civil_properties": {
+    "structural_grade": "20mm",
+    "workability": "Good",
+    "standard_sizes": [
+      "20mm"
+    ],
+    "wastage_percentage": 3,
+    "is_code": "IS 383:2016",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.05,
+    "embodied_energy": 0.3,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 35,
+    "unit_type": "cu.ft",
+    "retail_price": 38,
+    "wholesale_price": 33,
+    "bulk_price": 30,
+    "minimum_order_quantity": 100,
+    "material_cost": 35,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "aggregate",
+    "coarse",
+    "20mm",
+    "stone"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.389Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.084Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2613",
+  "name": "Recycled Concrete Aggregates",
+  "description": "Aggregates from recycled concrete. Sustainable alternative to virgin aggregates.",
+  "category": "aggregates",
+  "subcategory": "Recycled Aggregate",
+  "brand": "Green Recycle",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1400,
+    "specific_gravity": 2.35,
+    "bulk_density": 1350,
+    "compressive_strength": 0
+  },
+  "civil_properties": {
+    "structural_grade": "RCA",
+    "workability": "Medium",
+    "standard_sizes": [
+      "20mm",
+      "10mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 383:2016",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC",
+      "LEED"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.08,
+    "embodied_energy": 0.2,
+    "recycled_content": 100,
+    "recyclable": true,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 25,
+    "unit_type": "cu.ft",
+    "retail_price": 28,
+    "wholesale_price": 23,
+    "bulk_price": 20,
+    "minimum_order_quantity": 200,
+    "material_cost": 25,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Green Recycle Solutions",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "recycled",
+    "aggregate",
+    "sustainable",
+    "eco-friendly",
+    "rca"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.390Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.086Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2614",
+  "name": "Vitrified Tiles",
+  "description": "Double-charged vitrified tiles for flooring. Low maintenance, high durability.",
+  "category": "finish",
+  "subcategory": "Floor Tiles",
+  "brand": "Kajaria",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2400,
+    "compressive_strength": 45,
+    "thermal_conductivity": 1.3,
+    "water_absorption": 0.5,
+    "hardness": 7
+  },
+  "civil_properties": {
+    "structural_grade": "V2",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "600x600mm",
+      "800x800mm",
+      "600x1200mm"
+    ],
+    "thickness_options": [
+      8,
+      10,
+      12
+    ],
+    "coverage_per_unit": 0.36,
+    "wastage_percentage": 8,
+    "surface_finish": "Polished/Matte",
+    "color_options": [
+      "Beige",
+      "Grey",
+      "White",
+      "Black",
+      "Wood-finish"
+    ],
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.1,
+    "embodied_energy": 15,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 120,
+    "unit_type": "sq.ft",
+    "retail_price": 130,
+    "wholesale_price": 110,
+    "bulk_price": 100,
+    "minimum_order_quantity": 500,
+    "material_cost": 120,
+    "labor_cost": 35,
+    "installation_cost": 45,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 1,
+    "lifecycle_cost_10yr": 180,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "tiles",
+    "vitrified",
+    "flooring",
+    "premium"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.391Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.088Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2615",
+  "name": "Granite Slabs",
+  "description": "Natural granite stone slabs for flooring, countertops, and wall cladding.",
+  "category": "finish",
+  "subcategory": "Natural Stone",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2700,
+    "compressive_strength": 150,
+    "thermal_conductivity": 2.8,
+    "water_absorption": 0.3,
+    "hardness": 7
+  },
+  "civil_properties": {
+    "structural_grade": "A Grade",
+    "durability_years": 100,
+    "weather_resistance": "Excellent",
+    "workability": "Medium",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "thickness_options": [
+      15,
+      18,
+      20,
+      30
+    ],
+    "coverage_per_unit": 0.5,
+    "wastage_percentage": 20,
+    "surface_finish": "Polished/Flamed/Leather",
+    "color_options": [
+      "Black",
+      "Red",
+      "White",
+      "Grey",
+      "Pink"
+    ],
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.35,
+    "embodied_energy": 5.9,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 650,
+    "unit_type": "sq.ft",
+    "retail_price": 750,
+    "wholesale_price": 600,
+    "bulk_price": 550,
+    "minimum_order_quantity": 200,
+    "material_cost": 650,
+    "labor_cost": 150,
+    "installation_cost": 200,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 2,
+    "lifecycle_cost_10yr": 850,
+    "warranty_period": 0,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Kerala Granite Mart",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 7,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "granite",
+    "stone",
+    "natural",
+    "premium",
+    "flooring"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.391Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.089Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2616",
+  "name": "Teak Wood",
+  "description": "Premium teak wood for doors, windows, and furniture. Naturally termite resistant.",
+  "category": "wood",
+  "subcategory": "Hardwood",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 660,
+    "compressive_strength": 55,
+    "thermal_conductivity": 0.14,
+    "water_absorption": 10
+  },
+  "civil_properties": {
+    "structural_grade": "A Grade",
+    "durability_years": 40,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "High",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "wastage_percentage": 15,
+    "surface_finish": "Natural/Polished",
+    "color_options": [
+      "Golden Brown"
+    ],
+    "quality_grade": "Premium",
+    "fsc_certified": true
+  },
+  "environmental_properties": {
+    "embodied_carbon": -0.85,
+    "embodied_energy": 2.5,
+    "recycled_content": 100,
+    "recyclable": true,
+    "renewable": true,
+    "biodegradable": true,
+    "fsc_certified": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 3500,
+    "unit_type": "cu.ft",
+    "retail_price": 4000,
+    "wholesale_price": 3200,
+    "bulk_price": 3000,
+    "minimum_order_quantity": 50,
+    "material_cost": 3500,
+    "labor_cost": 800,
+    "installation_cost": 1200,
+    "price_volatility": "High",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 5,
+    "lifecycle_cost_10yr": 4200,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala State Bamboo Mission",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 14,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "wood",
+    "teak",
+    "hardwood",
+    "premium",
+    "furniture"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.392Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.090Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2617",
+  "name": "Bamboo Composite Boards",
+  "description": "Engineered bamboo boards for interiors, furniture, and partitions. Carbon negative material.",
+  "category": "composite",
+  "subcategory": "Bamboo Products",
+  "brand": "Kerala Bamboo Mission",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 700,
+    "compressive_strength": 35,
+    "thermal_conductivity": 0.14,
+    "thermal_expansion": 3
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 25,
+    "weather_resistance": "Medium",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "8x4 feet",
+      "6x3 feet"
+    ],
+    "thickness_options": [
+      6,
+      12,
+      18,
+      25
+    ],
+    "wastage_percentage": 10,
+    "surface_finish": "Natural/Laminated",
+    "is_code": "IS 6874:2008",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": -1.2,
+    "embodied_energy": 2,
+    "recycled_content": 100,
+    "recyclable": true,
+    "renewable": true,
+    "biodegradable": true,
+    "epd_available": true,
+    "carbon_footprint_certified": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 120,
+    "unit_type": "sq.ft",
+    "retail_price": 140,
+    "wholesale_price": 110,
+    "bulk_price": 100,
+    "minimum_order_quantity": 100,
+    "material_cost": 120,
+    "labor_cost": 40,
+    "installation_cost": 60,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 12,
+    "warranty_period": 5,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Kerala State Bamboo Mission",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 7,
+    "reliability_rating": 8.5
+  },
+  "tags": [
+    "bamboo",
+    "composite",
+    "eco-friendly",
+    "carbon-negative",
+    "sustainable"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.393Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.092Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2618",
+  "name": "Glass Fiber Reinforced Concrete (GFRC)",
+  "description": "Lightweight concrete reinforced with glass fibers. High strength, versatile shapes.",
+  "category": "composite",
+  "subcategory": "GFRC",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2000,
+    "compressive_strength": 40,
+    "flexural_strength": 20,
+    "thermal_conductivity": 0.32,
+    "fire_rating": "2 hours"
+  },
+  "civil_properties": {
+    "structural_grade": "M40",
+    "design_strength": 40,
+    "compressive_strength": 40,
+    "durability_years": 80,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "High",
+    "workability": "Good",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "wastage_percentage": 8,
+    "surface_finish": "Smooth/Textured",
+    "color_options": [
+      "White",
+      "Grey",
+      "Custom"
+    ],
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.45,
+    "embodied_energy": 8,
+    "recycled_content": 40,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 280,
+    "unit_type": "sq.ft",
+    "retail_price": 320,
+    "wholesale_price": 260,
+    "bulk_price": 240,
+    "minimum_order_quantity": 100,
+    "material_cost": 280,
+    "labor_cost": 80,
+    "installation_cost": 100,
+    "price_volatility": "Medium",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 10,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "gfrc",
+    "composite",
+    "lightweight",
+    "cladding"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.393Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.094Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2619",
+  "name": "Rockwool Insulation",
+  "description": "Mineral wool insulation for thermal and acoustic insulation.",
+  "category": "insulation",
+  "subcategory": "Mineral Wool",
+  "brand": "Rockwool",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 100,
+    "thermal_conductivity": 0.04,
+    "fire_rating": "4 hours",
+    "sound_absorption": 0.9,
+    "acoustic_rating": 50
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 50,
+    "weather_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "1.2x0.6m"
+    ],
+    "thickness_options": [
+      25,
+      50,
+      75,
+      100,
+      150
+    ],
+    "coverage_per_unit": 0.72,
+    "wastage_percentage": 10,
+    "is_code": "IS 8183:1993",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.2,
+    "embodied_energy": 16.8,
+    "recycled_content": 25,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 180,
+    "unit_type": "sq.ft",
+    "retail_price": 200,
+    "wholesale_price": 170,
+    "bulk_price": 160,
+    "minimum_order_quantity": 100,
+    "material_cost": 180,
+    "labor_cost": 30,
+    "installation_cost": 40,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 5,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Thrissur Insulation Suppliers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "insulation",
+    "rockwool",
+    "thermal",
+    "acoustic"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.394Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.096Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261a",
+  "name": "XPS Insulation Board",
+  "description": "Extruded polystyrene foam insulation. High compressive strength.",
+  "category": "insulation",
+  "subcategory": "XPS Foam",
+  "brand": "Dow",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 35,
+    "compressive_strength": 0.3,
+    "thermal_conductivity": 0.03,
+    "water_absorption": 0.5,
+    "fire_rating": "B2"
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "1.2x0.6m"
+    ],
+    "thickness_options": [
+      25,
+      50,
+      75,
+      100
+    ],
+    "coverage_per_unit": 0.72,
+    "wastage_percentage": 8,
+    "is_code": "IS 4671:1984",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.8,
+    "embodied_energy": 88.6,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 380,
+    "unit_type": "sq.ft",
+    "retail_price": 420,
+    "wholesale_price": 360,
+    "bulk_price": 340,
+    "minimum_order_quantity": 100,
+    "material_cost": 380,
+    "labor_cost": 25,
+    "installation_cost": 35,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Thrissur Insulation Suppliers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 5,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "insulation",
+    "xps",
+    "thermal",
+    "waterproof"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.394Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.097Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261b",
+  "name": "Clay Roofing Tiles (Kerala)",
+  "description": "Traditional Kerala clay roofing tiles (Mangalore tiles). Time-tested durability.",
+  "category": "roof",
+  "subcategory": "Roof Tiles",
+  "brand": "Local Kilns",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1900,
+    "compressive_strength": 15,
+    "thermal_conductivity": 0.8,
+    "water_absorption": 15
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 80,
+    "weather_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "420x330mm"
+    ],
+    "coverage_per_unit": 0.14,
+    "wastage_percentage": 8,
+    "is_code": "IS 2690:1992",
+    "surface_finish": "Natural",
+    "color_options": [
+      "Red",
+      "Brown"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.42,
+    "embodied_energy": 3.2,
+    "recycled_content": 0,
+    "recyclable": true,
+    "biodegradable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 65,
+    "unit_type": "piece",
+    "retail_price": 70,
+    "wholesale_price": 60,
+    "bulk_price": 55,
+    "minimum_order_quantity": 1000,
+    "material_cost": 65,
+    "labor_cost": 25,
+    "installation_cost": 35,
+    "price_volatility": "Low",
+    "price_trend": "Increasing",
+    "gst_rate": 5,
+    "lifecycle_cost_20yr": 100,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Chalakudy Brick Kilns",
+    "supplier_location": "Chalakudy",
+    "lead_time_days": 3,
+    "reliability_rating": 7.5
+  },
+  "tags": [
+    "roofing",
+    "tiles",
+    "clay",
+    "kerala",
+    "traditional"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.395Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.097Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261c",
+  "name": "Metal Roofing Sheets",
+  "description": "Color-coated steel roofing sheets. Long span, low maintenance.",
+  "category": "roof",
+  "subcategory": "Metal Roofing",
+  "brand": "Tata",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7850,
+    "thermal_conductivity": 50,
+    "fire_rating": "Non-combustible"
+  },
+  "civil_properties": {
+    "structural_grade": "G550",
+    "durability_years": 40,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "High",
+    "workability": "Good",
+    "standard_sizes": [
+      "Custom lengths"
+    ],
+    "thickness_options": [
+      0.35,
+      0.45,
+      0.5,
+      0.6
+    ],
+    "coverage_per_unit": 10,
+    "wastage_percentage": 5,
+    "surface_finish": "Color Coated",
+    "color_options": [
+      "Red",
+      "Blue",
+      "Green",
+      "Grey",
+      "White"
+    ],
+    "is_code": "IS 14246:1995",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.1,
+    "embodied_energy": 35,
+    "recycled_content": 60,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 450,
+    "unit_type": "sq.ft",
+    "retail_price": 480,
+    "wholesale_price": 430,
+    "bulk_price": 400,
+    "minimum_order_quantity": 500,
+    "material_cost": 450,
+    "labor_cost": 40,
+    "installation_cost": 50,
+    "price_volatility": "High",
+    "price_trend": "Fluctuating",
+    "gst_rate": 18,
+    "lifecycle_cost_20yr": 580,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "roofing",
+    "metal",
+    "steel",
+    "long-span"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.396Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.098Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261d",
+  "name": "UPVC Door System",
+  "description": "UPVC door frames and shutters. Weather resistant, low maintenance.",
+  "category": "door",
+  "subcategory": "UPVC Doors",
+  "brand": "Fenesta",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1400,
+    "thermal_conductivity": 0.2,
+    "fire_rating": "B1"
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 40,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "Excellent",
+    "uv_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "900x2100mm",
+      "1200x2100mm"
+    ],
+    "wastage_percentage": 3,
+    "surface_finish": "Smooth",
+    "color_options": [
+      "White",
+      "Wood finish",
+      "Grey"
+    ],
+    "is_code": "IS 14856:2000",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 3.2,
+    "embodied_energy": 60,
+    "recycled_content": 40,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 8500,
+    "unit_type": "piece",
+    "retail_price": 9500,
+    "wholesale_price": 8000,
+    "bulk_price": 7500,
+    "minimum_order_quantity": 5,
+    "material_cost": 8500,
+    "labor_cost": 1500,
+    "installation_cost": 2000,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 0,
+    "lifecycle_cost_10yr": 8500,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Fenesta Thrissur",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 14,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "doors",
+    "upvc",
+    "weather-resistant",
+    "low-maintenance"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.396Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.100Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261e",
+  "name": "Aluminum Door System",
+  "description": "Powder-coated aluminum door systems. Lightweight and durable.",
+  "category": "door",
+  "subcategory": "Aluminum Doors",
+  "brand": "Dorset",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2700,
+    "thermal_conductivity": 160,
+    "fire_rating": "Non-combustible"
+  },
+  "civil_properties": {
+    "structural_grade": "Alloy 6063",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "High",
+    "uv_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "900x2100mm",
+      "1200x2100mm",
+      "1500x2100mm"
+    ],
+    "wastage_percentage": 3,
+    "surface_finish": "Powder Coated/Anodized",
+    "color_options": [
+      "White",
+      "Black",
+      "Grey",
+      "Brown",
+      "Custom"
+    ],
+    "is_code": "IS 1948:1961",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 8.5,
+    "embodied_energy": 155,
+    "recycled_content": 70,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 12500,
+    "unit_type": "piece",
+    "retail_price": 14000,
+    "wholesale_price": 11500,
+    "bulk_price": 11000,
+    "minimum_order_quantity": 5,
+    "material_cost": 12500,
+    "labor_cost": 2000,
+    "installation_cost": 2500,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 1,
+    "lifecycle_cost_10yr": 13500,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Dorset Thrissur",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 21,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "doors",
+    "aluminum",
+    "lightweight",
+    "durable"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.397Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.101Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e261f",
+  "name": "Weather Shield Exterior Paint",
+  "description": "Premium exterior emulsion with weather protection and anti-fungal properties.",
+  "category": "coating",
+  "subcategory": "Exterior Paint",
+  "brand": "Asian Paints",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1400,
+    "thermal_conductivity": 0.2
+  },
+  "civil_properties": {
+    "structural_grade": "Premium",
+    "durability_years": 10,
+    "weather_resistance": "Excellent",
+    "uv_resistance": "Excellent",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "1L",
+      "4L",
+      "10L",
+      "20L"
+    ],
+    "coverage_per_unit": 140,
+    "wastage_percentage": 10,
+    "is_code": "IS 5410:1992",
+    "surface_finish": "Matt/Satin",
+    "color_options": [
+      "Wide range"
+    ],
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.5,
+    "embodied_energy": 60,
+    "recycled_content": 10,
+    "recyclable": false,
+    "voc_emissions": 50,
+    "formaldehyde_emission": "E1",
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 450,
+    "unit_type": "liter",
+    "retail_price": 480,
+    "wholesale_price": 430,
+    "bulk_price": 400,
+    "minimum_order_quantity": 20,
+    "material_cost": 450,
+    "labor_cost": 80,
+    "installation_cost": 100,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 10,
+    "lifecycle_cost_10yr": 550,
+    "warranty_period": 7,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Asian Paints Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "paint",
+    "exterior",
+    "weather-shield",
+    "premium"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.397Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.102Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2620",
+  "name": "Plastic Emulsion Interior Paint",
+  "description": "Interior emulsion paint. Washable and stain-resistant.",
+  "category": "coating",
+  "subcategory": "Interior Paint",
+  "brand": "Asian Paints",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1350,
+    "thermal_conductivity": 0.15
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 8,
+    "weather_resistance": "N/A",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "1L",
+      "4L",
+      "10L",
+      "20L"
+    ],
+    "coverage_per_unit": 160,
+    "wastage_percentage": 10,
+    "is_code": "IS 5410:1992",
+    "surface_finish": "Matt/Satin",
+    "color_options": [
+      "Wide range"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.2,
+    "embodied_energy": 55,
+    "recycled_content": 5,
+    "recyclable": false,
+    "voc_emissions": 30,
+    "formaldehyde_emission": "E0",
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 280,
+    "unit_type": "liter",
+    "retail_price": 300,
+    "wholesale_price": 270,
+    "bulk_price": 250,
+    "minimum_order_quantity": 20,
+    "material_cost": 280,
+    "labor_cost": 50,
+    "installation_cost": 70,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 8,
+    "lifecycle_cost_10yr": 360,
+    "warranty_period": 5,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Asian Paints Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "paint",
+    "interior",
+    "emulsion",
+    "washable"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.398Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.103Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2621",
+  "name": "Tempered Glass",
+  "description": "Toughened safety glass. 5x stronger than regular glass.",
+  "category": "glass",
+  "subcategory": "Safety Glass",
+  "brand": "Saint-Gobain",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2500,
+    "compressive_strength": 120,
+    "thermal_conductivity": 1,
+    "thermal_expansion": 9
+  },
+  "civil_properties": {
+    "structural_grade": "Toughened",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "workability": "Poor",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "thickness_options": [
+      4,
+      5,
+      6,
+      8,
+      10,
+      12,
+      15,
+      19
+    ],
+    "coverage_per_unit": 1,
+    "wastage_percentage": 5,
+    "surface_finish": "Clear/Tinted/Frosted",
+    "is_code": "IS 2553:2018",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.5,
+    "embodied_energy": 15,
+    "recycled_content": 20,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 850,
+    "unit_type": "sq.ft",
+    "retail_price": 950,
+    "wholesale_price": 800,
+    "bulk_price": 750,
+    "minimum_order_quantity": 50,
+    "material_cost": 850,
+    "labor_cost": 100,
+    "installation_cost": 150,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "warranty_period": 5,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Saint-Gobain Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 7,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "glass",
+    "tempered",
+    "safety",
+    "toughened"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.399Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.104Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2622",
+  "name": "Tile Adhesive",
+  "description": "Cement-based tile adhesive for floor and wall tiles. High bond strength.",
+  "category": "adhesive",
+  "subcategory": "Tile Adhesive",
+  "brand": "Birla White",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1600,
+    "compressive_strength": 15,
+    "thermal_conductivity": 0.5
+  },
+  "civil_properties": {
+    "structural_grade": "Type 1",
+    "durability_years": 20,
+    "weather_resistance": "Good",
+    "chemical_resistance": [
+      "Water",
+      "Mild acids"
+    ],
+    "workability": "Excellent",
+    "setting_time": 240,
+    "standard_sizes": [
+      "20 kg bag",
+      "40 kg bag"
+    ],
+    "coverage_per_unit": 40,
+    "wastage_percentage": 5,
+    "is_code": "IS 15477:2004",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.45,
+    "embodied_energy": 3,
+    "recycled_content": 0,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 35,
+    "unit_type": "kg",
+    "retail_price": 38,
+    "wholesale_price": 33,
+    "bulk_price": 30,
+    "minimum_order_quantity": 500,
+    "material_cost": 35,
+    "labor_cost": 10,
+    "installation_cost": 15,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 2,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "KTJ Steel & Cement Dealers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "adhesive",
+    "tile",
+    "cement-based"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.399Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.107Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2623",
+  "name": "Cementitious Waterproofing",
+  "description": "Crystalline waterproofing compound for basements and water tanks.",
+  "category": "adhesive",
+  "subcategory": "Waterproofing",
+  "brand": "Dr. Fixit",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1400,
+    "compressive_strength": 10,
+    "thermal_conductivity": 0.6
+  },
+  "civil_properties": {
+    "structural_grade": "Type 2",
+    "durability_years": 25,
+    "weather_resistance": "Excellent",
+    "chemical_resistance": [
+      "Water",
+      "Chlorides",
+      "Sulfates"
+    ],
+    "workability": "Good",
+    "curing_time": 7,
+    "standard_sizes": [
+      "20 kg bag"
+    ],
+    "coverage_per_unit": 15,
+    "wastage_percentage": 5,
+    "is_code": "IS 2645:2003",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.55,
+    "embodied_energy": 3.5,
+    "recycled_content": 10,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 45,
+    "unit_type": "kg",
+    "retail_price": 50,
+    "wholesale_price": 42,
+    "bulk_price": 38,
+    "minimum_order_quantity": 200,
+    "material_cost": 45,
+    "labor_cost": 30,
+    "installation_cost": 40,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Dr. Fixit Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "waterproofing",
+    "cementitious",
+    "basement",
+    "tank"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.400Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.108Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2624",
+  "name": "Hollow Concrete Blocks",
+  "description": "Concrete masonry units with hollow cores for structural and non-structural walls.",
+  "category": "masonry",
+  "subcategory": "Concrete Blocks",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1600,
+    "compressive_strength": 7,
+    "thermal_conductivity": 0.95,
+    "water_absorption": 12
+  },
+  "civil_properties": {
+    "structural_grade": "Grade B",
+    "design_strength": 7,
+    "compressive_strength": 7,
+    "durability_years": 50,
+    "weather_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "400x200x200mm",
+      "400x200x150mm",
+      "400x200x100mm"
+    ],
+    "thickness_options": [
+      100,
+      150,
+      200
+    ],
+    "coverage_per_unit": 0.16,
+    "wastage_percentage": 5,
+    "is_code": "IS 2185 (Part 1):2005",
+    "surface_finish": "Rough",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.22,
+    "embodied_energy": 2.5,
+    "recycled_content": 15,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 28,
+    "unit_type": "piece",
+    "retail_price": 30,
+    "wholesale_price": 26,
+    "bulk_price": 24,
+    "minimum_order_quantity": 500,
+    "material_cost": 28,
+    "labor_cost": 12,
+    "installation_cost": 20,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 12,
+    "warranty_period": 0,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Thrissur Block Industries",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 2,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "blocks",
+    "concrete",
+    "hollow",
+    "masonry"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.401Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.110Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2625",
+  "name": "Porotherm Clay Blocks",
+  "description": "Perforated clay blocks for walls. Excellent thermal insulation and faster construction.",
+  "category": "masonry",
+  "subcategory": "Clay Blocks",
+  "brand": "Wienerberger",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 750,
+    "compressive_strength": 6,
+    "thermal_conductivity": 0.65,
+    "fire_rating": "4 hours"
+  },
+  "civil_properties": {
+    "structural_grade": "Grade A",
+    "design_strength": 6,
+    "compressive_strength": 6,
+    "durability_years": 80,
+    "weather_resistance": "Excellent",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "400x200x200mm",
+      "400x200x150mm"
+    ],
+    "thickness_options": [
+      150,
+      200
+    ],
+    "coverage_per_unit": 0.16,
+    "wastage_percentage": 3,
+    "is_code": "IS 3952:1988",
+    "surface_finish": "Natural",
+    "quality_grade": "Premium",
+    "green_building_cert": [
+      "GRIHA",
+      "IGBC"
+    ]
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.3,
+    "embodied_energy": 2.8,
+    "recycled_content": 10,
+    "recyclable": true,
+    "biodegradable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 65,
+    "unit_type": "piece",
+    "retail_price": 70,
+    "wholesale_price": 60,
+    "bulk_price": 55,
+    "minimum_order_quantity": 500,
+    "material_cost": 65,
+    "labor_cost": 20,
+    "installation_cost": 30,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 12,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Wienerberger India",
+    "supplier_location": "Bangalore",
+    "lead_time_days": 7,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "blocks",
+    "porotherm",
+    "clay",
+    "thermal",
+    "premium"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.401Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.111Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2626",
+  "name": "Rubber Wood",
+  "description": "Treated rubber wood for furniture and interiors. Cost-effective hardwood alternative.",
+  "category": "wood",
+  "subcategory": "Softwood",
+  "brand": "Kerala State",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 600,
+    "compressive_strength": 35,
+    "thermal_conductivity": 0.12,
+    "water_absorption": 15
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 25,
+    "weather_resistance": "Low",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "wastage_percentage": 15,
+    "surface_finish": "Smooth",
+    "color_options": [
+      "Light Brown"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": -0.65,
+    "embodied_energy": 2,
+    "recycled_content": 100,
+    "recyclable": true,
+    "renewable": true,
+    "biodegradable": true,
+    "fsc_certified": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 850,
+    "unit_type": "cu.ft",
+    "retail_price": 950,
+    "wholesale_price": 800,
+    "bulk_price": 750,
+    "minimum_order_quantity": 100,
+    "material_cost": 850,
+    "labor_cost": 200,
+    "installation_cost": 300,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "lifecycle_cost_10yr": 1050,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala Rubber Wood Industries",
+    "supplier_location": "Kottayam",
+    "lead_time_days": 7,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "wood",
+    "rubber",
+    "furniture",
+    "eco-friendly"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.402Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.112Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2627",
+  "name": "Ceramic Wall Tiles",
+  "description": "Glazed ceramic tiles for bathroom and kitchen walls.",
+  "category": "finish",
+  "subcategory": "Wall Tiles",
+  "brand": "Kajaria",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2000,
+    "compressive_strength": 35,
+    "thermal_conductivity": 1.2,
+    "water_absorption": 15
+  },
+  "civil_properties": {
+    "structural_grade": "Grade 1",
+    "durability_years": 30,
+    "weather_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "300x450mm",
+      "300x600mm",
+      "250x375mm"
+    ],
+    "thickness_options": [
+      6,
+      8
+    ],
+    "coverage_per_unit": 0.135,
+    "wastage_percentage": 10,
+    "surface_finish": "Glossy/Matt",
+    "color_options": [
+      "White",
+      "Beige",
+      "Multiple"
+    ],
+    "is_code": "IS 13753:1993",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.85,
+    "embodied_energy": 12,
+    "recycled_content": 5,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 85,
+    "unit_type": "sq.ft",
+    "retail_price": 95,
+    "wholesale_price": 80,
+    "bulk_price": 75,
+    "minimum_order_quantity": 500,
+    "material_cost": 85,
+    "labor_cost": 30,
+    "installation_cost": 40,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 5,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Kajaria Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "tiles",
+    "ceramic",
+    "wall",
+    "bathroom"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.402Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.114Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2628",
+  "name": "Plastering M-Sand",
+  "description": "Fine manufactured sand for plastering work. IS 1542:1992 compliant.",
+  "category": "aggregates",
+  "subcategory": "Fine Aggregate",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1700,
+    "specific_gravity": 2.6,
+    "bulk_density": 1650
+  },
+  "civil_properties": {
+    "structural_grade": "Zone III/IV",
+    "workability": "Good",
+    "standard_sizes": [
+      "0-2.36mm"
+    ],
+    "wastage_percentage": 5,
+    "is_code": "IS 1542:1992",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.1,
+    "embodied_energy": 0.4,
+    "recycled_content": 0,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 55,
+    "unit_type": "cu.ft",
+    "retail_price": 58,
+    "wholesale_price": 52,
+    "bulk_price": 50,
+    "minimum_order_quantity": 100,
+    "material_cost": 55,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Sri Vallaba Building Materials",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "sand",
+    "plastering",
+    "m-sand",
+    "fine"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.403Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.115Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2629",
+  "name": "Marble",
+  "description": "Natural marble stone for premium flooring and cladding.",
+  "category": "finish",
+  "subcategory": "Natural Stone",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2700,
+    "compressive_strength": 80,
+    "thermal_conductivity": 2.5,
+    "water_absorption": 0.5,
+    "hardness": 3
+  },
+  "civil_properties": {
+    "structural_grade": "Premium",
+    "durability_years": 80,
+    "weather_resistance": "Medium",
+    "workability": "Poor",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "thickness_options": [
+      16,
+      18,
+      20
+    ],
+    "coverage_per_unit": 0.5,
+    "wastage_percentage": 25,
+    "surface_finish": "Polished/Honed",
+    "color_options": [
+      "White",
+      "Beige",
+      "Green",
+      "Pink"
+    ],
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.45,
+    "embodied_energy": 6,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 850,
+    "unit_type": "sq.ft",
+    "retail_price": 1000,
+    "wholesale_price": 800,
+    "bulk_price": 750,
+    "minimum_order_quantity": 100,
+    "material_cost": 850,
+    "labor_cost": 200,
+    "installation_cost": 250,
+    "price_volatility": "High",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 5,
+    "lifecycle_cost_10yr": 1100,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala Granite Mart",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 7,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "marble",
+    "stone",
+    "natural",
+    "premium",
+    "flooring"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.403Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.117Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262a",
+  "name": "Kota Stone",
+  "description": "Limestone from Kota, Rajasthan. Popular for flooring and stairs.",
+  "category": "finish",
+  "subcategory": "Natural Stone",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2650,
+    "compressive_strength": 65,
+    "thermal_conductivity": 2.1,
+    "water_absorption": 1.5,
+    "hardness": 4
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 100,
+    "weather_resistance": "Good",
+    "workability": "Poor",
+    "standard_sizes": [
+      "600x600mm",
+      "600x900mm",
+      "Custom"
+    ],
+    "thickness_options": [
+      20,
+      25,
+      30
+    ],
+    "coverage_per_unit": 0.54,
+    "wastage_percentage": 15,
+    "surface_finish": "Polished/Honed/Rough",
+    "color_options": [
+      "Blue",
+      "Brown"
+    ],
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.25,
+    "embodied_energy": 3,
+    "recycled_content": 0,
+    "recyclable": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 120,
+    "unit_type": "sq.ft",
+    "retail_price": 140,
+    "wholesale_price": 110,
+    "bulk_price": 100,
+    "minimum_order_quantity": 500,
+    "material_cost": 120,
+    "labor_cost": 40,
+    "installation_cost": 50,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 5,
+    "maintenance_cost_annual": 2,
+    "lifecycle_cost_10yr": 160,
+    "warranty_period": 0,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala Granite Mart",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 7,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "kota",
+    "stone",
+    "limestone",
+    "flooring",
+    "stairs"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.404Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.118Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262b",
+  "name": "Glasswool Insulation",
+  "description": "Fiberglass insulation for thermal and acoustic applications.",
+  "category": "insulation",
+  "subcategory": "Fiberglass",
+  "brand": "Owens Corning",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 15,
+    "thermal_conductivity": 0.035,
+    "fire_rating": "Non-combustible",
+    "sound_absorption": 0.85
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 40,
+    "weather_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "1.2x10m rolls"
+    ],
+    "thickness_options": [
+      25,
+      50,
+      75,
+      100
+    ],
+    "coverage_per_unit": 12,
+    "wastage_percentage": 10,
+    "is_code": "IS 8183:1993",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.35,
+    "embodied_energy": 30,
+    "recycled_content": 30,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 220,
+    "unit_type": "sq.ft",
+    "retail_price": 250,
+    "wholesale_price": 200,
+    "bulk_price": 180,
+    "minimum_order_quantity": 500,
+    "material_cost": 220,
+    "labor_cost": 20,
+    "installation_cost": 30,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 5,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Thrissur Insulation Suppliers",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "insulation",
+    "glasswool",
+    "fiberglass",
+    "thermal"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.405Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.118Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262c",
+  "name": "Ferrocement",
+  "description": "Thin-wall reinforced concrete using wire mesh. Lightweight and versatile.",
+  "category": "composite",
+  "subcategory": "Ferrocement",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1800,
+    "compressive_strength": 25,
+    "flexural_strength": 8,
+    "thermal_conductivity": 1.8
+  },
+  "civil_properties": {
+    "structural_grade": "M25",
+    "design_strength": 25,
+    "compressive_strength": 25,
+    "durability_years": 60,
+    "weather_resistance": "Good",
+    "corrosion_resistance": "Medium",
+    "workability": "Medium",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "wastage_percentage": 10,
+    "surface_finish": "Smooth",
+    "is_code": "IS 13356:1992",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.55,
+    "embodied_energy": 6,
+    "recycled_content": 15,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 180,
+    "unit_type": "sq.ft",
+    "retail_price": 200,
+    "wholesale_price": 170,
+    "bulk_price": 160,
+    "minimum_order_quantity": 500,
+    "material_cost": 180,
+    "labor_cost": 60,
+    "installation_cost": 80,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 5,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "Local Contractors",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 5,
+    "reliability_rating": 7
+  },
+  "tags": [
+    "ferrocement",
+    "composite",
+    "lightweight",
+    "wire-mesh"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.406Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.119Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262d",
+  "name": "Asphalt Shingles",
+  "description": "Bitumen-based roofing shingles for sloped roofs.",
+  "category": "roof",
+  "subcategory": "Shingles",
+  "brand": "Owens Corning",
+  "country_of_origin": "USA/India",
+  "physical_properties": {
+    "density": 1100,
+    "thermal_conductivity": 0.2,
+    "fire_rating": "Class A"
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 25,
+    "weather_resistance": "Good",
+    "uv_resistance": "Good",
+    "workability": "Good",
+    "standard_sizes": [
+      "1000x335mm"
+    ],
+    "coverage_per_unit": 0.33,
+    "wastage_percentage": 10,
+    "surface_finish": "Textured",
+    "color_options": [
+      "Black",
+      "Grey",
+      "Brown",
+      "Red"
+    ],
+    "is_code": "ASTM D3462",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.85,
+    "embodied_energy": 45,
+    "recycled_content": 15,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 180,
+    "unit_type": "sq.ft",
+    "retail_price": 200,
+    "wholesale_price": 170,
+    "bulk_price": 160,
+    "minimum_order_quantity": 1000,
+    "material_cost": 180,
+    "labor_cost": 40,
+    "installation_cost": 50,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "lifecycle_cost_20yr": 280,
+    "warranty_period": 25,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Owens Corning India",
+    "supplier_location": "Mumbai",
+    "lead_time_days": 14,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "shingles",
+    "asphalt",
+    "roofing",
+    "sloped"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.406Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.121Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262e",
+  "name": "Concrete Roofing Tiles",
+  "description": "Cement-based roofing tiles. Durable and versatile.",
+  "category": "roof",
+  "subcategory": "Concrete Tiles",
+  "brand": "Monier",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2100,
+    "compressive_strength": 25,
+    "thermal_conductivity": 1,
+    "water_absorption": 10
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 60,
+    "weather_resistance": "Excellent",
+    "workability": "Good",
+    "standard_sizes": [
+      "420x330mm"
+    ],
+    "coverage_per_unit": 0.14,
+    "wastage_percentage": 8,
+    "surface_finish": "Textured",
+    "color_options": [
+      "Red",
+      "Brown",
+      "Grey",
+      "Terracotta"
+    ],
+    "is_code": "IS 2690:1992",
+    "quality_grade": "Standard"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 0.65,
+    "embodied_energy": 4.5,
+    "recycled_content": 5,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 85,
+    "unit_type": "piece",
+    "retail_price": 95,
+    "wholesale_price": 80,
+    "bulk_price": 75,
+    "minimum_order_quantity": 1000,
+    "material_cost": 85,
+    "labor_cost": 30,
+    "installation_cost": 40,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "lifecycle_cost_20yr": 125,
+    "warranty_period": 30,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Monier India",
+    "supplier_location": "Chennai",
+    "lead_time_days": 10,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "tiles",
+    "concrete",
+    "roofing",
+    "durable"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.407Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.123Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e262f",
+  "name": "Steel Door System",
+  "description": "Galvanized steel door frames and shutters. High security.",
+  "category": "door",
+  "subcategory": "Steel Doors",
+  "brand": "Godrej",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7850,
+    "thermal_conductivity": 50,
+    "fire_rating": "2 hours"
+  },
+  "civil_properties": {
+    "structural_grade": "G90",
+    "durability_years": 60,
+    "weather_resistance": "Excellent",
+    "corrosion_resistance": "High",
+    "workability": "Poor",
+    "standard_sizes": [
+      "900x2100mm",
+      "1200x2100mm"
+    ],
+    "wastage_percentage": 3,
+    "surface_finish": "Powder Coated",
+    "color_options": [
+      "White",
+      "Grey",
+      "Wood finish"
+    ],
+    "is_code": "IS 4351:2003",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.8,
+    "embodied_energy": 35,
+    "recycled_content": 50,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 9500,
+    "unit_type": "piece",
+    "retail_price": 11000,
+    "wholesale_price": 9000,
+    "bulk_price": 8500,
+    "minimum_order_quantity": 5,
+    "material_cost": 9500,
+    "labor_cost": 1800,
+    "installation_cost": 2200,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 0,
+    "lifecycle_cost_10yr": 9500,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Godrej Building Solutions",
+    "supplier_location": "Mumbai",
+    "lead_time_days": 14,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "doors",
+    "steel",
+    "security",
+    "fire-rated"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.407Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.125Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2630",
+  "name": "Wooden Door System",
+  "description": "Solid wood door with frame. Traditional and aesthetic.",
+  "category": "door",
+  "subcategory": "Wooden Doors",
+  "brand": "Various",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 700,
+    "thermal_conductivity": 0.15,
+    "fire_rating": "30 minutes"
+  },
+  "civil_properties": {
+    "structural_grade": "Standard",
+    "durability_years": 50,
+    "weather_resistance": "Medium",
+    "corrosion_resistance": "N/A",
+    "workability": "Excellent",
+    "standard_sizes": [
+      "900x2100mm",
+      "1200x2100mm"
+    ],
+    "wastage_percentage": 5,
+    "surface_finish": "Polished/Varnished",
+    "color_options": [
+      "Natural",
+      "Walnut",
+      "Teak",
+      "Mahogany"
+    ],
+    "fsc_certified": true,
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": -1.5,
+    "embodied_energy": 3,
+    "recycled_content": 80,
+    "recyclable": true,
+    "renewable": true,
+    "biodegradable": true,
+    "fsc_certified": true,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 15000,
+    "unit_type": "piece",
+    "retail_price": 18000,
+    "wholesale_price": 14000,
+    "bulk_price": 13000,
+    "minimum_order_quantity": 5,
+    "material_cost": 15000,
+    "labor_cost": 3000,
+    "installation_cost": 3500,
+    "price_volatility": "High",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "maintenance_cost_annual": 8,
+    "lifecycle_cost_10yr": 16200,
+    "warranty_period": 5,
+    "credit_period": 7
+  },
+  "supplier": {
+    "supplier_name": "Kerala Wood Industries",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 14,
+    "reliability_rating": 8
+  },
+  "tags": [
+    "doors",
+    "wood",
+    "traditional",
+    "premium"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.408Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.126Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2631",
+  "name": "Laminated Glass",
+  "description": "Safety glass with PVB interlayer. Stays intact when broken.",
+  "category": "glass",
+  "subcategory": "Safety Glass",
+  "brand": "Saint-Gobain",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2500,
+    "compressive_strength": 80,
+    "thermal_conductivity": 1
+  },
+  "civil_properties": {
+    "structural_grade": "Laminated",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "uv_resistance": "Excellent",
+    "workability": "Poor",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "thickness_options": [
+      6.38,
+      8.38,
+      10.38,
+      12.38
+    ],
+    "coverage_per_unit": 1,
+    "wastage_percentage": 5,
+    "surface_finish": "Clear/Tinted/Colored",
+    "is_code": "IS 2553:2018",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.65,
+    "embodied_energy": 18,
+    "recycled_content": 15,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 1200,
+    "unit_type": "sq.ft",
+    "retail_price": 1350,
+    "wholesale_price": 1150,
+    "bulk_price": 1100,
+    "minimum_order_quantity": 50,
+    "material_cost": 1200,
+    "labor_cost": 150,
+    "installation_cost": 200,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Saint-Gobain Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 10,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "glass",
+    "laminated",
+    "safety",
+    "acoustic"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.408Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.128Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2632",
+  "name": "Insulated Glass Unit (IGU)",
+  "description": "Double/triple glazed units for thermal and acoustic insulation.",
+  "category": "glass",
+  "subcategory": "Insulated Glass",
+  "brand": "Saint-Gobain",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2500,
+    "thermal_conductivity": 0.8,
+    "sound_absorption": 0.7,
+    "acoustic_rating": 35
+  },
+  "civil_properties": {
+    "structural_grade": "IGU",
+    "durability_years": 50,
+    "weather_resistance": "Excellent",
+    "uv_resistance": "Excellent",
+    "workability": "Poor",
+    "standard_sizes": [
+      "Custom"
+    ],
+    "thickness_options": [
+      24,
+      28,
+      32,
+      36
+    ],
+    "coverage_per_unit": 1,
+    "wastage_percentage": 5,
+    "surface_finish": "Clear/Low-E/Tinted",
+    "is_code": "IS 3548:1988",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 1.8,
+    "embodied_energy": 25,
+    "recycled_content": 10,
+    "recyclable": true,
+    "epd_available": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 2200,
+    "unit_type": "sq.ft",
+    "retail_price": 2500,
+    "wholesale_price": 2100,
+    "bulk_price": 2000,
+    "minimum_order_quantity": 50,
+    "material_cost": 2200,
+    "labor_cost": 200,
+    "installation_cost": 250,
+    "price_volatility": "Medium",
+    "price_trend": "Increasing",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 30
+  },
+  "supplier": {
+    "supplier_name": "Saint-Gobain Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 14,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "glass",
+    "insulated",
+    "double-glazed",
+    "thermal",
+    "acoustic"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.409Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.129Z"
+  }
+},
+{
+  "_id": "6991911df633e5af951e2633",
+  "name": "Epoxy Grout",
+  "description": "Chemical resistant epoxy grout for industrial floors and tile joints.",
+  "category": "adhesive",
+  "subcategory": "Grout",
+  "brand": "MYK Laticrete",
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1700,
+    "compressive_strength": 45,
+    "thermal_conductivity": 0.25
+  },
+  "civil_properties": {
+    "structural_grade": "Industrial",
+    "durability_years": 30,
+    "weather_resistance": "Excellent",
+    "chemical_resistance": [
+      "Acids",
+      "Alkalis",
+      "Solvents",
+      "Oils"
+    ],
+    "workability": "Good",
+    "setting_time": 1440,
+    "standard_sizes": [
+      "1 kg",
+      "5 kg"
+    ],
+    "coverage_per_unit": 3,
+    "wastage_percentage": 5,
+    "surface_finish": "Smooth",
+    "color_options": [
+      "Multiple"
+    ],
+    "is_code": "ISO 13007-3",
+    "quality_grade": "Premium"
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2.8,
+    "embodied_energy": 80,
+    "recycled_content": 0,
+    "recyclable": false,
+    "epd_available": false
+  },
+  "financial_properties": {
+    "cost_per_unit": 850,
+    "unit_type": "kg",
+    "retail_price": 950,
+    "wholesale_price": 800,
+    "bulk_price": 750,
+    "minimum_order_quantity": 20,
+    "material_cost": 850,
+    "labor_cost": 200,
+    "installation_cost": 250,
+    "price_volatility": "Low",
+    "price_trend": "Stable",
+    "gst_rate": 18,
+    "warranty_period": 10,
+    "credit_period": 15
+  },
+  "supplier": {
+    "supplier_name": "MYK Laticrete Dealer",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 3,
+    "reliability_rating": 9
+  },
+  "tags": [
+    "grout",
+    "epoxy",
+    "chemical-resistant",
+    "industrial"
+  ],
+  "status": "active",
+  "created_at": {
+    "$date": "2026-02-15T09:25:49.410Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-15T11:42:39.130Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf5b"
+  },
+  "material_code": "MAT-FND-001",
+  "name": "Plain Cement Concrete (Pcc)",
+  "description": "Foundation concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2350,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 10,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 370,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.691Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.692Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf5c"
+  },
+  "material_code": "MAT-FND-002",
+  "name": "Reinforced Cement Concrete (Rcc)",
+  "description": "Foundation concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 370,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf5d"
+  },
+  "material_code": "MAT-FND-003",
+  "name": "Brick Masonry",
+  "description": "Foundation concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1800,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 5,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf5e"
+  },
+  "material_code": "MAT-FND-004",
+  "name": "Stone Masonry",
+  "description": "Foundation concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2400,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.693Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf5f"
+  },
+  "material_code": "MAT-FND-005",
+  "name": "Fly Ash Concrete",
+  "description": "Foundation concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2200,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 15,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 8500,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": "CERA Sanitaryware ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf60"
+  },
+  "material_code": "MAT-PLN-001",
+  "name": "Cement Mortar Dpc",
+  "description": "Plinth concrete type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2100,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 2015,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 370,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf61"
+  },
+  "material_code": "MAT-MAS-001",
+  "name": "Brick Masonry",
+  "description": "Masonry unit type",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "masonry"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf62"
+  },
+  "material_code": "MAT-FLR-001",
+  "name": "Cement Concrete Flooring",
+  "description": "Flooring system",
+  "category": "finish",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2300,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 370,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "flooring"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf63"
+  },
+  "material_code": "MAT-FLR-002",
+  "name": "Mozaic/Terrazzo Flooring",
+  "description": "Flooring system",
+  "category": "finish",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2400,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "flooring"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf64"
+  },
+  "material_code": "MAT-FLR-003",
+  "name": "Marble Flooring",
+  "description": "Flooring system",
+  "category": "finish",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2650,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "flooring"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf65"
+  },
+  "material_code": "MAT-FLR-004",
+  "name": "Granite Flooring",
+  "description": "Flooring system",
+  "category": "finish",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2750,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 60,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "flooring"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf66"
+  },
+  "material_code": "MAT-FLR-005",
+  "name": "Ceramic Tile Flooring",
+  "description": "Flooring system",
+  "category": "finish",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2000,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 15,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 200
+  },
+  "supplier": {
+    "supplier_name": "Johnson Tiles ",
+    "supplier_location": "Kodakara",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "flooring"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf67"
+  },
+  "material_code": "MAT-SLB-001",
+  "name": "Rcc Slab",
+  "description": "Slab type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf68"
+  },
+  "material_code": "MAT-SLB-002",
+  "name": "Prestressed Concrete Slab",
+  "description": "Slab type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 40,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf69"
+  },
+  "material_code": "MAT-SLB-003",
+  "name": "Precast Concrete Slab",
+  "description": "Slab type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 25,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6a"
+  },
+  "material_code": "MAT-SLB-004",
+  "name": "Filler Slab",
+  "description": "Slab type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2000,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 15,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6b"
+  },
+  "material_code": "MAT-SLB-005",
+  "name": "Lightweight Concrete Slab",
+  "description": "Slab type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6c"
+  },
+  "material_code": "MAT-BEM-001",
+  "name": "Rcc Beam",
+  "description": "Beam type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6d"
+  },
+  "material_code": "MAT-BEM-002",
+  "name": "Prestressed Concrete Beam",
+  "description": "Beam type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6e"
+  },
+  "material_code": "MAT-BEM-003",
+  "name": "Steel Beam",
+  "description": "Beam type",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7775,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 73,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf6f"
+  },
+  "material_code": "MAT-BEM-004",
+  "name": "Composite Beam",
+  "description": "Beam type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 3500,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf70"
+  },
+  "material_code": "MAT-BEM-005",
+  "name": "Timber Beam",
+  "description": "Beam type",
+  "category": "wood",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 650,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "timber"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf71"
+  },
+  "material_code": "MAT-COL-001",
+  "name": "Rcc Column",
+  "description": "Column type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 25,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf72"
+  },
+  "material_code": "MAT-COL-002",
+  "name": "Steel Column",
+  "description": "Column type",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 7775,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 250,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 73,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf73"
+  },
+  "material_code": "MAT-COL-003",
+  "name": "Timber Column",
+  "description": "Column type",
+  "category": "wood",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 650,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 20,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": null,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "timber"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf74"
+  },
+  "material_code": "MAT-COL-004",
+  "name": "Masonry Column",
+  "description": "Column type",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 1800,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 5,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "masonry"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf75"
+  },
+  "material_code": "MAT-COL-005",
+  "name": "Precast Concrete Column",
+  "description": "Column type",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": 2450,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": 30,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf76"
+  },
+  "material_code": "MAT-CON-001",
+  "name": "Concrete M20",
+  "description": "Normal concrete mix",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 456:2000",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "m³",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": "Slabs/Beams (general)",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf77"
+  },
+  "material_code": "MAT-CON-002",
+  "name": "Concrete M25",
+  "description": "Normal concrete mix",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 456:2000",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "m³",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": "Beams/Columns",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf78"
+  },
+  "material_code": "MAT-CON-003",
+  "name": "Concrete Rmc M30",
+  "description": "RMC concrete mix",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 456:2000,IS 4926:2003",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "m³",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "concrete"
+  ],
+  "typical_uses": "Columns/Footings",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf79"
+  },
+  "material_code": "MAT-STL-001",
+  "name": "Tmt Bar Fe500",
+  "description": "Steel reinforcement or structural steel",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": "Fe500",
+    "is_code": "IS 1786:2008",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 360,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 300
+  },
+  "supplier": {
+    "supplier_name": "Malabar Cement Dealer ",
+    "supplier_location": "Kodungallur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": "Beams/Columns/Slabs",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7a"
+  },
+  "material_code": "MAT-STL-002",
+  "name": "Tmt Bar - Fe500D",
+  "description": "Steel reinforcement or structural steel",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": "Fe500D",
+    "is_code": "IS 1786:2008",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 360,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 1100
+  },
+  "supplier": {
+    "supplier_name": "Coimbatore Crusher Unit ",
+    "supplier_location": "Coimbatore",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": "All RC members",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7b"
+  },
+  "material_code": "MAT-STL-003",
+  "name": "Structural Steel ",
+  "description": "Steel reinforcement or structural steel",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": "E250/E350",
+    "is_code": "IS 2062:2011",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 73,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": "Frames/Trusses",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7c"
+  },
+  "material_code": "MAT-STL-004",
+  "name": "Hysd Bar",
+  "description": "Steel reinforcement or structural steel",
+  "category": "steel",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 1786:2008",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 2500,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 360,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 300
+  },
+  "supplier": {
+    "supplier_name": "Malabar Cement Dealer ",
+    "supplier_location": "Kodungallur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "steel"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7d"
+  },
+  "material_code": "MAT-MAS-002",
+  "name": "Burnt Clay Brick",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 1077:1992",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": "Walls (external/internal)",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7e"
+  },
+  "material_code": "MAT-MAS-003",
+  "name": "Fly Ash Brick",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 12894:2002",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "CERA Sanitaryware ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": "Walls",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf7f"
+  },
+  "material_code": "MAT-MAS-004",
+  "name": "Aac Block",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 2185 (Part 3)",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": "Walls (LB/NLB)",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf80"
+  },
+  "material_code": "MAT-MAS-005",
+  "name": "Laterite Stone Block",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 3620:1979",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": "Masonry/Foundations",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.696Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf81"
+  },
+  "material_code": "MAT-MAS-006",
+  "name": "Concrete Hollow Blocks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS: 2185 (Part 1): 2005",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf82"
+  },
+  "material_code": "MAT-MAS-007",
+  "name": "Concrete Solid Blocks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS: 2185 (Part 1): 2005",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf83"
+  },
+  "material_code": "MAT-MAS-008",
+  "name": "Compressed Earth Blocks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS: 1725:1982",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf84"
+  },
+  "material_code": "MAT-MAS-009",
+  "name": "Hourdi Blocks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf85"
+  },
+  "material_code": "MAT-MAS-010",
+  "name": "Surkhi Brick",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf86"
+  },
+  "material_code": "MAT-MAS-011",
+  "name": "Calcium Silicate Blocks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 105,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf87"
+  },
+  "material_code": "MAT-MAS-012",
+  "name": "Wire Cut Bricks",
+  "description": "Masonry unit",
+  "category": "masonry",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 50,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 16,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 150
+  },
+  "supplier": {
+    "supplier_name": "Avon Cement Bricks ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "blocks/bricks"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf88"
+  },
+  "material_code": "MAT-CEM-001",
+  "name": "Opc 43",
+  "description": "OPC cement",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": "43",
+    "is_code": "IS 8112",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 385,
+    "unit_type": "kg",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": "ACC Cement Distributor ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "cement"
+  ],
+  "typical_uses": "General RCC",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf89"
+  },
+  "material_code": "MAT-CEM-002",
+  "name": "Opc 53",
+  "description": "OPC cement",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": "53",
+    "is_code": "IS 12269",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 385,
+    "unit_type": "kg",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": "ACC Cement Distributor ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "cement"
+  ],
+  "typical_uses": "High early strength",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8a"
+  },
+  "material_code": "MAT-CEM-003",
+  "name": "Ppc",
+  "description": "PPC cement",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 1489",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 385,
+    "unit_type": "kg",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": "ACC Cement Distributor ",
+    "supplier_location": "Thrissur",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "cement"
+  ],
+  "typical_uses": "Durability-focused RCC/mortar",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8b"
+  },
+  "material_code": "MAT-CEM-004",
+  "name": "Psc",
+  "description": "PSC cement",
+  "category": "cement",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 455",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 900,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 0,
+    "unit_type": "kg",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 0
+  },
+  "supplier": {
+    "supplier_name": null,
+    "supplier_location": null,
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "cement"
+  ],
+  "typical_uses": "Marine/aggressive",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8c"
+  },
+  "material_code": "MAT-AGG-001",
+  "name": "River Sand",
+  "description": "Aggregate for concrete/mortar",
+  "category": "aggregates",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 383:2016",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 20,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 2150,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 1100
+  },
+  "supplier": {
+    "supplier_name": "Coimbatore Crusher Unit ",
+    "supplier_location": "Coimbatore",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "aggregates"
+  ],
+  "typical_uses": "Fine aggregate for concrete/mortar",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8d"
+  },
+  "material_code": "MAT-AGG-002",
+  "name": "M-Sand",
+  "description": "Aggregate for concrete/mortar",
+  "category": "aggregates",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 383:2016",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 20,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 2150,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 1100
+  },
+  "supplier": {
+    "supplier_name": "Coimbatore Crusher Unit ",
+    "supplier_location": "Coimbatore",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "aggregates"
+  ],
+  "typical_uses": "Fine aggregate (manufactured)",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8e"
+  },
+  "material_code": "MAT-AGG-003",
+  "name": "P-Sand",
+  "description": "Aggregate for concrete/mortar",
+  "category": "aggregates",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": null,
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 20,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 2000,
+    "unit_type": "piece",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 40
+  },
+  "supplier": {
+    "supplier_name": "St.Marys hardwares",
+    "supplier_location": "Thrissur-Punkunnam",
+    "lead_time_days": 1,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "aggregates"
+  ],
+  "typical_uses": null,
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf8f"
+  },
+  "material_code": "MAT-AGG-004",
+  "name": "Coarse Aggregate 20 Mm",
+  "description": "Aggregate for concrete/mortar",
+  "category": "aggregates",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 383:2016",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 20,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 1900,
+    "unit_type": "m³",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 1100
+  },
+  "supplier": {
+    "supplier_name": "Coimbatore Crusher Unit ",
+    "supplier_location": "Coimbatore",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "aggregates"
+  ],
+  "typical_uses": "Concrete (general)",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b504e14bf2d10fe072cf90"
+  },
+  "material_code": "MAT-AGG-005",
+  "name": "Coarse Aggregate 10 Mm",
+  "description": "Aggregate for concrete/mortar",
+  "category": "aggregates",
+  "subcategory": null,
+  "brand": null,
+  "manufacturer": null,
+  "country_of_origin": "India",
+  "physical_properties": {
+    "density": null,
+    "specific_gravity": null,
+    "water_absorption": null
+  },
+  "civil_properties": {
+    "structural_grade": null,
+    "is_code": "IS 383:2016",
+    "design_strength": null,
+    "wastage_percentage": 5
+  },
+  "environmental_properties": {
+    "embodied_carbon": 20,
+    "embodied_energy": null,
+    "recycled_content": 0,
+    "recyclable": true
+  },
+  "financial_properties": {
+    "cost_per_unit": 1900,
+    "unit_type": "m³",
+    "currency": "INR",
+    "gst_rate": 18,
+    "transportation_cost": 1100
+  },
+  "supplier": {
+    "supplier_name": "Coimbatore Crusher Unit ",
+    "supplier_location": "Coimbatore",
+    "lead_time_days": 3,
+    "reliability_rating": 8
+  },
+  "status": "active",
+  "is_active": true,
+  "tags": [
+    "aggregates"
+  ],
+  "typical_uses": "Thin sections/finishes",
+  "sustainability_notes": null,
+  "created_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  },
+  "updated_at": {
+    "$date": "2026-03-14T06:49:05.698Z"
+  }
+}]

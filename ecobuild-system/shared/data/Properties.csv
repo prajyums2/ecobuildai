@@ -1,0 +1,83 @@
+# Material Properties Database
+# EcoBuild System - Kerala Construction Materials
+# Format: ID,Name,Category,Embodied Carbon (kg CO2/kg),Recycled Content (%),Cost (INR/unit),Thermal Conductivity (W/m·K),Durability (years),Aesthetic (1-10),Compressive Strength (MPa)
+
+# Cement & Binders
+cement_opc,OPC 53 Grade Cement,cement,0.95,0,380,0.29,50,3,53
+cement_ppc,PPC Fly Ash Cement,cement,0.65,35,360,0.27,50,4,43
+cement_psc,PSC Slag Cement,cement,0.55,50,375,0.28,50,4,43
+white_cement,White Cement,cement,1.10,0,850,0.35,50,9,52
+
+# Steel
+steel_tmt_fe500,TMT Steel Fe 500,steel,1.85,25,72,50.0,75,5,500
+steel_tmt_fe550,TMT Steel Fe 550,steel,1.90,25,75,50.0,75,5,550
+steel_tmt_fe500d,TMT Steel Fe 500D,steel,1.85,30,74,50.0,75,5,500
+steel_mild,Mild Steel,steel,2.10,20,65,50.0,60,4,250
+steel_stainless,Stainless Steel,steel,2.80,60,450,15.0,100,9,520
+
+# Masonry
+aac_blocks,AAC Blocks (600x200x300),masonry,0.25,65,42,0.16,60,7,4.5
+clay_bricks,Clay Bricks (Kerala),masonry,0.38,0,8.5,0.70,100,8,10
+fly_ash_bricks,Fly Ash Bricks,masonry,0.18,70,6.5,0.45,50,6,7.5
+hollow_concrete,Hollow Concrete Blocks,masonry,0.22,15,28,0.95,50,6,7.0
+laterite_stone,Laterite Stone (Kerala),masonry,0.15,0,45,0.80,150,9,5.0
+porotherm,Porotherm Clay Blocks,masonry,0.30,10,65,0.65,80,8,6.0
+
+# Aggregates
+msand,Manufactured Sand (M-Sand),aggregates,0.12,0,45,2.5,50,5,0
+psand,Plastering M-Sand,aggregates,0.10,0,55,2.3,50,5,0
+river_sand,River Sand,aggregates,0.08,0,85,2.8,50,5,0
+20mm_aggregate,20mm Coarse Aggregate,aggregates,0.05,0,35,2.7,50,4,0
+12mm_aggregate,12mm Coarse Aggregate,aggregates,0.05,0,38,2.7,50,4,0
+40mm_aggregate,40mm Coarse Aggregate,aggregates,0.04,0,32,2.8,50,4,0
+rcc_aggregates,Recycled Concrete Aggregates,aggregates,0.08,100,25,1.5,50,4,0
+
+# Finishes & Surfaces
+tiles_ceramic,Ceramic Tiles,finish,0.85,5,85,1.2,30,8,35
+tiles_vitrified,Vitrified Tiles,finish,1.10,0,120,1.3,50,9,45
+tiles_porcelain,Porcelain Tiles,finish,1.25,0,180,1.4,60,9,50
+granite,Granite Slabs,finish,0.35,0,650,2.8,100,10,150
+marble,Marble,finish,0.45,0,850,2.5,80,10,80
+ kota_stone,Kota Stone,finish,0.25,0,120,2.1,100,7,65
+wood_teak,Teak Wood,finish,-0.85,100,3500,0.14,40,10,55
+wood_sal,Sal Wood,finish,-0.75,100,1800,0.15,35,8,45
+wood_rubber,Rubber Wood,finish,-0.65,100,850,0.12,25,7,35
+
+# Insulation
+rockwool,Rockwool Insulation,insulation,1.20,25,180,0.04,50,4,0
+glasswool,Glasswool Insulation,insulation,1.35,30,220,0.035,40,4,0
+pu_foam,PU Foam Insulation,insulation,3.20,5,450,0.025,30,3,0
+xps_board,XPS Insulation Board,insulation,2.80,0,380,0.030,50,4,0
+thermocol,Thermocol (EPS),insulation,2.50,30,120,0.035,20,3,0
+
+# Composites & Special
+bamboo_comp,Bamboo Composite Boards,composite,-1.20,100,120,0.14,25,9,35
+gfrc,Glass Fiber Reinforced Concrete,composite,0.45,40,280,0.32,80,9,40
+ferrocement,Ferrocement,composite,0.55,15,180,1.8,60,6,25
+ferrochrome,Ferrochrome Slag,composite,0.25,80,45,1.2,80,5,0
+
+# Roofing
+clay_tiles,Clay Roofing Tiles,roof,0.42,0,65,0.80,80,9,15
+concrete_tiles,Concrete Roofing Tiles,roof,0.65,5,85,1.0,60,7,25
+metal_sheet,Metal Roofing Sheets,roof,2.10,60,450,50.0,40,6,0
+shingles,Asphalt Shingles,roof,1.85,15,180,0.20,25,6,0
+
+# Glass
+glass_tempered,Tempered Glass,glass,1.50,20,850,1.0,50,9,120
+glass_laminated,Laminated Glass,glass,1.65,15,1200,1.0,50,9,80
+glass_insulated,Insulated Glass Unit,glass,1.80,10,2200,0.80,50,9,0
+
+# Adhesives & Sealants
+tile_adhesive,Tile Adhesive,adhesive,0.45,0,35,0.50,20,4,15
+waterproofing,Cementitious Waterproofing,adhesive,0.55,10,45,0.60,25,4,10
+epoxy,Epoxy Grout,adhesive,2.80,0,850,0.25,30,7,45
+
+# Paints & Coatings
+plastic_emulsion,Plastic Emulsion Paint,coating,2.20,5,280,0.15,15,7,0
+weather_shield,Weather Shield Paint,coating,2.50,10,450,0.20,20,8,0
+
+# Doors & Windows
+upvc_door,UPVC Door System,door,3.20,40,8500,0.20,40,7,0
+aluminum_door,Aluminum Door System,door,8.50,70,12500,160.0,50,8,0
+wooden_door,Wooden Door System,door,-1.50,80,15000,0.15,50,10,25
+steel_door,Steel Door System,door,2.80,50,9500,50.0,60,7,0

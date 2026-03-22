@@ -1,0 +1,1729 @@
+[{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c1"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Yield Strength",
+  "Value": "415",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From foundation sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c2"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Ultimate Tensile Strength",
+  "Value": "485",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c3"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Elongation",
+  "Value": "14.5",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c4"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Modulus of Elasticity",
+  "Value": "200",
+  "Unit": "GPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c5"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "7850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From foundation sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c6"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Yield Strength",
+  "Value": "500",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c7"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Ultimate Tensile Strength",
+  "Value": "545",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c8"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Elongation",
+  "Value": "12",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0c9"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Modulus of Elasticity",
+  "Value": "200",
+  "Unit": "GPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From foundation sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ca"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "7850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0cb"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Yield Strength",
+  "Value": "500",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0cc"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Ultimate Tensile Strength",
+  "Value": "565",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0cd"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Elongation",
+  "Value": "16",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From foundation sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ce"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Modulus of Elasticity",
+  "Value": "200",
+  "Unit": "GPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0cf"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "7850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d0"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Yield Strength",
+  "Value": "250",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d1"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Ultimate Tensile Strength",
+  "Value": "410–540",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From foundation sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d2"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Elongation",
+  "Value": "23",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d3"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Modulus of Elasticity",
+  "Value": "200",
+  "Unit": "GPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d4"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "7850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d5"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Yield Strength",
+  "Value": "415",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": "From plinth sheet"
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d6"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Ultimate Tensile Strength",
+  "Value": "485",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d7"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Elongation",
+  "Value": "14.5",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d8"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Modulus of Elasticity",
+  "Value": "200",
+  "Unit": "GPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0d9"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "7850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0da"
+  },
+  "MaterialCode": "MAT-MAS-001",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3.5 – 10",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0db"
+  },
+  "MaterialCode": "MAT-MAS-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤20",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0dc"
+  },
+  "MaterialCode": "MAT-MAS-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1600 – 1900",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0dd"
+  },
+  "MaterialCode": "MAT-MAS-001",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.6 – 1.0",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0de"
+  },
+  "MaterialCode": "MAT-MAS-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "7.5 – 12",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0df"
+  },
+  "MaterialCode": "MAT-MAS-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤20",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e0"
+  },
+  "MaterialCode": "MAT-MAS-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1700 – 1850",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e1"
+  },
+  "MaterialCode": "MAT-MAS-002",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.7 – 1.2",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e2"
+  },
+  "MaterialCode": "MAT-MAS-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3 – 5",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e3"
+  },
+  "MaterialCode": "MAT-MAS-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "10 – 15",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e4"
+  },
+  "MaterialCode": "MAT-MAS-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "550 – 650",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e5"
+  },
+  "MaterialCode": "MAT-MAS-003",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.16 – 0.24",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e6"
+  },
+  "MaterialCode": "MAT-MAS-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "2 – 5",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e7"
+  },
+  "MaterialCode": "MAT-MAS-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "12 – 18",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e8"
+  },
+  "MaterialCode": "MAT-MAS-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1500 – 1700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0e9"
+  },
+  "MaterialCode": "MAT-MAS-004",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.6 – 0.9",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ea"
+  },
+  "MaterialCode": "MAT-MAS-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3 – 7",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0eb"
+  },
+  "MaterialCode": "MAT-MAS-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤10",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ec"
+  },
+  "MaterialCode": "MAT-MAS-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1200 – 1500",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ed"
+  },
+  "MaterialCode": "MAT-MAS-005",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.3 – 0.7",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ee"
+  },
+  "MaterialCode": "MAT-MAS-006",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "4 – 12",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ef"
+  },
+  "MaterialCode": "MAT-MAS-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤10",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f0"
+  },
+  "MaterialCode": "MAT-MAS-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1800 – 2000",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f1"
+  },
+  "MaterialCode": "MAT-MAS-006",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "1.1 – 1.4",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f2"
+  },
+  "MaterialCode": "MAT-MAS-007",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3 – 7",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f3"
+  },
+  "MaterialCode": "MAT-MAS-007",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "10 – 15",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f4"
+  },
+  "MaterialCode": "MAT-MAS-007",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1700 – 1900",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f5"
+  },
+  "MaterialCode": "MAT-MAS-007",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.5 – 0.9",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f6"
+  },
+  "MaterialCode": "MAT-MAS-008",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "2 – 4",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f7"
+  },
+  "MaterialCode": "MAT-MAS-008",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "15 – 20",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f8"
+  },
+  "MaterialCode": "MAT-MAS-008",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1000 – 1400",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0f9"
+  },
+  "MaterialCode": "MAT-MAS-008",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.4 – 0.7",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0fa"
+  },
+  "MaterialCode": "MAT-MAS-009",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3 – 6",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0fb"
+  },
+  "MaterialCode": "MAT-MAS-009",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤20",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0fc"
+  },
+  "MaterialCode": "MAT-MAS-009",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1500 – 1700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0fd"
+  },
+  "MaterialCode": "MAT-MAS-009",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.6 – 0.9",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0fe"
+  },
+  "MaterialCode": "MAT-MAS-010",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "7.5 – 15",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f0ff"
+  },
+  "MaterialCode": "MAT-MAS-010",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤15",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f100"
+  },
+  "MaterialCode": "MAT-MAS-010",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1800 – 2000",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f101"
+  },
+  "MaterialCode": "MAT-MAS-010",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.7 – 1.2",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f102"
+  },
+  "MaterialCode": "MAT-MAS-011",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "10 – 20",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f103"
+  },
+  "MaterialCode": "MAT-MAS-011",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤15",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f104"
+  },
+  "MaterialCode": "MAT-MAS-011",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1700 – 1900",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f105"
+  },
+  "MaterialCode": "MAT-MAS-011",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.7 – 1.0",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f106"
+  },
+  "MaterialCode": "MAT-MAS-012",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3.5 – 10",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f107"
+  },
+  "MaterialCode": "MAT-MAS-012",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤10",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f108"
+  },
+  "MaterialCode": "MAT-MAS-012",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1800 – 2000",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f109"
+  },
+  "MaterialCode": "MAT-MAS-012",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "1.1 – 1.4",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10a"
+  },
+  "MaterialCode": "MAT-MAS-013",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "3.5 – 7",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10b"
+  },
+  "MaterialCode": "MAT-MAS-013",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "≤20",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10c"
+  },
+  "MaterialCode": "MAT-MAS-013",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1400 – 1700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10d"
+  },
+  "MaterialCode": "MAT-MAS-013",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "0.5 – 0.8",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10e"
+  },
+  "MaterialCode": "MAT-MAS-014",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength",
+  "Value": "40 – 100",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f10f"
+  },
+  "MaterialCode": "MAT-MAS-014",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "0.5 – 3",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f110"
+  },
+  "MaterialCode": "MAT-MAS-014",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "2400 – 2700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f111"
+  },
+  "MaterialCode": "MAT-MAS-014",
+  "PropertyGroup": "Thermal",
+  "PropertyName": "Thermal Conductivity",
+  "Value": "2.5 – 3.5",
+  "Unit": "W/mK",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f112"
+  },
+  "MaterialCode": "MAT-CEM-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f113"
+  },
+  "MaterialCode": "MAT-CEM-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "3.15",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f114"
+  },
+  "MaterialCode": "MAT-CEM-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f115"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength (28 days)",
+  "Value": "43",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f116"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Initial Setting Time",
+  "Value": "≥30",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f117"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f118"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "3.15",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f119"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11a"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength (28 days)",
+  "Value": "53",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11b"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Initial Setting Time",
+  "Value": "≥30",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11c"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11d"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "3.15",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11e"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f11f"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength (28 days)",
+  "Value": "≥33",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f120"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Initial Setting Time",
+  "Value": "≥30",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f121"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f122"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.9",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f123"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f124"
+  },
+  "MaterialCode": "MAT-CEM-005",
+  "PropertyGroup": "Mechanical",
+  "PropertyName": "Compressive Strength (28 days)",
+  "Value": "≥33",
+  "Unit": "MPa",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f125"
+  },
+  "MaterialCode": "MAT-CEM-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Initial Setting Time",
+  "Value": "≥30",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f126"
+  },
+  "MaterialCode": "MAT-CEM-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f127"
+  },
+  "MaterialCode": "MAT-CEM-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.9",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f128"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f129"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Initial Setting Time",
+  "Value": "≥30",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12a"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Final Setting Time",
+  "Value": "≤600",
+  "Unit": "minutes",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12b"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "3.05",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12c"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1440",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12d"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.6 – 2.7",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12e"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Bulk Density",
+  "Value": "1450 – 1650",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f12f"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "1 – 2",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f130"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "PropertyGroup": "Grading",
+  "PropertyName": "Fineness Modulus",
+  "Value": "2.2 – 3.2",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f131"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1600",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Book1.xlsx",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f132"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.5 – 2.9",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f133"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Bulk Density",
+  "Value": "1500 – 1700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f134"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "2 – 4",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f135"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "PropertyGroup": "Grading",
+  "PropertyName": "Fineness Modulus",
+  "Value": "2.6 – 3.0",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f136"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1700",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f137"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.6 – 2.7",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f138"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Bulk Density",
+  "Value": "1400 – 1600",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": "Sprint1 Steel",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f139"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "1 – 2",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": "Sprint1 Aggregates",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13a"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "PropertyGroup": "Grading",
+  "PropertyName": "Fineness Modulus",
+  "Value": "1.2 – 2.0",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": "Sprint1 Aggregates",
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13b"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1500",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13c"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.5 – 2.7",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13d"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Bulk Density",
+  "Value": "1500 – 1750",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13e"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "2 – 3",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f13f"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "PropertyGroup": "Grading",
+  "PropertyName": "Fineness Modulus",
+  "Value": "2.5 – 3.2",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f140"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1650",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f141"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Specific Gravity",
+  "Value": "2.6 – 2.7",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f142"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Bulk Density",
+  "Value": "1400 – 1600",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f143"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Water Absorption",
+  "Value": "1 – 2",
+  "Unit": "%",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f144"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "PropertyGroup": "Grading",
+  "PropertyName": "Fineness Modulus",
+  "Value": "1.2 – 2.0",
+  "Unit": "—",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edebfe97aa5c991f145"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "PropertyGroup": "Physical",
+  "PropertyName": "Density",
+  "Value": "1500",
+  "Unit": "kg/m³",
+  "TestStandard": null,
+  "Source": null,
+  "Notes": null
+}]

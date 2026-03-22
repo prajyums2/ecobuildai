@@ -1,0 +1,828 @@
+[{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efdf"
+  },
+  "MaterialCode": "MAT-CON-001",
+  "MaterialName": "Concrete M20",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 456:2000",
+  "Description": "Normal concrete mix",
+  "Unit": "m³",
+  "Applications": "Slabs/Beams (general)",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe0"
+  },
+  "MaterialCode": "MAT-CON-002",
+  "MaterialName": "Concrete M25",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 456:2000",
+  "Description": "Normal concrete mix",
+  "Unit": "m³",
+  "Applications": "Beams/Columns",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe1"
+  },
+  "MaterialCode": "MAT-CON-003",
+  "MaterialName": "Concrete RMC M30",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 456:2000,IS 4926:2003",
+  "Description": "RMC concrete mix",
+  "Unit": "m³",
+  "Applications": "Columns/Footings",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe2"
+  },
+  "MaterialCode": "MAT-CON-004",
+  "MaterialName": "Plain Cement Concrete",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 456:2000",
+  "Description": null,
+  "Unit": "m³",
+  "Applications": "Foundations, leveling",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe3"
+  },
+  "MaterialCode": "MAT-CON-005",
+  "MaterialName": "Reinforced Cement Concrete",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 456:2000",
+  "Description": null,
+  "Unit": "m³",
+  "Applications": "Structural members",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe4"
+  },
+  "MaterialCode": "MAT-CON-006",
+  "MaterialName": "Fly Ash Concrete",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": "IS 3812:2013",
+  "Description": null,
+  "Unit": "m³",
+  "Applications": "Durable concrete",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe5"
+  },
+  "MaterialCode": "MAT-CON-007",
+  "MaterialName": "Recycled Aggregate Concrete",
+  "Category": "Concrete",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": "m³",
+  "Applications": "Sustainable construction",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe6"
+  },
+  "MaterialCode": "MAT-STL-001",
+  "MaterialName": "TMT Bar - Fe415",
+  "Category": "steel",
+  "GradeOrModel": "Fe415",
+  "BIS Code": "IS 1786:2008",
+  "Description": "Steel reinforcement or structural steel",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe7"
+  },
+  "MaterialCode": "MAT-STL-002",
+  "MaterialName": "TMT Bar - Fe500",
+  "Category": "Steel",
+  "GradeOrModel": "Fe500",
+  "BIS Code": "IS 1786:2008",
+  "Description": "Steel reinforcement or structural steel",
+  "Unit": null,
+  "Applications": "Beams/Columns/Slabs",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe8"
+  },
+  "MaterialCode": "MAT-STL-003",
+  "MaterialName": "TMT bar - Fe500D",
+  "Category": "Steel",
+  "GradeOrModel": "Fe500D",
+  "BIS Code": "IS 1786:2008",
+  "Description": "Steel reinforcement or structural steel",
+  "Unit": null,
+  "Applications": "All RC members",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efe9"
+  },
+  "MaterialCode": "MAT-STL-004",
+  "MaterialName": "Structural Steel",
+  "Category": "Steel",
+  "GradeOrModel": "E250/E350",
+  "BIS Code": "IS 2062:2011",
+  "Description": "Steel reinforcement or structural steel",
+  "Unit": null,
+  "Applications": "Frames/Trusses",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efea"
+  },
+  "MaterialCode": "MAT-STL-005",
+  "MaterialName": "HYSD bar",
+  "Category": "Steel",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1786:2008",
+  "Description": "Steel reinforcement or structural steel",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efeb"
+  },
+  "MaterialCode": "MAT-MAS-001",
+  "MaterialName": "Burnt Clay Brick",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1077:1992",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": "Walls (external/internal)",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efec"
+  },
+  "MaterialCode": "MAT-MAS-002",
+  "MaterialName": "Fly Ash Brick",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS 12894:2002",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": "Walls",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efed"
+  },
+  "MaterialCode": "MAT-MAS-003",
+  "MaterialName": "AAC Block",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS 2185 (Part 3)",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": "Walls (LB/NLB)",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efee"
+  },
+  "MaterialCode": "MAT-MAS-004",
+  "MaterialName": "Laterite Stone Block",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS 3620:1979",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": "Masonry/Foundations",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efef"
+  },
+  "MaterialCode": "MAT-MAS-005",
+  "MaterialName": "concrete hollow blocks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS: 2185 (Part 1): 2005",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff0"
+  },
+  "MaterialCode": "MAT-MAS-006",
+  "MaterialName": "concrete solid blocks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS: 2185 (Part 1): 2005",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff1"
+  },
+  "MaterialCode": "MAT-MAS-007",
+  "MaterialName": "compressed earth blocks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS: 1725:1982",
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff2"
+  },
+  "MaterialCode": "MAT-MAS-008",
+  "MaterialName": "hourdi blocks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff3"
+  },
+  "MaterialCode": "MAT-MAS-009",
+  "MaterialName": "surkhi brick",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff4"
+  },
+  "MaterialCode": "MAT-MAS-010",
+  "MaterialName": "calcium silicate blocks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Masonry unit",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff5"
+  },
+  "MaterialCode": "MAT-MAS-011",
+  "MaterialName": "wire cut bricks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Masonry unit",
+  "Unit": "unit",
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff6"
+  },
+  "MaterialCode": "MAT-MAS-012",
+  "MaterialName": "cement bricks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS: 2185: 2005",
+  "Description": "Masonry unit",
+  "Unit": null,
+  "Applications": "Masonry walls",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff7"
+  },
+  "MaterialCode": "MAT-MAS-013",
+  "MaterialName": "Jali bricks",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1077, IS 6542",
+  "Description": "Masonry unit",
+  "Unit": null,
+  "Applications": "Non load bearing wall,decorative wall",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff8"
+  },
+  "MaterialCode": "MAT-MAS-014",
+  "MaterialName": "Rubble Stone",
+  "Category": "Blocks/Bricks",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Masonry unit",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991eff9"
+  },
+  "MaterialCode": "MAT-CEM-001",
+  "MaterialName": "OPC 33",
+  "Category": "Cement",
+  "GradeOrModel": "33",
+  "BIS Code": null,
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "General construction",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991effa"
+  },
+  "MaterialCode": "MAT-CEM-002",
+  "MaterialName": "OPC 43",
+  "Category": "Cement",
+  "GradeOrModel": "43",
+  "BIS Code": null,
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "RCC works",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991effb"
+  },
+  "MaterialCode": "MAT-CEM-003",
+  "MaterialName": "OPC 53",
+  "Category": "Cement",
+  "GradeOrModel": "53",
+  "BIS Code": "IS 12269:2013",
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "High strength concrete",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991effc"
+  },
+  "MaterialCode": "MAT-CEM-004",
+  "MaterialName": "PPC",
+  "Category": "Cement",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1489",
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "Eco-friendly concrete",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991effd"
+  },
+  "MaterialCode": "MAT-CEM-005",
+  "MaterialName": "PSC",
+  "Category": "Cement",
+  "GradeOrModel": null,
+  "BIS Code": "IS 455:2015",
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "Marine structures",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991effe"
+  },
+  "MaterialCode": "MAT-CEM-006",
+  "MaterialName": "White Cement",
+  "Category": "Cement",
+  "GradeOrModel": null,
+  "BIS Code": "IS 8042:2015",
+  "Description": "cement",
+  "Unit": "kg",
+  "Applications": "Architectural finishes",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991efff"
+  },
+  "MaterialCode": "MAT-AGG-001",
+  "MaterialName": "River Sand",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 383:2016",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f000"
+  },
+  "MaterialCode": "MAT-AGG-002",
+  "MaterialName": "M-Sand",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 383:2016",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": null,
+  "Applications": "Fine aggregate (manufactured)",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f001"
+  },
+  "MaterialCode": "MAT-AGG-003",
+  "MaterialName": "P-sand",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1542:1992",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": null,
+  "Applications": null,
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f002"
+  },
+  "MaterialCode": "MAT-AGG-004",
+  "MaterialName": "Quarry Dust",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": null,
+  "Applications": "Mortar and filling",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f003"
+  },
+  "MaterialCode": "MAT-AGG-005",
+  "MaterialName": "Plastering Sand",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 1542:1992",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": null,
+  "Applications": "Plaster works",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f004"
+  },
+  "MaterialCode": "MAT-AGG-006",
+  "MaterialName": "Coarse Aggregate 20 mm",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 383:2016",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": "m³",
+  "Applications": "Concrete (general)",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f005"
+  },
+  "MaterialCode": "MAT-AGG-007",
+  "MaterialName": "Coarse Aggregate 10 mm",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": "IS 383:2016",
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": "m³",
+  "Applications": "Thin sections/finishes",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f006"
+  },
+  "MaterialCode": "MAT-AGG-008",
+  "MaterialName": "Recycled Concrete Aggregate",
+  "Category": "Aggregates",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": "Aggregate for concrete/mortar",
+  "Unit": "m³",
+  "Applications": "Sustainable concrete",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f007"
+  },
+  "MaterialCode": "MAT-TIM-001",
+  "MaterialName": "Teak",
+  "Category": "Hardwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Door frames, window frames, flooring, furniture",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f008"
+  },
+  "MaterialCode": "MAT-TIM-002",
+  "MaterialName": "Sal",
+  "Category": "Hardwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Structural beams, railway sleepers, heavy construction",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f009"
+  },
+  "MaterialCode": "MAT-TIM-003",
+  "MaterialName": "Mahogany",
+  "Category": "Hardwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Furniture, interior paneling, decorative works",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f00a"
+  },
+  "MaterialCode": "MAT-TIM-004",
+  "MaterialName": "Pine",
+  "Category": "Softwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Furniture, interior paneling, partitions",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f00b"
+  },
+  "MaterialCode": "MAT-TIM-005",
+  "MaterialName": "Cedar",
+  "Category": "Softwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Exterior cladding, furniture, roofing",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edabfe97aa5c991f00c"
+  },
+  "MaterialCode": "MAT-TIM-006",
+  "MaterialName": "Fir",
+  "Category": "Softwood",
+  "GradeOrModel": null,
+  "BIS Code": null,
+  "Description": null,
+  "Unit": null,
+  "Applications": "Structural framing, roof trusses",
+  "SustainabilityNotes": null,
+  "PriceRangeIndicative": null,
+  "AvailabilityRegionSummary": null,
+  "LastUpdated": null,
+  "Notes": null
+}]

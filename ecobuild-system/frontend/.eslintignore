@@ -1,0 +1,4 @@
+/*
+  eslint-disable react/react-in-jsx-scope, react/no-unknown-property
+  Using React 18 with automatic JSX transform
+*/

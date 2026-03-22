@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f146"
+  },
+  "Category": "Aggregates",
+  "Description": "Fine and coarse aggregates"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f147"
+  },
+  "Category": "Blocks/Bricks",
+  "Description": "Brick, block, and masonry units"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f148"
+  },
+  "Category": "Cement",
+  "Description": "Cement binders (OPC, PPC, PSC, etc.)"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f149"
+  },
+  "Category": "Concrete",
+  "Description": "Concrete mixes and RCC/PSC elements"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f14a"
+  },
+  "Category": "Flooring",
+  "Description": "Flooring systems and finishes"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f14b"
+  },
+  "Category": "Masonry",
+  "Description": "Brick, block, and masonry systems"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f14c"
+  },
+  "Category": "Steel",
+  "Description": "Steel structural elements"
+},
+{
+  "_id": {
+    "$oid": "69bd6ee0bfe97aa5c991f14d"
+  },
+  "Category": "Timber",
+  "Description": "Timber structural elements"
+}]

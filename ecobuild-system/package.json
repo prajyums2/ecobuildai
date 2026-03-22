@@ -1,0 +1,19 @@
+{
+  "name": "ecobuild-system",
+  "version": "1.0.0",
+  "description": "EcoBuild - Lifecycle Decision Support System for Sustainable Construction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sustainability",
+    "construction",
+    "LCA",
+    "Kerala",
+    "GEC Thrissur"
+  ],
+  "author": "GEC Thrissur",
+  "license": "MIT",
+  "dependencies": {}
+}

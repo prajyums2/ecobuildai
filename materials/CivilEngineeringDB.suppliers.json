@@ -1,0 +1,2520 @@
+[{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f00d"
+  },
+  "Supplier Name": "UltraTech Cement Dealer",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Authorized Dealer",
+  "Materials Supplied": "UltraTech OPC / PPC",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹350–420 / bag",
+  "Transport Access": "NH / SH",
+  "Remarks": "Major brand"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f00e"
+  },
+  "Supplier Name": "ACC Cement Distributor",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Authorized Dealer",
+  "Materials Supplied": "ACC OPC / PPC",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹340–410 / bag",
+  "Transport Access": "NH",
+  "Remarks": "Retail & bulk"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f00f"
+  },
+  "Supplier Name": "Ramco Cement Agency",
+  "City / Area": "Kunnamkulam",
+  "Distance from Thrissur (km)": 30,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹340–400 / bag",
+  "Transport Access": "SH",
+  "Remarks": "Town supply"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f010"
+  },
+  "Supplier Name": "Malabar Cement Dealer",
+  "City / Area": "Kodungallur",
+  "Distance from Thrissur (km)": 30,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Malabar cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹330–390 / bag",
+  "Transport Access": "NH66",
+  "Remarks": "Govt brand"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f011"
+  },
+  "Supplier Name": "Dalmia Cement Stockist",
+  "City / Area": "Irinjalakuda",
+  "Distance from Thrissur (km)": 22,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹345–410 / bag",
+  "Transport Access": "SH",
+  "Remarks": "Retail"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f012"
+  },
+  "Supplier Name": "Chettinad Cement Dealer",
+  "City / Area": "Palakkad",
+  "Distance from Thrissur (km)": 65,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Chettinad cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹335–395 / bag",
+  "Transport Access": "NH544",
+  "Remarks": "Bulk possible"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f013"
+  },
+  "Supplier Name": "India Cements Distributor",
+  "City / Area": "Ernakulam",
+  "Distance from Thrissur (km)": 75,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Coromandel / Sankar",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹340–405 / bag",
+  "Transport Access": "NH544",
+  "Remarks": "Wholesale hub"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f014"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹335/ bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f015"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "UltraTech cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹345/ bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f016"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "chettinad cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹310 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f017"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "UltraTech cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹340 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f018"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹325 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f019"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "JSW cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹310 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01a"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "ACC cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹320 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01b"
+  },
+  "Supplier Name": "MPR Traders",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": 9.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "UltraTech cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹320 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01c"
+  },
+  "Supplier Name": "MPR Traders",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": 9.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "JSW cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹290 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01d"
+  },
+  "Supplier Name": "MPR Traders",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": 9.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Chettinad cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹290 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01e"
+  },
+  "Supplier Name": "MPR Traders",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": 9.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹310 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f01f"
+  },
+  "Supplier Name": "MPR Traders",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": 9.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹315 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f020"
+  },
+  "Supplier Name": "Kavalakat",
+  "City / Area": "Thrissur-",
+  "Distance from Thrissur (km)": 5.8,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "ACC cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": null,
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f021"
+  },
+  "Supplier Name": "Kavalakat",
+  "City / Area": "Thrissur-",
+  "Distance from Thrissur (km)": 5.8,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "JSW cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": null,
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f022"
+  },
+  "Supplier Name": "Kavalakat",
+  "City / Area": "Thrissur-",
+  "Distance from Thrissur (km)": 5.8,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹335 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f023"
+  },
+  "Supplier Name": "Kavalakat",
+  "City / Area": "Thrissur-",
+  "Distance from Thrissur (km)": 5.8,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "UltraTech cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹345 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f024"
+  },
+  "Supplier Name": "JVS  Steels",
+  "City / Area": "Paluvai",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "UltraTech cement",
+  "Material Grade": "grade33 , OPC",
+  "Indicative Rate Range (Academic)": "₹400 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f025"
+  },
+  "Supplier Name": "JVS  Steels",
+  "City / Area": "Paluvai",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "ACC cement",
+  "Material Grade": "grade33",
+  "Indicative Rate Range (Academic)": "₹320 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f026"
+  },
+  "Supplier Name": "JVS  Steels",
+  "City / Area": "Paluvai",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Dalmia cement",
+  "Material Grade": "ppc",
+  "Indicative Rate Range (Academic)": "₹285 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f027"
+  },
+  "Supplier Name": "Gautham Agencies",
+  "City / Area": "Kodungallur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ambuja cement",
+  "Material Grade": "grade 53",
+  "Indicative Rate Range (Academic)": "₹ 340/ bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f028"
+  },
+  "Supplier Name": "Nippon Steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement",
+  "Material Grade": "opc",
+  "Indicative Rate Range (Academic)": "₹420 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f029"
+  },
+  "Supplier Name": "Nippon Steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Maha cement",
+  "Material Grade": "ppc",
+  "Indicative Rate Range (Academic)": "₹390 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02a"
+  },
+  "Supplier Name": "Voltamps",
+  "City / Area": "Amalanagar-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement",
+  "Material Grade": "OPC",
+  "Indicative Rate Range (Academic)": "₹360 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02b"
+  },
+  "Supplier Name": "Voltamps",
+  "City / Area": "Amalanagar-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "F2r ACC cement",
+  "Material Grade": "grade 53,OPC",
+  "Indicative Rate Range (Academic)": "₹325 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02c"
+  },
+  "Supplier Name": "Panthallookkaran Building Materials",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement supergrade",
+  "Material Grade": "grade 53,OPC",
+  "Indicative Rate Range (Academic)": null,
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02d"
+  },
+  "Supplier Name": "Panthallookkaran Building Materials",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco cement supergrade",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": null,
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02e"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ramco Super crete cement",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": "₹450 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f02f"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Super fine cement",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": "₹200 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f030"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Super steel cement",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": "₹450 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f031"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Super fast cement",
+  "Material Grade": "PSC",
+  "Indicative Rate Range (Academic)": "₹230 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f032"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Samudra cement",
+  "Material Grade": "OPC",
+  "Indicative Rate Range (Academic)": "₹980 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f033"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Super Coast cement",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹470 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f034"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Infra 53 Grade cement",
+  "Material Grade": "Grade 53,OPC",
+  "Indicative Rate Range (Academic)": "₹450 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f035"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Infra 43 Grade cement",
+  "Material Grade": "Grade 43,OPC",
+  "Indicative Rate Range (Academic)": "₹760 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f036"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Karthic Super Plus cement",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": "₹450 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f037"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Ramco Supergrade cement",
+  "Material Grade": "PPC",
+  "Indicative Rate Range (Academic)": "₹780 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f038"
+  },
+  "Supplier Name": "Select Metals",
+  "City / Area": "Kodakara-Thrissur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Dalmia Supreme Cement",
+  "Material Grade": "Grade 53,OPC",
+  "Indicative Rate Range (Academic)": "₹450 / bag",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f039"
+  },
+  "Supplier Name": "Tata Tiscon Dealer",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Authorized Dealer",
+  "Materials Supplied": "Tata Tiscon",
+  "Material Grade": "TMT",
+  "Indicative Rate Range (Academic)": "₹58–72 / kg",
+  "Transport Access": "NH",
+  "Remarks": "Premium steel"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03a"
+  },
+  "Supplier Name": "JSW Steel Distributor",
+  "City / Area": "Ernakulam",
+  "Distance from Thrissur (km)": 75,
+  "Supplier Type": "Distributor",
+  "Materials Supplied": null,
+  "Material Grade": "TMT, structural steel",
+  "Indicative Rate Range (Academic)": "₹56–70 / kg",
+  "Transport Access": "NH",
+  "Remarks": "Bulk"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03b"
+  },
+  "Supplier Name": "Kamdhenu Steel Dealer",
+  "City / Area": "Palakkad",
+  "Distance from Thrissur (km)": 65,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": null,
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹55–68 / kg",
+  "Transport Access": "NH544",
+  "Remarks": "Mid-range"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03c"
+  },
+  "Supplier Name": "Sree Lakshmi Steels",
+  "City / Area": "Chelakkara",
+  "Distance from Thrissur (km)": 30,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": null,
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹54–66 / kg",
+  "Transport Access": "SH",
+  "Remarks": "Rural supply"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03d"
+  },
+  "Supplier Name": "Kairali Metals",
+  "City / Area": "Guruvayur",
+  "Distance from Thrissur (km)": 26,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": null,
+  "Material Grade": "Steel rods",
+  "Indicative Rate Range (Academic)": "₹55–69 / kg",
+  "Transport Access": "SH",
+  "Remarks": "Local works"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03e"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Tata steel",
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹73 / kg",
+  "Transport Access": "73",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f03f"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Vishak",
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹62 / kg",
+  "Transport Access": "62",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f040"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Jindal steel",
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹61 / kg",
+  "Transport Access": "61",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f041"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Kairali",
+  "Material Grade": "TMT bars",
+  "Indicative Rate Range (Academic)": "₹62.5 / kg",
+  "Transport Access": "62.5",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f042"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Kalliyath",
+  "Material Grade": "TMT Fe 550",
+  "Indicative Rate Range (Academic)": "₹63 / kg",
+  "Transport Access": "63",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f043"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Kalliyath",
+  "Material Grade": "TMT bars Fe 500",
+  "Indicative Rate Range (Academic)": "₹59 / kg",
+  "Transport Access": "59",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f044"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Bhoopathi",
+  "Material Grade": "steel bar ,6mm",
+  "Indicative Rate Range (Academic)": "₹70 / kg",
+  "Transport Access": "70",
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f045"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ap Suraksha",
+  "Material Grade": "steel bar ,8mm",
+  "Indicative Rate Range (Academic)": "₹68.50 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f046"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ap Suraksha",
+  "Material Grade": "steel bar ,10mm",
+  "Indicative Rate Range (Academic)": "₹68.50 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f047"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ap Suraksha",
+  "Material Grade": "steel bar ,12mm",
+  "Indicative Rate Range (Academic)": "₹68.50 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f048"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Ap Suraksha",
+  "Material Grade": "steel bar ,16mm",
+  "Indicative Rate Range (Academic)": "₹68.50 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f049"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,8mm",
+  "Indicative Rate Range (Academic)": "₹74 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04a"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,10mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04b"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,12mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04c"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,16mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04d"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,20mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04e"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Keraleeyam",
+  "Material Grade": "TMT Fe 500 , 8mm",
+  "Indicative Rate Range (Academic)": "₹68 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f04f"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "TMT Fe 550 , 12mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f050"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,20mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f051"
+  },
+  "Supplier Name": "Nippon steels",
+  "City / Area": "Chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Magna",
+  "Material Grade": "steel bar ,20mm",
+  "Indicative Rate Range (Academic)": "₹73 / Kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f052"
+  },
+  "Supplier Name": "Avon Cement Bricks",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 15,
+  "Supplier Type": "Manufacturer",
+  "Materials Supplied": "Cement bricks",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹12–20 / piece",
+  "Transport Access": "Truck",
+  "Remarks": "Direct factory"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f053"
+  },
+  "Supplier Name": "Green AAC Blocks",
+  "City / Area": "Triprayar",
+  "Distance from Thrissur (km)": 28,
+  "Supplier Type": "Manufacturer",
+  "Materials Supplied": "AAC blocks",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹90–120 / piece",
+  "Transport Access": "NH",
+  "Remarks": "Eco blocks"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f054"
+  },
+  "Supplier Name": "Malabar Brick Industries",
+  "City / Area": "Malappuram",
+  "Distance from Thrissur (km)": 70,
+  "Supplier Type": "Manufacturer",
+  "Materials Supplied": "Solid concrete blocks",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹25–40 / piece",
+  "Transport Access": "NH",
+  "Remarks": "Bulk loads"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f055"
+  },
+  "Supplier Name": "Kerala Hollow Bricks",
+  "City / Area": "Palakkad",
+  "Distance from Thrissur (km)": 65,
+  "Supplier Type": "Manufacturer",
+  "Materials Supplied": "Hollow concrete blocks",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹30–45 / piece",
+  "Transport Access": "NH544",
+  "Remarks": "Structural"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f056"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": null,
+  "Materials Supplied": "Renacon AAC blocks",
+  "Material Grade": "600 X200x200 mm (8 inch)",
+  "Indicative Rate Range (Academic)": "₹132 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f057"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": null,
+  "Materials Supplied": "Renacon AAC blocks",
+  "Material Grade": "600 X200x150 mm (6 inch)",
+  "Indicative Rate Range (Academic)": "₹102 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f058"
+  },
+  "Supplier Name": "KTJ steel centre",
+  "City / Area": "Thrissur-Kolazhy",
+  "Distance from Thrissur (km)": 2.3,
+  "Supplier Type": null,
+  "Materials Supplied": "Renacon AAC blocks",
+  "Material Grade": "600 X200x100 mm (4 inch)",
+  "Indicative Rate Range (Academic)": "₹72 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f059"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "AAC blocks",
+  "Material Grade": "600 X200x200 mm (8 inch)",
+  "Indicative Rate Range (Academic)": "₹49 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05a"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "AAC blocks",
+  "Material Grade": "600 X200x150 mm (6 inch)",
+  "Indicative Rate Range (Academic)": "₹38 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05b"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "AAC blocks",
+  "Material Grade": "600 X200x100 mm (4 inch)",
+  "Indicative Rate Range (Academic)": "₹28 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05c"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "Light weight AAC blocks",
+  "Material Grade": "600 X200x200 mm (8 inch)",
+  "Indicative Rate Range (Academic)": "₹125 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05d"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "Light weight AAC blocks",
+  "Material Grade": "600 X200x150 mm (6 inch)",
+  "Indicative Rate Range (Academic)": "₹96 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05e"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "Light weight AAC blocks",
+  "Material Grade": "600 X200x100 mm (4 inch)",
+  "Indicative Rate Range (Academic)": "₹66 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f05f"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Cement bricks",
+  "Material Grade": "8 inch",
+  "Indicative Rate Range (Academic)": "₹46 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f060"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Cement bricks",
+  "Material Grade": "6 inch",
+  "Indicative Rate Range (Academic)": "₹37 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f061"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Cement bricks",
+  "Material Grade": "4 inch",
+  "Indicative Rate Range (Academic)": "₹26 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f062"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Cement bricks",
+  "Material Grade": "2.5 inch",
+  "Indicative Rate Range (Academic)": "₹9 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f063"
+  },
+  "Supplier Name": "Grace Tiles",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Exposed Wire cut Clay Brick",
+  "Material Grade": "9x4.25x3 inch",
+  "Indicative Rate Range (Academic)": "₹23 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f064"
+  },
+  "Supplier Name": "Grace Tiles",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "20mm Clay Terracotta Jali Brick",
+  "Material Grade": "8x8 inch",
+  "Indicative Rate Range (Academic)": "₹28 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f065"
+  },
+  "Supplier Name": "Grace Tiles",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "19mm Clay Terracotta Jali Brick",
+  "Material Grade": "8x8 inch",
+  "Indicative Rate Range (Academic)": "₹29 / piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f066"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Laterite Stone Slab",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "230/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f067"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Laterite Clading Tiles",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "90/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f068"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Laterite Stone Block",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "95/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f069"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Laterite Brick",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "95/kg",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06a"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "50mm Laterite Slab",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "240/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06b"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Laterite full finished brick",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "95/piece",
+  "Transport Access": null,
+  "Remarks": "for flooring"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06c"
+  },
+  "Supplier Name": "Vintage Stones",
+  "City / Area": "Thrissur-Aloor",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Red laterite stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "90/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06d"
+  },
+  "Supplier Name": "Clay Palace",
+  "City / Area": "Thrissur-Potttore",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "clay brick",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "8/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06e"
+  },
+  "Supplier Name": "Clay Palace",
+  "City / Area": "Thrissur-Potttore",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "DE aired wirecut brick",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "8/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f06f"
+  },
+  "Supplier Name": "Cameo stones",
+  "City / Area": "Ernakulam-Edapally",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "red laterite stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "70/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f070"
+  },
+  "Supplier Name": "Vacco Stones",
+  "City / Area": "Ernakulam-Kakkanad",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "red laterite stone",
+  "Material Grade": "15x9x7",
+  "Indicative Rate Range (Academic)": "115/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f071"
+  },
+  "Supplier Name": "Thrissur M-Sand Supplier",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Manufacturer",
+  "Materials Supplied": "M-Sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": null,
+  "Transport Access": "Urban",
+  "Remarks": "RMC compatible"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f072"
+  },
+  "Supplier Name": "Kerala River Sand Dealer",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Licensed Dealer",
+  "Materials Supplied": "River sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹3,500–5,000 / load",
+  "Transport Access": "Urban",
+  "Remarks": "Limited supply"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f073"
+  },
+  "Supplier Name": "Palakkad M-Sand Plant",
+  "City / Area": "Palakkad",
+  "Distance from Thrissur (km)": 65,
+  "Supplier Type": "Crusher Unit",
+  "Materials Supplied": "M-Sand, P-Sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹1,700–2,300 / ton",
+  "Transport Access": "NH544",
+  "Remarks": "Bulk supply"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f074"
+  },
+  "Supplier Name": "Malappuram Blue Metal Quarry",
+  "City / Area": "Malappuram",
+  "Distance from Thrissur (km)": 70,
+  "Supplier Type": "Quarry",
+  "Materials Supplied": "Aggregates, sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹1,600–2,200 / ton",
+  "Transport Access": "NH",
+  "Remarks": "Crusher dust"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f075"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "M-sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "6600",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f076"
+  },
+  "Supplier Name": "St.Marys hardwares",
+  "City / Area": "Thrissur-Punkunnam",
+  "Distance from Thrissur (km)": 4,
+  "Supplier Type": null,
+  "Materials Supplied": "P-sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "6900",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f077"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "M-sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "58/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f078"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "River-sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "110/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f079"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "P-sand",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "63/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07a"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "12mm",
+  "Indicative Rate Range (Academic)": "55/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07b"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "20mm",
+  "Indicative Rate Range (Academic)": "54/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07c"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "6mm",
+  "Indicative Rate Range (Academic)": "55/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07d"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "10mm",
+  "Indicative Rate Range (Academic)": "53/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07e"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "30mm",
+  "Indicative Rate Range (Academic)": "54/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f07f"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "60mm",
+  "Indicative Rate Range (Academic)": "55/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f080"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "15mm",
+  "Indicative Rate Range (Academic)": "53/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f081"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "40mm",
+  "Indicative Rate Range (Academic)": "54/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f082"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Rubble stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "43/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f083"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Quarry dust",
+  "Material Grade": "WMM",
+  "Indicative Rate Range (Academic)": "54/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f084"
+  },
+  "Supplier Name": "Aditya Associates",
+  "City / Area": "Thrissur-Kuttanellur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Rubble stone",
+  "Material Grade": "GSB",
+  "Indicative Rate Range (Academic)": "54/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f085"
+  },
+  "Supplier Name": "Seven Star Traders",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "30mm",
+  "Indicative Rate Range (Academic)": "7000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f086"
+  },
+  "Supplier Name": "Seven Star Traders",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "20mm",
+  "Indicative Rate Range (Academic)": "7000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f087"
+  },
+  "Supplier Name": "Seven Star Traders",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "12mm",
+  "Indicative Rate Range (Academic)": "6500",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f088"
+  },
+  "Supplier Name": "Seven Star Traders",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "10mm",
+  "Indicative Rate Range (Academic)": "6500",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f089"
+  },
+  "Supplier Name": "Seven Star Traders",
+  "City / Area": "Thrissur-Irinjalakuda",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "8mm",
+  "Indicative Rate Range (Academic)": "6500",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08a"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "53mm",
+  "Indicative Rate Range (Academic)": "16,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08b"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "40mm",
+  "Indicative Rate Range (Academic)": "15,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08c"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "20mm",
+  "Indicative Rate Range (Academic)": "14,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08d"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "14mm",
+  "Indicative Rate Range (Academic)": "16,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08e"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "12mm",
+  "Indicative Rate Range (Academic)": "12,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f08f"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "8mm",
+  "Indicative Rate Range (Academic)": "10,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f090"
+  },
+  "Supplier Name": "Godson Tipper Services and Material Supply",
+  "City / Area": "Thrissur-Puthur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Coarse aggregate",
+  "Material Grade": "6mm",
+  "Indicative Rate Range (Academic)": "10,000",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f091"
+  },
+  "Supplier Name": "Coimbatore Crusher Unit",
+  "City / Area": "Coimbatore",
+  "Distance from Thrissur (km)": 110,
+  "Supplier Type": "Crusher",
+  "Materials Supplied": "M-Sand, aggregates",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹1,500–2,100 / ton",
+  "Transport Access": "NH544",
+  "Remarks": "Industrial scale"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f092"
+  },
+  "Supplier Name": "Kerala State Timber Depot",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Govt Depot",
+  "Materials Supplied": "Teak, Rosewood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹2,500–6,000 / cft",
+  "Transport Access": "Urban",
+  "Remarks": "Govt controlled"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f093"
+  },
+  "Supplier Name": "Malabar Timber Traders",
+  "City / Area": "Kunnamkulam",
+  "Distance from Thrissur (km)": 30,
+  "Supplier Type": "Trader",
+  "Materials Supplied": "Teak, Anjili",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹2,200–5,500 / cft",
+  "Transport Access": "SH",
+  "Remarks": "Bulk timber"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f094"
+  },
+  "Supplier Name": "Coastal Timber Depot",
+  "City / Area": "Kodungallur",
+  "Distance from Thrissur (km)": 30,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Teak, Plywood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹2,000–5,200 / cft",
+  "Transport Access": "NH66",
+  "Remarks": "Marine timber"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f095"
+  },
+  "Supplier Name": "Nilambur Timber Traders",
+  "City / Area": "Nilambur",
+  "Distance from Thrissur (km)": 95,
+  "Supplier Type": "Trader",
+  "Materials Supplied": "Teak, hardwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹2,300–6,200 / cft",
+  "Transport Access": "SH",
+  "Remarks": "Forest belt"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f096"
+  },
+  "Supplier Name": "Coimbatore Timber Mart",
+  "City / Area": "Coimbatore",
+  "Distance from Thrissur (km)": 110,
+  "Supplier Type": "Wholesaler",
+  "Materials Supplied": "Softwood, plywood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹1,800–4,500 / cft",
+  "Transport Access": "NH544",
+  "Remarks": "Industrial supply"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f097"
+  },
+  "Supplier Name": "St. Thomas Saw Mill",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Wholesaler",
+  "Materials Supplied": "Kunnivaga wood log",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "2000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f098"
+  },
+  "Supplier Name": "St. Thomas Saw Mill",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Wholesaler",
+  "Materials Supplied": "Mixed wooden reepers & runners",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "750/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f099"
+  },
+  "Supplier Name": "St. Thomas Saw Mill",
+  "City / Area": "Thrissur-Ollur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": "Wholesaler",
+  "Materials Supplied": "Teakwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "4200/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09a"
+  },
+  "Supplier Name": "Trichur Ply House",
+  "City / Area": "Thrissur-Chembukav",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Saburi HD Plywood Board",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "3950/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09b"
+  },
+  "Supplier Name": "Trichur Ply House",
+  "City / Area": "Thrissur-Chembukav",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Woodgrain Texture Plywood Board",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "490/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09c"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Teakwood",
+  "Material Grade": "thickness-75cm -100cm",
+  "Indicative Rate Range (Academic)": "3000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09d"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Forest Teakwood",
+  "Material Grade": "thickness-100cm -150cm",
+  "Indicative Rate Range (Academic)": "7000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09e"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "A Quality Kerala Teakwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "5000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f09f"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "B Quality Kerala Teakwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "6000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a0"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "C Quality Kerala Teakwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "7000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a1"
+  },
+  "Supplier Name": "St. Marys Saw Mills",
+  "City / Area": "Thrissur-Paravattani",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "D Quality Kerala Teakwood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "9000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a2"
+  },
+  "Supplier Name": "Manishkumar Traders",
+  "City / Area": "Thrissur-Kodannur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Rose Wood Logs",
+  "Material Grade": "8 ft",
+  "Indicative Rate Range (Academic)": "2000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a3"
+  },
+  "Supplier Name": "Manishkumar Traders",
+  "City / Area": "Thrissur-Kodannur",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Rose Wood Logs",
+  "Material Grade": "8 ft",
+  "Indicative Rate Range (Academic)": "2000/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a4"
+  },
+  "Supplier Name": "MC Ventures",
+  "City / Area": "Ernakulam-Aluva",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "mahogany wood",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "800/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a5"
+  },
+  "Supplier Name": "MC Ventures",
+  "City / Area": "Ernakulam-Aluva",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Teakwood logs",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "2200/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a6"
+  },
+  "Supplier Name": "Virgo cosmic",
+  "City / Area": null,
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Nilambur teakwood logs",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "1150/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a7"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "6 ft",
+  "Indicative Rate Range (Academic)": "1560/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a8"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "7 ft",
+  "Indicative Rate Range (Academic)": "1580/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0a9"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "8 ft",
+  "Indicative Rate Range (Academic)": "1600/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0aa"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "9 ft",
+  "Indicative Rate Range (Academic)": "1800/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0ab"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "10 ft",
+  "Indicative Rate Range (Academic)": "1900/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0ac"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round teakwood log",
+  "Material Grade": "12 ft",
+  "Indicative Rate Range (Academic)": "2500/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0ad"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "6 ft",
+  "Indicative Rate Range (Academic)": "1450/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0ae"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "7 ft",
+  "Indicative Rate Range (Academic)": "1600/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0af"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "8 ft",
+  "Indicative Rate Range (Academic)": "1700/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b0"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "9 ft",
+  "Indicative Rate Range (Academic)": "800/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b1"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "11 ft",
+  "Indicative Rate Range (Academic)": "2280/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b2"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Mahogany log",
+  "Material Grade": "13 ft",
+  "Indicative Rate Range (Academic)": "2500/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b3"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Jackwood log",
+  "Material Grade": "5 ft",
+  "Indicative Rate Range (Academic)": "2450/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b4"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Jackwood log",
+  "Material Grade": "6 ft",
+  "Indicative Rate Range (Academic)": "1400/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b5"
+  },
+  "Supplier Name": "Matha Wood Industries",
+  "City / Area": "Thrissur-Mullassery",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Round Jackwood log",
+  "Material Grade": "7 ft",
+  "Indicative Rate Range (Academic)": "1300/cft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b6"
+  },
+  "Supplier Name": "Kajaria Tiles Showroom",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Showroom",
+  "Materials Supplied": "Vitrified tiles",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹60–150 / sq.ft",
+  "Transport Access": "NH",
+  "Remarks": "Premium"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b7"
+  },
+  "Supplier Name": "Somany Tiles Dealer",
+  "City / Area": "Ernakulam",
+  "Distance from Thrissur (km)": 75,
+  "Supplier Type": "Distributor",
+  "Materials Supplied": "Floor & wall tiles",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹55–140 / sq.ft",
+  "Transport Access": "NH",
+  "Remarks": "Wide range"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b8"
+  },
+  "Supplier Name": "Johnson Tiles",
+  "City / Area": "Kodakara",
+  "Distance from Thrissur (km)": 20,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "Industrial tiles",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹50–130 / sq.ft",
+  "Transport Access": "NH",
+  "Remarks": "Commercial"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0b9"
+  },
+  "Supplier Name": "CERA Sanitaryware",
+  "City / Area": "Thrissur",
+  "Distance from Thrissur (km)": 0,
+  "Supplier Type": "Dealer",
+  "Materials Supplied": "WC, wash basins",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "₹2,000–15,000 / unit",
+  "Transport Access": "Urban",
+  "Remarks": "Finishing"
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0ba"
+  },
+  "Supplier Name": "clay palace",
+  "City / Area": "Thrissur-Pottore",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "Teracotta clay jali",
+  "Material Grade": "8x8x3 inch",
+  "Indicative Rate Range (Academic)": "30/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0bb"
+  },
+  "Supplier Name": "clay palace",
+  "City / Area": "Thrissur-Pottore",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "laterite cladding stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "125/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0bc"
+  },
+  "Supplier Name": "Italia Marbles",
+  "City / Area": "Thrissur-chettupuzha",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "laterite cladding stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "70/piece",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0bd"
+  },
+  "Supplier Name": "cameo stones",
+  "City / Area": "Ernakulam-Edapally",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "yellow Tandoor stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "80/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0be"
+  },
+  "Supplier Name": "cameo stones",
+  "City / Area": "Ernakulam-Edapally",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "broken yellow natural stone",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "295/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0bf"
+  },
+  "Supplier Name": "Vacco stones",
+  "City / Area": "Ernakulam-Kakkanad",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "natural stone cladding",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "200/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+},
+{
+  "_id": {
+    "$oid": "69bd6edcbfe97aa5c991f0c0"
+  },
+  "Supplier Name": "Vacco stones",
+  "City / Area": "Ernakulam-Kakkanad",
+  "Distance from Thrissur (km)": null,
+  "Supplier Type": null,
+  "Materials Supplied": "natural stone wall cladding",
+  "Material Grade": null,
+  "Indicative Rate Range (Academic)": "180/sq ft",
+  "Transport Access": null,
+  "Remarks": null
+}]
