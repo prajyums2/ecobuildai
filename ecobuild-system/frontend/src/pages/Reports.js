@@ -615,7 +615,7 @@ function MaterialSummaryTab({ boq, project }) {
       }
       if (!coord) coord = { lat: 10.5167, lon: 76.2167 };
       const dist = calculateDistance(projectLat, projectLon, coord.lat, coord.lon);
-      return { ...supplier: s, distance: Math.round(dist * 10) / 10 };
+      return { ...s, distance: Math.round(dist * 10) / 10 };
     });
     
     return withDistance.sort((a, b) => a.distance - b.distance)[0];
