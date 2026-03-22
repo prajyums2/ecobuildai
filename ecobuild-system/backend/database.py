@@ -2,6 +2,13 @@ from pymongo import MongoClient
 from datetime import datetime
 import os
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # MongoDB connection
 MONGO_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
 DB_NAME = os.getenv('DB_NAME', 'ecobuild')
