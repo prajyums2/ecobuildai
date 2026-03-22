@@ -1776,17 +1776,6 @@ function Reports() {
           <FaLeaf />
           AI Recommendations
         </button>
-        <button
-          onClick={() => setActiveTab("references")}
-          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "references"
-              ? "border-blue-500 text-blue-600 dark:text-blue-400"
-              : "border-transparent text-foreground-secondary hover:text-foreground"
-          }`}
-        >
-          <FaBook />
-          References
-        </button>
       </div>
 
       {/* Content */}
@@ -3070,103 +3059,119 @@ function Reports() {
         </div>
 
         <div
-          data-tab-content="references"
-          style={{ display: activeTab === "references" ? "block" : "none" }}
+          data-tab-content="sustainability-explanation"
+          style={{ display: activeTab === "sustainability" ? "block" : "none" }}
           className="print:block"
         >
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <FaBook className="text-blue-500" />
-                Academic References & Citations
+                <FaLeaf className="text-green-500" />
+                How Sustainability Score is Calculated
               </h3>
-              <p className="text-foreground-secondary mb-6">
-                The structural engineering calculations in this system are based
-                on Indian Standards (IS Codes). The following academic papers
-                provide technical background, validation, and comparative
-                studies for the implemented standards.
-              </p>
-
-              {citations &&
-              citations.bibliography &&
-              Object.keys(citations.bibliography).length > 0 ? (
-                <div className="space-y-6">
-                  {Object.entries(citations.bibliography).map(
-                    ([code, refs]) => (
-                      <div
-                        key={code}
-                        className="border-l-4 border-blue-500 pl-4"
-                      >
-                        <h4 className="font-bold text-lg text-primary mb-3">
-                          {code}
-                        </h4>
-                        <div className="space-y-3">
-                          {refs.map((ref, idx) => (
-                            <div
-                              key={idx}
-                              className="text-sm bg-gray-50 dark:bg-gray-700/50 p-3 rounded"
-                            >
-                              <p className="text-foreground">{ref}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ),
-                  )}
+              
+              <div className="space-y-4 text-foreground-secondary">
+                <p>
+                  The sustainability score is calculated based on GRIHA v3.1 guidelines 
+                  (Green Rating for Integrated Habitat Assessment) developed by TERI.
+                </p>
+                
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Score Components:</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Rainwater Harvesting</span>
+                      <span className="font-mono text-primary">+10 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Solar Water Heater</span>
+                      <span className="font-mono text-primary">+10 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Sewage Treatment Plant</span>
+                      <span className="font-mono text-primary">+8 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>High Sustainability Priority</span>
+                      <span className="font-mono text-primary">+8 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Medium Sustainability Priority</span>
+                      <span className="font-mono text-primary">+5 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Low Embodied Carbon (&lt;50 tons)</span>
+                      <span className="font-mono text-primary">+7 points</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Medium Embodied Carbon (50-100 tons)</span>
+                      <span className="font-mono text-primary">+4 points</span>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <p className="text-foreground-secondary">
-                    The following Indian Standards are implemented in this
-                    system:
-                  </p>
-                  <ul className="list-disc list-inside space-y-2 text-foreground">
-                    <li>
-                      <strong>IS 875 (Part 3):2015</strong> - Wind Loads on
-                      Buildings and Structures
-                    </li>
-                    <li>
-                      <strong>IS 1893 (Part 1):2016</strong> - Criteria for
-                      Earthquake Resistant Design
-                    </li>
-                    <li>
-                      <strong>IS 456:2000</strong> - Plain and Reinforced
-                      Concrete Code of Practice
-                    </li>
-                    <li>
-                      <strong>IS 13920:2016</strong> - Ductile Detailing of RC
-                      Structures
-                    </li>
-                    <li>
-                      <strong>IS 10262:2019</strong> - Concrete Mix
-                      Proportioning Guidelines
-                    </li>
-                  </ul>
-                  <p className="text-sm text-foreground-secondary mt-4">
-                    Academic citations are available when the backend server is
-                    running with the citations module.
+
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Rating Thresholds:</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>5-Star (Excellent)</span>
+                      <span className="font-mono">75-100 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>4-Star (Very Good)</span>
+                      <span className="font-mono">65-74 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>3-Star (Good)</span>
+                      <span className="font-mono">55-64 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>2-Star</span>
+                      <span className="font-mono">46-54 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>1-Star</span>
+                      <span className="font-mono">36-45 points</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-semibold text-foreground mb-2">Your Project Score: {sustainabilityScore || 0}/100</h4>
+                  <p className="text-sm">
+                    {sustainabilityScore >= 65 ? 'Excellent! Your project qualifies for GRIHA 4-Star or higher.' :
+                     sustainabilityScore >= 55 ? 'Good! Your project qualifies for GRIHA 3-Star.' :
+                     sustainabilityScore >= 46 ? 'Your project qualifies for GRIHA 2-Star. Add more sustainability features to improve.' :
+                     sustainabilityScore >= 36 ? 'Your project qualifies for GRIHA 1-Star. Consider adding rainwater harvesting and solar heater.' :
+                     'Your project needs more sustainability features to qualify for GRIHA certification.'}
                   </p>
                 </div>
-              )}
-            </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-              <h4 className="font-semibold text-foreground mb-2">
-                Note on Standards:
-              </h4>
-              <p className="text-sm text-foreground-secondary">
-                This software implements the following Indian Standards for
-                structural engineering calculations:
-              </p>
-              <ul className="list-disc list-inside space-y-1 text-sm text-foreground-secondary mt-2">
-                <li>
-                  IS 875 (Part 1 & 3) - Design Loads (Dead, Imposed & Wind
-                  Loads)
-                </li>
-                <li>IS 1893 (Part 1):2016 - Earthquake Resistant Design</li>
-                <li>IS 456:2000 - Plain and Reinforced Concrete Code</li>
-                <li>IS 13920:2016 - Ductile Detailing of RC Structures</li>
-              </ul>
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Embodied Carbon Calculation:</h4>
+                  <p className="text-sm mb-2">
+                    Based on material quantities from BOQ:
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span>Cement (OPC): 0.93 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.cement || 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Steel: 2.50 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.steel || 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>AAC Blocks: 0.55 kg CO2/unit</span>
+                      <span>{embodiedCarbon?.blocks || 0} kg</span>
+                    </div>
+                    <div className="flex justify-between font-semibold border-t pt-1 mt-1">
+                      <span>Total Embodied Carbon</span>
+                      <span>{embodiedCarbon?.total || 0} kg CO2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
