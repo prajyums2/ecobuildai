@@ -87,3 +87,24 @@ def get_suppliers_collection():
     if db is None:
         return None
     return db.suppliers
+
+def get_categories_collection():
+    """Get categories collection"""
+    db = database.get_db()
+    if db is None:
+        return None
+    return db.categories
+
+def get_material_properties_collection():
+    """Get material_properties collection"""
+    db = database.get_db()
+    if db is None:
+        return None
+    return db.material_properties
+
+def get_location_cost_indices_collection():
+    """Get location_cost_indices collection"""
+    db = database.get_db()
+    if db is None:
+        return None
+    return db.location_cost_indices

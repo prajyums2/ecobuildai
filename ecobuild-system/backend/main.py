@@ -767,6 +767,98 @@ async def get_materials_by_category(
         }
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid category")
+
+# ==================== NEW COLLECTION ENDPOINTS ====================
+
+@app.get("/api/categories")
+async def get_material_categories_list():
+    """Get all material categories"""
+    try:
+        collection = database.get_db().categories
+        if collection is None:
+            return {"categories": [], "total": 0}
+        
+        categories = list(collection.find({}))
+        for cat in categories:
+            cat["_id"] = str(cat["_id"])
+        
+        return {"categories": categories, "total": len(categories)}
+    except Exception as e:
+        return {"categories": [], "total": 0}
+
+@app.get("/api/material-properties/{material_code}")
+async def get_material_properties(material_code: str):
+    """Get properties for a specific material"""
+    try:
+        collection = database.get_db().material_properties
+        if collection is None:
+            return {"properties": [], "total": 0}
+        
+        props = list(collection.find({"MaterialCode": material_code}))
+        for prop in props:
+            prop["_id"] = str(prop["_id"])
+        
+        return {"material_code": material_code, "properties": props, "total": len(props)}
+    except Exception as e:
+        return {"properties": [], "total": 0}
+
+@app.get("/api/material-suppliers")
+async def get_material_suppliers(
+    district: Optional[str] = None,
+    material: Optional[str] = None
+):
+    """Get suppliers with optional filters"""
+    try:
+        collection = database.get_db().suppliers
+        if collection is None:
+            return {"suppliers": [], "total": 0}
+        
+        query = {}
+        if district:
+            query["City / Area"] = {"$regex": district, "$options": "i"}
+        if material:
+            query["Materials Supplied"] = {"$regex": material, "$options": "i"}
+        
+        suppliers = list(collection.find(query))
+        for sup in suppliers:
+            sup["_id"] = str(sup["_id"])
+        
+        return {"suppliers": suppliers, "total": len(suppliers)}
+    except Exception as e:
+        return {"suppliers": [], "total": 0}
+
+@app.get("/api/location-cost-indices")
+async def get_location_cost_indices():
+    """Get all location cost indices"""
+    try:
+        collection = database.get_db().location_cost_indices
+        if collection is None:
+            return {"indices": [], "total": 0}
+        
+        indices = list(collection.find({}))
+        for idx in indices:
+            idx["_id"] = str(idx["_id"])
+        
+        return {"indices": indices, "total": len(indices)}
+    except Exception as e:
+        return {"indices": [], "total": 0}
+
+@app.get("/api/location-cost-indices/{district}")
+async def get_location_cost_index(district: str):
+    """Get cost index for a specific district"""
+    try:
+        collection = database.get_db().location_cost_indices
+        if collection is None:
+            return {"district": district, "cost_index": 100}
+        
+        index = collection.find_one({"District": district})
+        if index:
+            index["_id"] = str(index["_id"])
+            return index
+        else:
+            return {"district": district, "cost_index": 100}
+    except Exception as e:
+        return {"district": district, "cost_index": 100}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
