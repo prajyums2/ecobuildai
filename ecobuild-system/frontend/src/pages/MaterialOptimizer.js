@@ -92,6 +92,33 @@ function MaterialOptimizer() {
   const [activeTab, setActiveTab] = useState('selection'); // selection, comparison, results
   const [activeCategory, setActiveCategory] = useState(null);
 
+  // Auto-select recommended materials when component loads
+  useEffect(() => {
+    const autoSelectRecommended = () => {
+      const recommendedSelections = {};
+      selectedCategories.forEach(catId => {
+        const materials = CATEGORY_MATERIALS[catId] || [];
+        const recommended = materials.find(m => m.recommended);
+        if (recommended) {
+          recommendedSelections[catId] = recommended;
+        }
+      });
+      
+      if (Object.keys(recommendedSelections).length > 0) {
+        setSelectedMaterials(recommendedSelections);
+        // Save to project
+        Object.entries(recommendedSelections).forEach(([catId, material]) => {
+          saveMaterialSelection(catId, material);
+        });
+      }
+    };
+    
+    // Only auto-select if no materials are currently selected
+    if (Object.keys(selectedMaterials).length === 0) {
+      autoSelectRecommended();
+    }
+  }, [selectedCategories]);
+
   if (!project || !project.isConfigured) {
     return (
       <div className="flex items-center justify-center h-full">
