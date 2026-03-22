@@ -392,9 +392,7 @@ function AIRecommendationsTab({ project, boq, embodiedCarbon, sustainabilityScor
         <div className="flex flex-wrap gap-3">
           {[
             { label: 'View Material Optimizer', action: () => window.location.href = '/optimizer' },
-            { label: 'Check Sustainability', action: () => {} },
-            { label: 'View BoQ Details', action: () => {} },
-            { label: 'Export Report', action: () => {} }
+            { label: 'Export Report', action: () => window.print() }
           ].map((action, idx) => (
             <button
               key={idx}
@@ -807,12 +805,16 @@ function MaterialSummaryTab({ boq }) {
 // Shows raw materials with supplier details
 // ============================================
 
-function SuppliersTab({ boq }) {
+function SuppliersTab({ boq, project }) {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDistrict, setSelectedDistrict] = useState('Thrissur');
   
   const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
+  
+  // Project coordinates
+  const projectLat = project?.location?.lat || 10.5167;
+  const projectLon = project?.location?.lon || 76.2167;
 
   useEffect(() => {
     fetchSuppliers();
@@ -829,6 +831,59 @@ function SuppliersTab({ boq }) {
       console.error('Failed to fetch suppliers:', err);
       setLoading(false);
     }
+  };
+
+  // Haversine formula to calculate distance between two coordinates
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  // District coordinates (approximate centers)
+  const districtCoords = {
+    'Thrissur': { lat: 10.5167, lon: 76.2167 },
+    'Ernakulam': { lat: 9.9312, lon: 76.2673 },
+    'Palakkad': { lat: 10.7867, lon: 76.6548 },
+    'Kozhikode': { lat: 11.2588, lon: 75.7804 },
+    'Thiruvananthapuram': { lat: 8.5241, lon: 76.9366 },
+    'Kollam': { lat: 8.8932, lon: 76.6141 },
+    'Kottayam': { lat: 9.5916, lon: 76.5222 },
+    'Kannur': { lat: 11.8745, lon: 75.3704 },
+  };
+
+  // Calculate distance from project to supplier location
+  const getDistance = (supplier) => {
+    const supplierLocation = supplier['City / Area'] || '';
+    
+    // Try to match district from supplier location
+    let supplierCoord = null;
+    for (const [district, coord] of Object.entries(districtCoords)) {
+      if (supplierLocation.toLowerCase().includes(district.toLowerCase())) {
+        supplierCoord = coord;
+        break;
+      }
+    }
+    
+    // Default to district center if not found
+    if (!supplierCoord) {
+      supplierCoord = districtCoords[selectedDistrict] || { lat: 10.5167, lon: 76.2167 };
+    }
+    
+    // Calculate distance from project location
+    const distance = calculateDistance(projectLat, projectLon, supplierCoord.lat, supplierCoord.lon);
+    
+    // If supplier is in same district as project, use provided distance
+    if (supplier['Distance from Thrissur (km)'] !== null && selectedDistrict === 'Thrissur') {
+      return supplier['Distance from Thrissur (km)'];
+    }
+    
+    return Math.round(distance * 10) / 10;
   };
 
   // Clean rate display
@@ -858,7 +913,7 @@ function SuppliersTab({ boq }) {
       categorized[cat.name] = suppliers.filter(s => {
         const supplied = (s['Materials Supplied'] || '').toLowerCase();
         return cat.keywords.some(kw => supplied.includes(kw));
-      }).slice(0, 5); // Limit to 5 suppliers per category
+      }).slice(0, 5);
     });
     return categorized;
   };
@@ -942,9 +997,7 @@ function SuppliersTab({ boq }) {
                         {cleanRate(supplier['Indicative Rate Range (Academic)'])}
                       </td>
                       <td className="p-3 text-right font-mono text-foreground-secondary">
-                        {supplier['Distance from Thrissur (km)'] !== null 
-                          ? `${supplier['Distance from Thrissur (km)']} km`
-                          : 'N/A'}
+                        {getDistance(supplier)} km
                       </td>
                     </tr>
                   ))}
@@ -1448,7 +1501,7 @@ function Reports() {
         </div>
 
         <div data-tab-content="suppliers" style={{ display: activeTab === 'suppliers' ? 'block' : 'none' }} className="print:block">
-          <SuppliersTab boq={boq} />
+          <SuppliersTab boq={boq} project={project} />
         </div>
 
         <div data-tab-content="staad" style={{ display: activeTab === 'staad' ? 'block' : 'none' }} className="print:block">
