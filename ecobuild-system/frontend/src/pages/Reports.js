@@ -771,34 +771,7 @@ function MaterialSummaryTab({ boq, project }) {
   );
 }
 
-    // Round all quantities
-    Object.keys(materials).forEach(key => {
-      materials[key].qty = Math.round(materials[key].qty * 10) / 10;
-    });
-
-    return materials;
-  };
-
-  const materials = extractMaterials();
-
-  // Define categories for display
-  const materialCategories = [
-    {
-      name: 'Concrete & Cement',
-      icon: FaIndustry,
-      items: [
-        { ...materials.cement, rate: 370, priority: 'High' },
-        { ...materials.concrete, rate: 5500, priority: 'Medium' },
-      ]
-    },
-    {
-      name: 'Steel',
-      icon: FaIndustry,
-      items: [
-        { ...materials.steel, rate: 72, priority: 'High' },
-        { ...materials.steelWire, rate: 85, priority: 'Medium' },
-      ]
-    },
+function Reports() {
     {
       name: 'Aggregates & Sand',
       icon: FaIndustry,
