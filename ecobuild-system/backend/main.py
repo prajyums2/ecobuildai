@@ -132,42 +132,53 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 @app.post("/api/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
     """Register a new user"""
-    users_collection = get_users_collection()
-    if users_collection is None:
-        raise HTTPException(status_code=503, detail="Database not available")
-    
-    # Check if user already exists
-    if users_collection.find_one({"email": user_data.email}):
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # Create user
-    user_dict = {
-        "_id": str(ObjectId()),
-        "email": user_data.email,
-        "full_name": user_data.full_name,
-        "company": user_data.company,
-        "phone": user_data.phone,
-        "hashed_password": get_password_hash(user_data.password),
-        "is_active": True,
-        "created_at": datetime.utcnow(),
-        "last_login": None
-    }
-    
-    users_collection.insert_one(user_dict)
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": user_data.email})
-    
-    return Token(
-        access_token=access_token,
-        token_type="bearer",
-        user=User(
-            id=str(user_dict["_id"]),
-            email=user_data.email,
-            full_name=user_data.full_name,
-            company=user_data.company,
-            phone=user_data.phone,
-            is_active=True,
+    try:
+        users_collection = get_users_collection()
+        if users_collection is None:
+            raise HTTPException(status_code=503, detail="Database not available")
+        
+        # Check if user already exists
+        existing = users_collection.find_one({"email": user_data.email})
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Create user
+        user_id = str(ObjectId())
+        user_dict = {
+            "_id": user_id,
+            "email": user_data.email,
+            "full_name": user_data.full_name,
+            "company": user_data.company,
+            "phone": user_data.phone,
+            "hashed_password": get_password_hash(user_data.password),
+            "is_active": True,
+            "created_at": datetime.utcnow(),
+            "last_login": None
+        }
+        
+        result = users_collection.insert_one(user_dict)
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": user_data.email})
+        
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
+            user=User(
+                id=user_id,
+                email=user_data.email,
+                full_name=user_data.full_name,
+                company=user_data.company,
+                phone=user_data.phone,
+                is_active=True,
+                created_at=user_dict["created_at"]
+            )
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Registration error: {e}")
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
             created_at=user_dict["created_at"]
         )
     )
