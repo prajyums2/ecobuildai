@@ -148,7 +148,7 @@ class EnhancedBIMParser:
         Returns:
             BIMProjectData with elements, quantities, and costs
         """
-        try:
+            try:
             import ifcopenshell
             import ifcopenshell.geom
             
@@ -156,10 +156,47 @@ class EnhancedBIMParser:
             elements = []
             self.stories = set()
             
-            # Get all stories in the building
+            # Get all stories and normalize names
+            raw_stories = []
+            story_elevations = {}
+            
             for storey in model.by_type('IfcBuildingStorey'):
-                if hasattr(storey, 'Name'):
-                    self.stories.add(storey.Name)
+                if hasattr(storey, 'Name') and storey.Name:
+                    name = storey.Name.strip()
+                    elevation = storey.Elevation if hasattr(storey, 'Elevation') else 0
+                    
+                    # Normalize story names
+                    normalized = name.lower()
+                    
+                    # Remove common prefixes/suffixes
+                    for prefix in ['level ', 'floor ', 'storey ', 'story ', 'lvl ']:
+                        if normalized.startswith(prefix):
+                            normalized = normalized[len(prefix):]
+                    
+                    # Remove leading zeros and clean
+                    normalized = normalized.lstrip('0').strip()
+                    if not normalized:
+                        normalized = '0'
+                    
+                    # Track elevation for ordering
+                    story_elevations[normalized] = elevation
+                    raw_stories.append((normalized, elevation, name))
+            
+            # Sort by elevation and deduplicate
+            raw_stories.sort(key=lambda x: x[1])
+            
+            # Build final stories list
+            seen_normalized = set()
+            for normalized, elevation, original_name in raw_stories:
+                if normalized not in seen_normalized:
+                    seen_normalized.add(normalized)
+                    self.stories.add(original_name)
+            
+            # Ensure we have at least "Ground Floor" if no stories found
+            if not self.stories:
+                self.stories.add("Ground Floor")
+            
+            print(f"[BIM Parser] Found {len(self.stories)} stories: {list(self.stories)}")
             
             # Enhanced type mapping with property-based fallback
             type_mapping = {

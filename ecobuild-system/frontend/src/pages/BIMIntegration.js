@@ -130,13 +130,19 @@ function BIMIntegration() {
   // Initialize IFC Viewer
   useEffect(() => {
     let viewer = null;
+    let isUnmounted = false;
     
     const initViewer = async () => {
-      if (!viewerContainerRef.current) return;
+      if (!viewerContainerRef.current || isUnmounted) return;
       
       try {
-        const { createIFCViewer } = await import('@ifc-viewer/core');
+        // Try to load @ifc-viewer/core
+        const ifcViewerModule = await import('@ifc-viewer/core');
         await import('@ifc-viewer/core/styles');
+        
+        if (isUnmounted) return;
+        
+        const { createIFCViewer } = ifcViewerModule;
         
         viewer = createIFCViewer({
           container: viewerContainerRef.current,
@@ -155,28 +161,47 @@ function BIMIntegration() {
             },
           },
           features: {
-            minimap: true,
-            measurement: true,
-            clipping: true,
-            floorplans: true,
+            minimap: false,
+            measurement: false,
+            clipping: false,
+            floorplans: false,
             aiVisualizer: false,
           },
           onModelLoaded: (meta) => {
             console.log('IFC Model loaded:', meta);
+            setViewerReady(true);
           },
           onError: (error) => {
             console.error('IFC Viewer error:', error);
           },
         });
         
+        if (ifcViewerRef.current) {
+          ifcViewerRef.current.unmount();
+        }
         ifcViewerRef.current = viewer;
         setViewerReady(true);
+        console.log('IFC Viewer initialized successfully');
       } catch (error) {
         console.error('Failed to initialize IFC viewer:', error);
+        // Fallback: Set viewer ready to true so the app works without 3D
+        setViewerReady(true);
       }
     };
     
     initViewer();
+    
+    return () => {
+      isUnmounted = true;
+      if (viewer) {
+        try {
+          viewer.unmount();
+        } catch (e) {
+          console.error('Error unmounting viewer:', e);
+        }
+      }
+    };
+  }, []);
     
     return () => {
       if (ifcViewerRef.current) {
