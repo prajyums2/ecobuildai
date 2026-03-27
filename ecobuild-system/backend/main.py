@@ -1499,7 +1499,8 @@ async def get_material_rates(
         query["is_active"] = {"$ne": False}
         
         # Fetch materials with their rates
-        materials = list(materials_collection.find(query).limit(100))
+        # Use $or to match both "category" (lowercase) and "Category" (uppercase) fields
+        materials = list(materials_collection.find({}).limit(200))
         
         # Format rates for BoQ calculator
         rates = {}
