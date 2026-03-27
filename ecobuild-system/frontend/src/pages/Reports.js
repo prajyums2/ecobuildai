@@ -1382,6 +1382,7 @@ function Reports() {
 
   // Track if BoQ has been generated for this session
   const [boqGenerated, setBoqGenerated] = useState(false);
+  const [lastGeneratedKey, setLastGeneratedKey] = useState(null);
 
   // Fetch BoQ data asynchronously - runs whenever project changes
   useEffect(() => {
@@ -1389,51 +1390,51 @@ function Reports() {
       // Generate BoQ if we have a valid project with building params
       const builtUpArea = project?.buildingParams?.builtUpArea;
       const hasValidParams = builtUpArea && builtUpArea > 0;
-
-      if (hasValidParams) {
+      
+      // Create a unique key based on project parameters
+      const currentKey = JSON.stringify({
+        id: project?.id,
+        builtUpArea: project?.buildingParams?.builtUpArea,
+        numFloors: project?.buildingParams?.numFloors,
+        height: project?.buildingParams?.height,
+        materials: Object.keys(project?.materialSelections || {}).length
+      });
+      
+      // Only regenerate if key changed or first time
+      if (hasValidParams && currentKey !== lastGeneratedKey) {
         setBoqLoading(true);
         try {
-          console.log(
-            "Generating BoQ with project:",
-            project.name,
-            "builtUpArea:",
-            builtUpArea,
-          );
+          console.log("Generating BoQ - key changed:", currentKey !== lastGeneratedKey);
           const boqData = await generateBoQAsync(project);
-          console.log(
-            "BoQ generated successfully, categories:",
-            boqData?.categories?.length,
-            "total:",
-            boqData?.summary?.grandTotal,
-          );
+          console.log("BoQ generated:", boqData?.categories?.length, "categories");
           setBoq(boqData);
           setBoqGenerated(true);
+          setLastGeneratedKey(currentKey);
           // Update workflow to mark BOQ as generated
           completeBOQGeneration();
         } catch (error) {
           console.error("Failed to generate BoQ:", error);
-          // Fallback to empty BoQ structure
           setBoq({
-            projectInfo: {
-              name: project.name,
-              builtUpArea: project.buildingParams?.builtUpArea || 150,
-              numFloors: project.buildingParams?.numFloors || 2,
-            },
+            projectInfo: { name: project.name, builtUpArea: project.buildingParams?.builtUpArea || 150, numFloors: project.buildingParams?.numFloors || 2 },
             categories: [],
             summary: { subTotal: 0, gstRate: 18, gstAmount: 0, grandTotal: 0 },
           });
           setBoqGenerated(true);
+          setLastGeneratedKey(currentKey);
         } finally {
           setBoqLoading(false);
         }
-      } else {
-        console.log("Skipping BoQ generation - no valid project params");
-        setBoqLoading(false);
       }
     };
 
     fetchBoQ();
-  }, [project?.id, project?.buildingParams?.builtUpArea]);
+  }, [project?.id, project?.buildingParams?.builtUpArea, project?.buildingParams?.numFloors, project?.buildingParams?.height, JSON.stringify(project?.materialSelections)]);
+
+  // Manual refresh function
+  const handleRefreshBoQ = async () => {
+    setBoqGenerated(false);
+    setLastGeneratedKey(null);
+  };
 
   // Fetch citations for references
   useEffect(() => {
@@ -1837,6 +1838,10 @@ function Reports() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 print:hidden">
+          <button onClick={handleRefreshBoQ} className="btn btn-secondary">
+            <FaSyncAlt className="mr-2" />
+            Refresh
+          </button>
           <button onClick={handlePrint} className="btn btn-secondary">
             <FaPrint className="mr-2" />
             Print
