@@ -1,0 +1,26 @@
+{
+  "a": {
+    "building_id": "a",
+    "building_name": "2BHK House",
+    "tests": {
+      "api_health": "PASS",
+      "materials_api": "OK"
+    }
+  },
+  "b": {
+    "building_id": "b",
+    "building_name": "Office Building",
+    "tests": {
+      "api_health": "PASS",
+      "materials_api": "OK"
+    }
+  },
+  "c": {
+    "building_id": "c",
+    "building_name": "Apartment Building",
+    "tests": {
+      "api_health": "PASS",
+      "materials_api": "OK"
+    }
+  }
+}

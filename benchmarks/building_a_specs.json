@@ -1,0 +1,44 @@
+{
+  "building_id": "A",
+  "name": "2BHK House",
+  "type": "residential",
+  "location": {
+    "district": "Thrissur",
+    "state": "Kerala"
+  },
+  "dimensions": {
+    "plotArea": 200,
+    "builtUpArea": 100,
+    "numFloors": 2,
+    "floorHeight": 3.0,
+    "totalHeight": 6.0,
+    "roadWidth": 6
+  },
+  "layout": {
+    "length": 10,
+    "width": 10,
+    "externalWallLength": 40,
+    "internalWallLength": 20,
+    "wallThickness": 0.23,
+    "slabThickness": 0.125
+  },
+  "structural": {
+    "foundationType": "isolated",
+    "foundationDepth": 1.2,
+    "columnSize": "230x300mm",
+    "beamSize": "230x450mm",
+    "concreteGrade": "M20",
+    "steelGrade": "Fe500"
+  },
+  "openings": {
+    "mainDoor": 1,
+    "internalDoors": 4,
+    "windows": 6,
+    "totalOpeningArea": 15
+  },
+  "sustainability": {
+    "hasRainwaterHarvesting": true,
+    "hasSolarWaterHeater": false,
+    "hasSTP": false
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "building_id": "C",
+  "name": "Apartment Building",
+  "type": "residential",
+  "location": {
+    "district": "Thrissur",
+    "state": "Kerala"
+  },
+  "dimensions": {
+    "plotArea": 2000,
+    "builtUpArea": 350,
+    "numFloors": 5,
+    "floorHeight": 3.0,
+    "totalHeight": 15.0,
+    "roadWidth": 10
+  },
+  "layout": {
+    "length": 25,
+    "width": 14,
+    "externalWallLength": 78,
+    "internalWallLength": 80,
+    "wallThickness": 0.23,
+    "slabThickness": 0.150
+  },
+  "structural": {
+    "foundationType": "raft",
+    "foundationDepth": 2.0,
+    "columnSize": "400x400mm",
+    "beamSize": "350x550mm",
+    "concreteGrade": "M30",
+    "steelGrade": "Fe500"
+  },
+  "openings": {
+    "mainDoor": 2,
+    "internalDoors": 30,
+    "windows": 40,
+    "totalOpeningArea": 95
+  },
+  "sustainability": {
+    "hasRainwaterHarvesting": true,
+    "hasSolarWaterHeater": true,
+    "hasSTP": true
+  }
+}

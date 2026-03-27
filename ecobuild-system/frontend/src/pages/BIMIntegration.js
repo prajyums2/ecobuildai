@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProject } from "../context/ProjectContext";
 import { ecoBuildAPI } from "../services/api";
+import * as THREE from "three";
 import {
   FaUpload,
   FaCube,
@@ -12,75 +13,208 @@ import {
   FaRegWindowMaximize,
 } from "react-icons/fa";
 
-function IFCViewerWrapper() {
+// Simple Three.js IFC Viewer - single engine approach
+function IFCViewer({ parsedElements, isLoading }) {
   const containerRef = useRef(null);
-  const viewerRef = useRef(null);
+  const sceneRef = useRef(null);
+  const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
+  const animationRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const initViewer = async () => {
-      try {
-        const { createIFCViewer } = await import('@ifc-viewer/core');
-        await import('@ifc-viewer/core/styles');
+    // Initialize Three.js scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+    sceneRef.current = scene;
 
-        const viewer = createIFCViewer({
-          container: containerRef.current,
-          appearance: {
-            world: {
-              backgroundColor: '#1a1a2e',
-              directionalLightColor: '#ffffff',
-              directionalLightPosition: [20, 35, 10],
-            },
-            grid: {
-              enabled: true,
-              color: '#10b981',
-              primarySize: 6,
-              secondarySize: 1,
-              distance: 250,
-            },
-          },
-          features: {
-            minimap: true,
-            measurement: true,
-            clipping: true,
-            floorplans: true,
-            aiVisualizer: false,
-          },
-          onModelLoaded: (meta) => {
-            console.log('IFC Model loaded:', meta);
-          },
-          onError: (error) => {
-            console.error('IFC Viewer error:', error);
-          },
-        });
+    // Camera
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      containerRef.current.clientWidth / containerRef.current.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(50, 50, 50);
+    camera.lookAt(0, 0, 0);
+    cameraRef.current = camera;
 
-        viewerRef.current = viewer;
-      } catch (error) {
-        console.error('Failed to initialize IFC viewer:', error);
-      }
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    containerRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(20, 35, 10);
+    scene.add(directionalLight);
+
+    // Grid helper
+    const gridHelper = new THREE.GridHelper(100, 20, 0x10b981, 0x10b981);
+    scene.add(gridHelper);
+
+    // Mouse controls for rotation
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    const onMouseDown = (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
     };
 
-    initViewer();
+    const onMouseUp = () => {
+      isDragging = false;
+    };
 
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+
+      const radius = Math.sqrt(
+        camera.position.x ** 2 + camera.position.z ** 2
+      );
+      const theta = Math.atan2(camera.position.z, camera.position.x);
+      const phi = Math.atan2(camera.position.y, radius);
+
+      const newTheta = theta + deltaX * 0.01;
+      const newPhi = Math.max(0.1, Math.min(Math.PI / 2, phi - deltaY * 0.01));
+
+      camera.position.x = radius * Math.cos(newTheta) * Math.cos(newPhi);
+      camera.position.z = radius * Math.sin(newTheta) * Math.cos(newPhi);
+      camera.position.y = radius * Math.sin(newPhi);
+      camera.lookAt(0, 0, 0);
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    };
+
+    containerRef.current.addEventListener('mousedown', onMouseDown);
+    containerRef.current.addEventListener('mouseup', onMouseUp);
+    containerRef.current.addEventListener('mousemove', onMouseMove);
+
+    // Animation loop
+    const animate = () => {
+      animationRef.current = requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Cleanup
     return () => {
-      if (viewerRef.current) {
-        viewerRef.current.unmount();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('mousedown', onMouseDown);
+        containerRef.current.removeEventListener('mouseup', onMouseUp);
+        containerRef.current.removeEventListener('mousemove', onMouseMove);
+      }
+      if (rendererRef.current && containerRef.current) {
+        containerRef.current.removeChild(rendererRef.current.domElement);
+        rendererRef.current.dispose();
       }
     };
   }, []);
 
-  const handleFileLoad = async (file) => {
-    if (viewerRef.current && file) {
-      try {
-        await viewerRef.current.loadModelFromFile(file);
-      } catch (error) {
-        console.error('Failed to load IFC file:', error);
-      }
-    }
-  };
+  // Update 3D scene with parsed elements
+  useEffect(() => {
+    if (!sceneRef.current || !parsedElements || parsedElements.length === 0) return;
 
-  return { containerRef, handleFileLoad, viewerRef };
+    // Clear previous meshes
+    const meshesToRemove = sceneRef.current.children.filter(
+      (child) => child.isMesh
+    );
+    meshesToRemove.forEach((mesh) => sceneRef.current.remove(mesh));
+
+    // Material colors by element type
+    const typeColors = {
+      column: 0x808080, // Gray
+      beam: 0xa0a0a0,
+      slab: 0x606060,
+      wall: 0xc0c0c0,
+      foundation: 0x404040,
+      roof: 0x909090,
+      staircase: 0xb0b0b0,
+    };
+
+    // Add elements to scene
+    parsedElements.forEach((element, index) => {
+      const type = element.element_type?.toLowerCase() || "wall";
+      const color = typeColors[type] || 0x808080;
+      const material = new THREE.MeshStandardMaterial({
+        color: color,
+        roughness: 0.7,
+        metalness: 0.3,
+      });
+
+      // Create geometry based on type
+      let geometry;
+      const dims = element.dimensions || {};
+      const width = dims.Width || dims.width || 1;
+      const height = dims.Height || dims.height || 3;
+      const depth = dims.Depth || dims.depth || 1;
+
+      if (type === "slab") {
+        geometry = new THREE.BoxGeometry(width, 0.15, depth);
+      } else if (type === "column") {
+        geometry = new THREE.BoxGeometry(0.3, height, 0.3);
+      } else if (type === "beam") {
+        geometry = new THREE.BoxGeometry(width, 0.3, 0.3);
+      } else {
+        geometry = new THREE.BoxGeometry(width, height, depth);
+      }
+
+      const mesh = new THREE.Mesh(geometry, material);
+
+      // Position based on location
+      const location = element.location || {};
+      mesh.position.set(
+        location.x || index * 2,
+        (location.z || 0) + height / 2,
+        location.y || 0
+      );
+
+      sceneRef.current.add(mesh);
+    });
+
+    // Fit camera to scene
+    const box = new THREE.Box3().setFromObject(sceneRef.current);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const cameraDistance = maxDim * 1.5;
+
+    cameraRef.current.position.set(
+      center.x + cameraDistance,
+      center.y + cameraDistance,
+      center.z + cameraDistance
+    );
+    cameraRef.current.lookAt(center);
+  }, [parsedElements]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full h-full"
+      style={{ minHeight: "400px" }}
+    >
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
+          <div className="text-center">
+            <FaSpinner className="animate-spin text-4xl text-white mx-auto mb-4" />
+            <p className="text-white">Loading 3D Model...</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function BIMIntegration() {
@@ -89,11 +223,7 @@ function BIMIntegration() {
   const [file, setFile] = useState(null);
   const [isParsing, setIsParsing] = useState(false);
   const [results, setResults] = useState(null);
-  const [viewerReady, setViewerReady] = useState(false);
-  const [ifcFileUrl, setIfcFileUrl] = useState(null);
   const [error, setError] = useState(null);
-  const viewerContainerRef = useRef(null);
-  const ifcViewerRef = useRef(null);
 
   // Restore BIM data from project context on mount
   useEffect(() => {
@@ -102,107 +232,7 @@ function BIMIntegration() {
     }
   }, []);
 
-  if (!project || !project.isConfigured) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-center max-w-md">
-          <div className="empty-state-icon mb-6">
-            <FaCube className="text-3xl" />
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
-            Configure Your Project First
-          </h2>
-          <p className="text-foreground-secondary mb-6">
-            Set up your project to import BIM models and extract quantities.
-          </p>
-          <button
-            onClick={() => navigate("/setup")}
-            className="btn btn-primary"
-          >
-            <FaArrowRight className="mr-2" />
-            Go to Project Setup
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Initialize IFC Viewer
-  useEffect(() => {
-    let viewer = null;
-    let isUnmounted = false;
-    
-    const initViewer = async () => {
-      if (!viewerContainerRef.current || isUnmounted) return;
-      
-      try {
-        // Try to load @ifc-viewer/core
-        const ifcViewerModule = await import('@ifc-viewer/core');
-        await import('@ifc-viewer/core/styles');
-        
-        if (isUnmounted) return;
-        
-        const { createIFCViewer } = ifcViewerModule;
-        
-        viewer = createIFCViewer({
-          container: viewerContainerRef.current,
-          appearance: {
-            world: {
-              backgroundColor: '#1a1a2e',
-              directionalLightColor: '#ffffff',
-              directionalLightPosition: [20, 35, 10],
-            },
-            grid: {
-              enabled: true,
-              color: '#10b981',
-              primarySize: 6,
-              secondarySize: 1,
-              distance: 250,
-            },
-          },
-          features: {
-            minimap: false,
-            measurement: false,
-            clipping: false,
-            floorplans: false,
-            aiVisualizer: false,
-          },
-          onModelLoaded: (meta) => {
-            console.log('IFC Model loaded:', meta);
-            setViewerReady(true);
-          },
-          onError: (error) => {
-            console.error('IFC Viewer error:', error);
-          },
-        });
-        
-        if (ifcViewerRef.current) {
-          ifcViewerRef.current.unmount();
-        }
-        ifcViewerRef.current = viewer;
-        setViewerReady(true);
-        console.log('IFC Viewer initialized successfully');
-      } catch (error) {
-        console.error('Failed to initialize IFC viewer:', error);
-        // Fallback: Set viewer ready to true so the app works without 3D
-        setViewerReady(true);
-      }
-    };
-    
-    initViewer();
-    
-    return () => {
-      isUnmounted = true;
-      if (viewer) {
-        try {
-          viewer.unmount();
-        } catch (e) {
-          console.error('Error unmounting viewer:', e);
-        }
-      }
-    };
-  }, []);
-  
+  // Handle file upload
   const handleFileUpload = async (e) => {
     const uploadedFile = e.target.files[0];
     if (!uploadedFile) return;
@@ -299,19 +329,6 @@ function BIMIntegration() {
         setError("Warning: No 3D elements were extracted from the file. The viewer will show a placeholder.");
       }
       
-      // Load IFC file into the viewer if viewer is ready
-      if (ifcViewerRef.current && uploadedFile && viewerReady) {
-        try {
-          console.log("Loading IFC file into viewer...");
-          await ifcViewerRef.current.loadModelFromFile(uploadedFile);
-          console.log("IFC file loaded successfully!");
-          // Create URL for persistence
-          const fileUrl = URL.createObjectURL(uploadedFile);
-          setIfcFileUrl(fileUrl);
-        } catch (viewerError) {
-          console.error("Failed to load IFC in viewer:", viewerError);
-        }
-      }
     } catch (err) {
       console.error("BIM parsing error:", err);
       setError(
@@ -749,17 +766,22 @@ function BIMIntegration() {
               </div>
             </div>
             <div className="h-96 relative">
-              {/* IFC Viewer Container */}
+              {/* Three.js IFC Viewer */}
               <div 
-                ref={viewerContainerRef}
-                className="w-full h-full rounded-lg overflow-hidden"
+                className="w-full h-full rounded-lg overflow-hidden relative"
                 style={{ backgroundColor: '#1a1a2e' }}
               >
-                {!viewerReady && (
-                  <div className="flex items-center justify-center h-full">
+                <IFCViewer 
+                  parsedElements={results?.parsed_elements || results?.elements || []}
+                  isLoading={isParsing}
+                />
+                
+                {/* Loading overlay */}
+                {isParsing && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/70 z-10">
                     <div className="text-center">
-                      <FaSpinner className="animate-spin text-3xl text-primary mx-auto mb-2" />
-                      <p className="text-foreground-secondary text-sm">Loading IFC Viewer...</p>
+                      <FaSpinner className="animate-spin text-4xl text-primary mx-auto mb-2" />
+                      <p className="text-white text-sm">Parsing IFC file...</p>
                     </div>
                   </div>
                 )}

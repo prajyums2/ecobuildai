@@ -1,0 +1,44 @@
+{
+  "building_id": "B",
+  "name": "Office Building",
+  "type": "commercial",
+  "location": {
+    "district": "Thrissur",
+    "state": "Kerala"
+  },
+  "dimensions": {
+    "plotArea": 800,
+    "builtUpArea": 250,
+    "numFloors": 3,
+    "floorHeight": 3.5,
+    "totalHeight": 10.5,
+    "roadWidth": 8
+  },
+  "layout": {
+    "length": 25,
+    "width": 10,
+    "externalWallLength": 70,
+    "internalWallLength": 40,
+    "wallThickness": 0.23,
+    "slabThickness": 0.150
+  },
+  "structural": {
+    "foundationType": "combined",
+    "foundationDepth": 1.5,
+    "columnSize": "300x400mm",
+    "beamSize": "300x500mm",
+    "concreteGrade": "M25",
+    "steelGrade": "Fe500"
+  },
+  "openings": {
+    "mainDoor": 2,
+    "internalDoors": 10,
+    "windows": 20,
+    "totalOpeningArea": 45
+  },
+  "sustainability": {
+    "hasRainwaterHarvesting": true,
+    "hasSolarWaterHeater": true,
+    "hasSTP": false
+  }
+}

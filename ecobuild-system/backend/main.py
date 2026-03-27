@@ -1504,21 +1504,53 @@ async def get_material_rates(
         # Format rates for BoQ calculator
         rates = {}
         for mat in materials:
-            cat = mat.get('category', 'other')
+            # Handle both "category" (lowercase) and "Category" (uppercase) fields
+            cat = mat.get('category') or mat.get('Category', 'other')
             financial = mat.get('financial_properties', {})
             civil = mat.get('civil_properties', {})
+            
+            # Map database categories to normalized names
+            category_mapping = {
+                'concrete': 'concrete',
+                'Concrete': 'concrete',
+                'cement': 'cement',
+                'Cement': 'cement',
+                'steel': 'steel',
+                'Steel': 'steel',
+                'blocks/bricks': 'blocks',
+                'Blocks/Bricks': 'blocks',
+                'aggregates': 'aggregate',
+                'Aggregates': 'aggregate',
+                'masonry': 'masonry',
+                'Masonry': 'masonry',
+                'flooring': 'flooring',
+                'Flooring': 'flooring',
+                'timber': 'timber',
+                'Timber': 'timber',
+                'hardwood': 'timber',
+                'Hardwood': 'timber',
+                'softwood': 'timber',
+                'Softwood': 'timber',
+            }
+            
+            cat = category_mapping.get(cat, cat.lower())
             
             if cat not in rates:
                 rates[cat] = {}
             
-            # Create rate entry
-            rate_key = mat.get('name', '').lower().replace(' ', '_').replace('-', '_')
+            # Create rate entry - handle both "name" and "MaterialName" fields
+            mat_name = mat.get('name') or mat.get('MaterialName', 'Unknown')
+            rate_key = mat_name.lower().replace(' ', '_').replace('-', '_')
             supplier_info = mat.get('supplier', {})
+            
+            # Get unit from multiple possible fields
+            unit = financial.get('unit_type') or mat.get('Unit', 'piece')
+            
             rates[cat][rate_key] = {
                 'id': str(mat.get('_id')),
-                'name': mat.get('name'),
+                'name': mat_name,
                 'rate': financial.get('cost_per_unit', 0),
-                'unit': financial.get('unit_type', 'piece'),
+                'unit': unit,
                 'wastage': (civil.get('wastage_percentage', 5) / 100),
                 'embodied_carbon': mat.get('environmental_properties', {}).get('embodied_carbon', 0),
                 'supplier': supplier_info.get('supplier_name', 'Unknown'),

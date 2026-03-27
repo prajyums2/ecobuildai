@@ -1,0 +1,84 @@
+{
+  "building_id": "B",
+  "name": "Office Building",
+  "type": "commercial",
+  "description": "Standard office building with G+2 configuration",
+  "area_sqm": 750,
+  "floors": 3,
+  
+  "concrete": {
+    "foundation": 33.00,
+    "columns": 15.12,
+    "beams": 24.00,
+    "slab": 112.50,
+    "lintels": 1.66,
+    "sunshades": 0.90,
+    "total": 187.18,
+    "unit": "cum",
+    "reference": "Manual takeoff - IS 456:2000"
+  },
+  
+  "steel": {
+    "foundation": 2640,
+    "columns": 2268,
+    "beams": 2880,
+    "slab": 9000,
+    "lintels": 116,
+    "sunshades": 54,
+    "total": 16958,
+    "unit": "kg",
+    "reference": "Manual takeoff - IS 456 steel ratios"
+  },
+  
+  "masonry": {
+    "external_wall_area": 735,
+    "internal_wall_area": 420,
+    "gross_wall_area": 1155,
+    "opening_area": 71.1,
+    "net_wall_area": 1083.9,
+    "blocks_quantity": 9479,
+    "blocks_unit": "nos",
+    "reference": "Manual takeoff - IS 1077:1992"
+  },
+  
+  "plaster": {
+    "internal_area": 1571.1,
+    "external_area": 682.8,
+    "total_area": 2253.9,
+    "unit": "sqm",
+    "reference": "Manual takeoff"
+  },
+  
+  "costs": {
+    "concrete": 1216670,
+    "cement": 586080,
+    "steel": 1220976,
+    "blocks": 739362,
+    "sand": 49300,
+    "aggregate": 249354,
+    "flooring": 1500000,
+    "painting": 300000,
+    "doors_windows": 400000,
+    "subtotal": 6261742,
+    "gst_amount": 1127114,
+    "grand_total": 7388856,
+    "currency": "INR",
+    "year": 2026,
+    "location": "Thrissur, Kerala"
+  },
+  
+  "sustainability": {
+    "estimated_score": 55,
+    "rating": "GRIHA 3-Star",
+    "rainwater_harvesting": true,
+    "solar_heater": true,
+    "stp": false
+  },
+  
+  "tolerances": {
+    "concrete_percent": 10,
+    "steel_percent": 10,
+    "blocks_percent": 10,
+    "total_cost_percent": 10
+  }
+}

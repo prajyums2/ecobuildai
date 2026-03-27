@@ -1,0 +1,115 @@
+{
+  "building_id": "A",
+  "name": "2BHK House",
+  "type": "residential",
+  "description": "Simple 2BHK house with G+1 configuration",
+  "area_sqm": 200,
+  "floors": 2,
+  
+  "concrete": {
+    "foundation": 3.80,
+    "columns": 1.66,
+    "beams": 4.14,
+    "slab": 12.50,
+    "lintels": 0.25,
+    "total": 22.35,
+    "unit": "cum",
+    "reference": "Manual takeoff - IS 456:2000"
+  },
+  
+  "steel": {
+    "foundation": 304,
+    "columns": 249,
+    "beams": 497,
+    "slab": 1000,
+    "lintels": 18,
+    "total": 2068,
+    "unit": "kg",
+    "reference": "Manual takeoff - IS 456 steel ratios"
+  },
+  
+  "masonry": {
+    "external_wall_area": 120,
+    "internal_wall_area": 60,
+    "gross_wall_area": 180,
+    "opening_area": 18.72,
+    "net_wall_area": 161.28,
+    "blocks_quantity": 1410,
+    "blocks_unit": "nos",
+    "mortar_volume": 3.23,
+    "cement_bags": 24,
+    "sand_cft": 131,
+    "reference": "Manual takeoff - IS 1077:1992"
+  },
+  
+  "plaster": {
+    "internal_area": 212.44,
+    "external_area": 108.84,
+    "total_area": 321.28,
+    "unit": "sqm",
+    "thickness_mm": 12,
+    "cement_bags": 29,
+    "sand_cft": 156,
+    "reference": "Manual takeoff - IS 1661:1972"
+  },
+  
+  "painting": {
+    "interior_paint_litres": 42.5,
+    "exterior_paint_litres": 27.2,
+    "primer_litres": 70,
+    "putty_kg": 96.4,
+    "reference": "Manual takeoff"
+  },
+  
+  "flooring": {
+    "total_area_sqft": 2152,
+    "tiles_sqft": 2367,
+    "reference": "Manual takeoff"
+  },
+  
+  "doors_windows": {
+    "main_door": 1,
+    "internal_doors": 4,
+    "bathroom_doors": 2,
+    "windows": 6,
+    "total_doors": 7,
+    "window_area_sqft": 93,
+    "reference": "Manual takeoff"
+  },
+  
+  "costs": {
+    "concrete": 129630,
+    "cement": 62900,
+    "steel": 148896,
+    "blocks": 109980,
+    "sand": 16646,
+    "aggregate": 29778,
+    "plaster": 19778,
+    "flooring": 224865,
+    "painting": 38210,
+    "doors_windows": 124450,
+    "subtotal": 905133,
+    "gst_amount": 162924,
+    "grand_total": 1068057,
+    "currency": "INR",
+    "year": 2026,
+    "location": "Thrissur, Kerala"
+  },
+  
+  "sustainability": {
+    "estimated_score": 45,
+    "rating": "GRIHA 2-Star",
+    "rainwater_harvesting": true,
+    "solar_heater": false,
+    "stp": false
+  },
+  
+  "tolerances": {
+    "concrete_percent": 10,
+    "steel_percent": 15,
+    "blocks_percent": 10,
+    "cement_percent": 15,
+    "sand_percent": 15,
+    "total_cost_percent": 15
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "building_id": "C",
+  "name": "Apartment Building",
+  "type": "residential",
+  "description": "Multi-unit apartment building with G+4 configuration",
+  "area_sqm": 1750,
+  "floors": 5,
+  
+  "concrete": {
+    "foundation": 285.60,
+    "columns": 48.00,
+    "beams": 50.44,
+    "slab": 262.50,
+    "lintels": 3.73,
+    "staircase": 1.08,
+    "parapet": 2.69,
+    "total": 654.04,
+    "unit": "cum",
+    "reference": "Manual takeoff - IS 456:2000"
+  },
+  
+  "steel": {
+    "foundation": 28560,
+    "columns": 7200,
+    "beams": 6053,
+    "slab": 21000,
+    "lintels": 261,
+    "staircase": 97,
+    "parapet": 135,
+    "total": 63306,
+    "unit": "kg",
+    "reference": "Manual takeoff - IS 456 steel ratios"
+  },
+  
+  "masonry": {
+    "external_wall_area": 1170,
+    "internal_wall_area": 1200,
+    "gross_wall_area": 2370,
+    "opening_area": 153.9,
+    "net_wall_area": 2216.1,
+    "blocks_quantity": 19383,
+    "blocks_unit": "nos",
+    "reference": "Manual takeoff - IS 1077:1992"
+  },
+  
+  "costs": {
+    "concrete": 4251260,
+    "cement": 2422000,
+    "steel": 4558032,
+    "blocks": 1511874,
+    "sand": 250000,
+    "aggregate": 1000000,
+    "flooring": 2800000,
+    "painting": 800000,
+    "doors_windows": 1200000,
+    "subtotal": 18793166,
+    "gst_amount": 3382770,
+    "grand_total": 22175936,
+    "currency": "INR",
+    "year": 2026,
+    "location": "Thrissur, Kerala"
+  },
+  
+  "sustainability": {
+    "estimated_score": 70,
+    "rating": "GRIHA 4-Star",
+    "rainwater_harvesting": true,
+    "solar_heater": true,
+    "stp": true
+  },
+  
+  "tolerances": {
+    "concrete_percent": 10,
+    "steel_percent": 10,
+    "blocks_percent": 10,
+    "total_cost_percent": 10
+  }
+}
