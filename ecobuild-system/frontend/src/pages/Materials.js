@@ -1475,17 +1475,77 @@ function Materials() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            Materials Database
-          </h1>
-          <p className="text-foreground-secondary mt-1">
-            Manage construction materials with complete civil engineering and
-            financial properties
-          </p>
+      {/* Header with Stats */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Materials Database
+        </h1>
+        <div className="flex items-center gap-6 text-sm text-foreground-secondary">
+          <span className="flex items-center gap-1">
+            <FaBox className="text-primary" />
+            {materials.length} materials
+          </span>
+          <span className="flex items-center gap-1">
+            <FaIndustry className="text-primary" />
+            {categories.length} categories
+          </span>
+          <span className="flex items-center gap-1">
+            <FaLeaf className="text-green-500" />
+            {materials.filter(m => m.environmental_properties?.embodied_carbon > 0).length} with carbon data
+          </span>
         </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="flex gap-4 mb-6">
+        {/* Search */}
+        <div className="flex-1 relative">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+            <FaSearch className="text-foreground-secondary" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search materials by name, category, or description..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="input w-full pl-12 pr-12 py-3"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-foreground-secondary hover:text-foreground"
+            >
+              <FaTimes />
+            </button>
+          )}
+        </div>
+
+        {/* Category Filter */}
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="input py-3 min-w-[180px]"
+        >
+          <option value="">All Categories</option>
+          {MATERIAL_CATEGORIES.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.label} ({dbMaterials[cat.id] || 0})
+            </option>
+          ))}
+        </select>
+
+        {/* Sort */}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="input py-3 min-w-[140px]"
+        >
+          <option value="name">Sort: Name</option>
+          <option value="price">Sort: Price</option>
+          <option value="carbon">Sort: Carbon</option>
+        </select>
+
+        {/* Add Button */}
         <button
           onClick={() => {
             setEditingMaterial(null);
@@ -1496,74 +1556,9 @@ function Materials() {
           className="btn btn-primary flex items-center"
         >
           <FaPlus className="mr-2" />
-          Add New Material
+          Add Material
         </button>
       </div>
-
-      {/* Search and Filters */}
-      <div className="card mb-6 border-2 border-primary/20 shadow-lg">
-        <div className="flex flex-wrap gap-3 mb-4">
-          {/* Main Search Bar - Enhanced */}
-          <div className="flex-[2] min-w-[300px] relative">
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-              <FaSearch className="text-primary text-lg" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search materials by name, brand, description, or tags..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="input w-full pl-12 pr-12 py-3 text-base border-2 border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg shadow-sm"
-              style={{ fontSize: '16px' }}
-            />
-            {searchTerm ? (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-foreground-secondary hover:text-error transition-colors p-1 rounded-full hover:bg-error/10"
-                title="Clear search"
-              >
-                <FaTimes className="text-lg" />
-              </button>
-            ) : (
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-foreground-muted text-sm">
-                Press / to focus
-              </div>
-            )}
-          </div>
-          
-          {/* Category Filter */}
-          <div className="relative min-w-[180px]">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="input w-full py-3 pl-4 pr-10 appearance-none cursor-pointer border-2 border-border hover:border-primary/50 transition-colors"
-            >
-              <option value="">All Categories</option>
-              {MATERIAL_CATEGORIES.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-            <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary pointer-events-none" />
-          </div>
-          
-          {/* Sort Dropdown */}
-          <div className="relative min-w-[160px]">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="input w-full py-3 pl-4 pr-10 appearance-none cursor-pointer border-2 border-border hover:border-primary/50 transition-colors"
-              title="Sort by"
-            >
-              <option value="name">Sort: Name</option>
-              <option value="price">Sort: Price</option>
-              <option value="carbon">Sort: Carbon</option>
-              <option value="recycled">Sort: Recycled %</option>
-              <option value="durability">Sort: Durability</option>
-            </select>
-            <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary pointer-events-none" />
-          </div>
           
           {/* Sort Order Toggle */}
           <button
@@ -1846,50 +1841,45 @@ function Materials() {
           {filteredMaterials.map((material) => (
             <div
               key={material._id}
-              className="card hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all p-5"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-semibold">{material.name}</h3>
-                    <span className="badge badge-primary capitalize">
+                    <h3 className="text-lg font-semibold text-foreground">{material.name}</h3>
+                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary capitalize">
                       {material.category}
                     </span>
-                    <span
-                      className={`badge ${material.status === "active" ? "badge-success" : "badge-warning"}`}
-                    >
-                      {material.status}
-                    </span>
+                    {material.financial_properties?.cost_per_unit > 0 && (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                        ₹{material.financial_properties.cost_per_unit}/{material.financial_properties.unit_type}
+                      </span>
+                    )}
+                    {material.civil_properties?.is_code && (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+                        {material.civil_properties.is_code}
+                      </span>
+                    )}
                   </div>
-                  <p className="text-foreground-secondary mb-3">
-                    {material.description}
+                  <p className="text-foreground-secondary text-sm mb-3">
+                    {material.description || material.applications || 'No description available'}
                   </p>
 
                   <div className="flex gap-6 text-sm">
-                    {material.brand && (
-                      <span className="flex items-center text-foreground-secondary">
-                        <FaIndustry className="mr-1" /> {material.brand}
+                    {material.environmental_properties?.embodied_carbon > 0 && (
+                      <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                        <FaLeaf />
+                        {material.environmental_properties.embodied_carbon} kg CO2/unit
                       </span>
                     )}
-                    {material.financial_properties?.cost_per_unit && (
-                      <span className="flex items-center text-foreground-secondary">
-                        <FaMoneyBillWave className="mr-1" />₹
-                        {material.financial_properties.cost_per_unit}/
-                        {material.financial_properties.unit_type}
+                    {material.financial_properties?.gst_rate && (
+                      <span className="text-foreground-secondary">
+                        GST: {material.financial_properties.gst_rate}%
                       </span>
                     )}
-                    {material.environmental_properties?.embodied_carbon !==
-                      undefined && (
-                      <span className="flex items-center text-green-600">
-                        <FaLeaf className="mr-1" />
-                        {material.environmental_properties.embodied_carbon} kg
-                        CO2/unit
-                      </span>
-                    )}
-                    {material.civil_properties?.durability_years && (
-                      <span className="flex items-center text-foreground-secondary">
-                        <FaClock className="mr-1" />
-                        {material.civil_properties.durability_years} years
+                    {material.GradeOrModel && (
+                      <span className="text-foreground-secondary">
+                        Grade: {material.GradeOrModel}
                       </span>
                     )}
                   </div>
