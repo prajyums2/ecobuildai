@@ -1559,26 +1559,54 @@ function Materials() {
           Add Material
         </button>
       </div>
-          
-          {/* Sort Order Toggle */}
-          <button
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            className="btn btn-secondary px-4 py-3 min-w-[50px]"
-            title={sortOrder === "asc" ? "Ascending order" : "Descending order"}
+
+      {/* Search and Filters */}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-3">
+          {/* Search */}
+          <div className="flex-1 min-w-[300px] relative">
+            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-foreground-secondary" />
+            <input
+              type="text"
+              placeholder="Search materials..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input w-full pl-12 pr-10 py-3"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-foreground-secondary"
+              >
+                <FaTimes />
+              </button>
+            )}
+          </div>
+
+          {/* Category Filter */}
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="input py-3 min-w-[180px]"
           >
-            {sortOrder === "asc" ? <FaSortAmountUp /> : <FaSortAmountDown />}
-          </button>
-          
-          {/* Advanced Filters Toggle */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`btn ${showFilters ? "btn-primary" : "btn-secondary"} px-4 py-3 flex items-center gap-2`}
+            <option value="">All Categories</option>
+            {MATERIAL_CATEGORIES.map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.label}</option>
+            ))}
+          </select>
+
+          {/* Sort */}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="input py-3 min-w-[140px]"
           >
-            <FaFilter />
-            <span>Filters</span>
-            {showFilters && <span className="ml-1 text-xs bg-white/20 px-2 py-0.5 rounded-full">On</span>}
-          </button>
+            <option value="name">Sort: Name</option>
+            <option value="price">Sort: Price</option>
+            <option value="carbon">Sort: Carbon</option>
+          </select>
         </div>
+      </div>
 
         {/* Advanced Filters Panel */}
         {showFilters && (
