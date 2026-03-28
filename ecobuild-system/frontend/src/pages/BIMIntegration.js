@@ -260,7 +260,6 @@ function IFCViewer({ parsedElements, isLoading }) {
 
     console.log(`[3D Viewer] Rendered ${parsedElements.length} elements`);
   }, [parsedElements]);
-  }, [parsedElements]);
 
   return (
     <div
