@@ -142,7 +142,16 @@ function IFCViewer({ parsedElements, isLoading }) {
       foundation: 0x404040,
       roof: 0x909090,
       staircase: 0xb0b0b0,
+      door: 0x8B4513,   // Brown
+      window: 0x87CEEB, // Light blue
     };
+
+    // Track bounds for camera positioning
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    let minZ = Infinity, maxZ = -Infinity;
+    let xOffset = 0;
+    const spacing = 2; // Space between elements
 
     // Add elements to scene
     parsedElements.forEach((element, index) => {
@@ -152,51 +161,105 @@ function IFCViewer({ parsedElements, isLoading }) {
         color: color,
         roughness: 0.7,
         metalness: 0.3,
+        transparent: color === 0x87CEEB, // Make windows transparent
+        opacity: color === 0x87CEEB ? 0.7 : 1.0,
       });
 
-      // Create geometry based on type
-      let geometry;
+      // Get dimensions - use defaults if missing
       const dims = element.dimensions || {};
-      const width = dims.Width || dims.width || 1;
-      const height = dims.Height || dims.height || 3;
-      const depth = dims.Depth || dims.depth || 1;
-
+      const vol = element.volume_m3 || 0.01;
+      
+      // Calculate reasonable dimensions from volume
+      let width, height, depth;
+      
       if (type === "slab") {
-        geometry = new THREE.BoxGeometry(width, 0.15, depth);
+        width = Math.sqrt(vol / 0.15) || 3;
+        depth = width;
+        height = 0.15;
       } else if (type === "column") {
-        geometry = new THREE.BoxGeometry(0.3, height, 0.3);
+        width = 0.3;
+        depth = 0.3;
+        height = Math.max(vol / (width * depth), 2.5);
       } else if (type === "beam") {
-        geometry = new THREE.BoxGeometry(width, 0.3, 0.3);
+        width = vol / (0.3 * 0.45) || 4;
+        height = 0.45;
+        depth = 0.3;
+      } else if (type === "wall") {
+        width = Math.sqrt(vol / 0.23 / 3) || 3;
+        height = 3;
+        depth = 0.23;
+      } else if (type === "foundation") {
+        width = Math.sqrt(vol / 0.6) || 1.2;
+        height = 0.6;
+        depth = width;
       } else {
-        geometry = new THREE.BoxGeometry(width, height, depth);
+        width = Math.cbrt(vol) || 1;
+        height = width;
+        depth = width;
       }
 
+      // Use dimensions from parsed data if available
+      if (dims.Width && dims.Width > 0) width = dims.Width;
+      if (dims.height && dims.height > 0) height = dims.height;
+      if (dims.depth && dims.depth > 0) depth = dims.depth;
+      if (dims.length && dims.length > 0) width = dims.length;
+
+      // Create geometry
+      const geometry = new THREE.BoxGeometry(width, height, depth);
       const mesh = new THREE.Mesh(geometry, material);
 
-      // Position based on location
+      // Position - use location from data or calculate from index
       const location = element.location || {};
-      mesh.position.set(
-        location.x || index * 2,
-        (location.z || 0) + height / 2,
-        location.y || 0
-      );
+      let x = location.x || xOffset;
+      let y = location.y || (type === "wall" ? height/2 : height/2);
+      let z = location.z || 0;
+
+      // If no location data, lay out in a grid
+      if (!location.x && !location.z) {
+        x = xOffset;
+        z = Math.floor(index / 5) * 10;
+        xOffset += width + spacing;
+        if ((index + 1) % 5 === 0) xOffset = 0;
+      }
+
+      // Adjust Y for slab (should be at bottom)
+      if (type === "slab") y = height / 2;
+      if (type === "foundation") y = 0 - height / 2;
+
+      mesh.position.set(x, y, z);
+
+      // Update bounds
+      minX = Math.min(minX, x - width/2);
+      maxX = Math.max(maxX, x + width/2);
+      minY = Math.min(minY, y - height/2);
+      maxY = Math.max(maxY, y + height/2);
+      minZ = Math.min(minZ, z - depth/2);
+      maxZ = Math.max(maxZ, z + depth/2);
 
       sceneRef.current.add(mesh);
     });
 
     // Fit camera to scene
-    const box = new THREE.Box3().setFromObject(sceneRef.current);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const cameraDistance = maxDim * 1.5;
+    if (parsedElements.length > 0) {
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      const centerZ = (minZ + maxZ) / 2;
+      const sizeX = maxX - minX;
+      const sizeY = maxY - minY;
+      const sizeZ = maxZ - minZ;
+      const maxDim = Math.max(sizeX, sizeY, sizeZ);
+      const cameraDistance = maxDim * 2;
 
-    cameraRef.current.position.set(
-      center.x + cameraDistance,
-      center.y + cameraDistance,
-      center.z + cameraDistance
-    );
-    cameraRef.current.lookAt(center);
+      cameraRef.current.position.set(
+        centerX + cameraDistance * 0.7,
+        centerY + cameraDistance * 0.7,
+        centerZ + cameraDistance * 0.7
+      );
+      cameraRef.current.lookAt(centerX, centerY, centerZ);
+    }
+
+    console.log(`[3D Viewer] Rendered ${parsedElements.length} elements`);
+  }, [parsedElements]);
   }, [parsedElements]);
 
   return (
