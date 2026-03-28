@@ -826,7 +826,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   });
   
   // Soling (if required)
-  const solingArea = foundationArea;
+  const solingArea = foundationVolume / foundationDepth * 1.2; // Approximate area from volume
   addBoQItem(earthwork, {
     sno: 3,
     description: 'Providing and laying 150mm thick soling with 40mm hard granite stone under footing',
@@ -855,7 +855,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   };
   
   // PCC for foundation
-  const pccVolume = foundationArea * 0.10; // 100mm thick PCC
+  const pccVolume = (footprintArea * 0.15) * 0.10; // 15% of footprint, 100mm thick
   const pccConcrete = calculateConcreteQuantities(pccVolume, 'm20');
   addBoQItem(concreteWork, {
     sno: 1,
