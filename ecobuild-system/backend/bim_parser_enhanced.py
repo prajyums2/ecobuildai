@@ -199,18 +199,29 @@ class EnhancedBIMParser:
             print(f"[BIM Parser] Found {len(self.stories)} stories: {list(self.stories)}")
             
             # Enhanced type mapping with property-based fallback
+            # Handles various IFC export formats (Revit, ArchiCAD, etc.)
             type_mapping = {
+                # Primary structural elements
                 'IfcColumn': StructuralElementType.COLUMN,
                 'IfcBeam': StructuralElementType.BEAM,
                 'IfcSlab': StructuralElementType.SLAB,
                 'IfcWall': StructuralElementType.WALL,
-                'IfcFooting': StructuralElementType.FOUNDATION,
                 'IfcWallStandardCase': StructuralElementType.WALL,
+                'IfcCurtainWall': StructuralElementType.WALL,
+                'IfcFooting': StructuralElementType.FOUNDATION,
                 'IfcCovering': StructuralElementType.ROOF,
                 'IfcRoof': StructuralElementType.ROOF,
                 'IfcStair': StructuralElementType.STAIRCASE,
+                'IfcStairFlight': StructuralElementType.STAIRCASE,
                 'IfcDoor': StructuralElementType.DOOR,
                 'IfcWindow': StructuralElementType.WINDOW,
+                'IfcRamp': StructuralElementType.STAIRCASE,
+                # Additional elements from Revit/ArchiCAD exports
+                'IfcMember': StructuralElementType.BEAM,  # Often used for beams
+                'IfcPlate': StructuralElementType.SLAB,   # Often used for slabs
+                'IfcBuildingElementProxy': None,          # Generic - will determine type from properties
+                'IfcPile': StructuralElementType.FOUNDATION,
+                'IfcPileCap': StructuralElementType.FOUNDATION,
             }
             
             # Parse each element type
@@ -220,6 +231,12 @@ class EnhancedBIMParser:
                 
                 for item in items:
                     try:
+                        # For IfcBuildingElementProxy, determine type from name
+                        if element_type is None and ifc_type == 'IfcBuildingElementProxy':
+                            element_type = self._determine_type_from_name(item)
+                            if element_type is None:
+                                continue  # Skip if we can't determine type
+                        
                         element = self._parse_element(
                             item, ifc_type, element_type, model
                         )
@@ -329,6 +346,43 @@ class EnhancedBIMParser:
             cost_estimate=cost,
             carbon_estimate=carbon
         )
+    
+    def _determine_type_from_name(self, item) -> Optional[StructuralElementType]:
+        """Determine element type from name for generic elements"""
+        try:
+            name = item.Name.lower() if hasattr(item, 'Name') and item.Name else ''
+            
+            # Check common naming patterns
+            if any(k in name for k in ['column', 'col', 'pillar', 'post']):
+                return StructuralElementType.COLUMN
+            elif any(k in name for k in ['beam', 'girder', 'lintel']):
+                return StructuralElementType.BEAM
+            elif any(k in name for k in ['slab', 'floor', 'deck', 'platform']):
+                return StructuralElementType.SLAB
+            elif any(k in name for k in ['wall', 'partition', 'masonry']):
+                return StructuralElementType.WALL
+            elif any(k in name for k in ['footing', 'foundation', 'base']):
+                return StructuralElementType.FOUNDATION
+            elif any(k in name for k in ['roof', 'ceiling', 'parapet']):
+                return StructuralElementType.ROOF
+            elif any(k in name for k in ['stair', 'step', 'ramp']):
+                return StructuralElementType.STAIRCASE
+            
+            # Check description if available
+            if hasattr(item, 'Description') and item.Description:
+                desc = item.Description.lower()
+                if any(k in desc for k in ['column', 'pillar']):
+                    return StructuralElementType.COLUMN
+                elif any(k in desc for k in ['beam', 'girder']):
+                    return StructuralElementType.BEAM
+                elif any(k in desc for k in ['slab', 'floor']):
+                    return StructuralElementType.SLAB
+                elif any(k in desc for k in ['wall']):
+                    return StructuralElementType.WALL
+            
+            return None  # Unknown type
+        except:
+            return None
     
     def _extract_geometry_volume(self, item) -> Tuple[float, float]:
         """Extract volume and surface area from geometry"""

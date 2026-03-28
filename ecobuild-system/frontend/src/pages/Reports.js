@@ -782,25 +782,51 @@ function MaterialSummaryTab({ boq, project }) {
         rate: 78,
         supplier: findSupplier(["aac", "block"]),
       },
+      timber: {
+        name: "Timber",
+        unit: "cft",
+        qty: 0,
+        rate: 2500,
+        supplier: findSupplier(["teak", "timber", "wood", "plywood", "sal", "mahogany"]),
+      },
+      flooring: {
+        name: "Flooring Tiles",
+        unit: "sqft",
+        qty: 0,
+        rate: 95,
+        supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
+      },
+      paint: {
+        name: "Paint",
+        unit: "litres",
+        qty: 0,
+        rate: 280,
+        supplier: findSupplier(["paint", "asian", "berger", "nerolac"]),
+      },
     };
 
     boq.categories.forEach((category) => {
       category.items.forEach((item) => {
         const desc = item.description?.toLowerCase() || "";
         const remarks = item.remarks?.toLowerCase() || "";
+        const catName = category.name?.toLowerCase() || "";
 
+        // Extract cement bags from remarks
         const cementMatch = remarks.match(/cement:\s*([\d,.]+)\s*bags/i);
         if (cementMatch)
           materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, ""));
 
+        // Extract sand from remarks
         const sandMatch = remarks.match(/sand:\s*([\d,.]+)\s*cft/i);
         if (sandMatch)
           materials.sand.qty += parseFloat(sandMatch[1].replace(/,/g, ""));
 
+        // Extract aggregate from remarks
         const aggMatch = remarks.match(/aggregate:\s*([\d,.]+)\s*cft/i);
         if (aggMatch)
           materials.aggregate.qty += parseFloat(aggMatch[1].replace(/,/g, ""));
 
+        // Steel
         if (
           desc.includes("steel") &&
           desc.includes("tmt") &&
@@ -808,8 +834,28 @@ function MaterialSummaryTab({ boq, project }) {
         ) {
           materials.steel.qty += parseFloat(item.quantity) || 0;
         }
+        
+        // Blocks
         if (desc.includes("aac block") && item.unit === "nos") {
           materials.blocks.qty += parseFloat(item.quantity) || 0;
+        }
+        
+        // Timber/Wood
+        if ((catName.includes("timber") || catName.includes("wood") || catName.includes("door")) && 
+            (item.unit === "cft" || item.unit === "nos")) {
+          materials.timber.qty += parseFloat(item.quantity) || 0;
+        }
+        
+        // Flooring/Tiles
+        if ((catName.includes("floor") || catName.includes("tiles")) && 
+            (item.unit === "sqft" || item.unit === "sqft")) {
+          materials.flooring.qty += parseFloat(item.quantity) || 0;
+        }
+        
+        // Paint
+        if ((desc.includes("paint") || desc.includes("emulsion")) && 
+            (item.unit === "litre" || item.unit === "litres")) {
+          materials.paint.qty += parseFloat(item.quantity) || 0;
         }
       });
     });
@@ -1099,8 +1145,18 @@ function SuppliersTab({ boq, project }) {
       materials: [],
     },
     {
-      name: "Timber",
-      keywords: ["teak", "timber", "wood", "plywood", "mahogany"],
+      name: "Timber & Wood",
+      keywords: ["teak", "timber", "wood", "plywood", "mahogany", "sal", "rosewood"],
+      materials: [],
+    },
+    {
+      name: "Tiles & Flooring",
+      keywords: ["tile", "vitrified", "ceramic", "granite", "marble", "flooring"],
+      materials: [],
+    },
+    {
+      name: "Paint",
+      keywords: ["paint", "asian", "berger", "nerolac", "dulux", "putty"],
       materials: [],
     },
   ];
