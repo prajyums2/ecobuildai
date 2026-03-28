@@ -28,6 +28,8 @@ import {
   FaHardHat,
   FaRobot,
   FaPaperPlane,
+  FaSyncAlt,
+} from "react-icons/fa";
   FaTimes,
 } from "react-icons/fa";
 import BillOfQuantities from "../components/BillOfQuantities";
