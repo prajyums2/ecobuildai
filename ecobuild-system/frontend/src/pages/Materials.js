@@ -87,6 +87,7 @@ function Materials() {
   const [greenCertified, setGreenCertified] = useState(false);
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [categoryCounts, setCategoryCounts] = useState({});
 
   // Form state
   const [formData, setFormData] = useState({
@@ -477,12 +478,28 @@ function Materials() {
       
       setMaterials(allMaterials);
       setFilteredMaterials(allMaterials);
+      
+      // Calculate category counts
+      const counts = {};
+      allMaterials.forEach(mat => {
+        const cat = mat.category || 'other';
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+      setCategoryCounts(counts);
     } catch (err) {
       console.error("Error fetching materials:", err);
       // Load from localStorage only
       const localMaterials = JSON.parse(localStorage.getItem('ecobuild_custom_materials') || '[]');
       setMaterials(localMaterials);
       setFilteredMaterials(localMaterials);
+      
+      // Calculate category counts for local materials too
+      const counts = {};
+      localMaterials.forEach(mat => {
+        const cat = mat.category || 'other';
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+      setCategoryCounts(counts);
       setError("Using local materials (could not connect to database)");
     } finally {
       setLoading(false);
@@ -1529,7 +1546,7 @@ function Materials() {
           <option value="">All Categories</option>
           {MATERIAL_CATEGORIES.map((cat) => (
             <option key={cat.id} value={cat.id}>
-              {cat.label} ({dbMaterials[cat.id] || 0})
+              {cat.label} ({categoryCounts[cat.id] || 0})
             </option>
           ))}
         </select>
