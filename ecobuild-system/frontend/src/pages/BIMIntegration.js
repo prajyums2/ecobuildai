@@ -15,8 +15,120 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
+// Render parsed elements from backend
+function renderParsedElements(scene, camera, elements, onModelLoaded) {
+  console.log('[3D Viewer] Rendering', elements.length, 'elements');
+  
+  // Clear previous
+  const meshesToRemove = scene.children.filter(c => c.isMesh);
+  meshesToRemove.forEach(m => scene.remove(m));
+  
+  // Type colors
+  const colors = {
+    column: 0x808080,
+    beam: 0xa0a0a0,
+    slab: 0x606060,
+    wall: 0xc0c0c0,
+    foundation: 0x404040,
+    roof: 0x909090,
+    staircase: 0xb0b0b0,
+    door: 0x8B4513,
+    window: 0x87CEEB,
+  };
+  
+  let totalVolume = 0;
+  let xOffset = 0;
+  let zOffset = 0;
+  let rowMax = 0;
+  let maxY = 0;
+  
+  elements.forEach((element, idx) => {
+    const type = (element.element_type || 'wall').toLowerCase();
+    const color = colors[type] || 0x808080;
+    const volume = element.volume_m3 || 0.01;
+    
+    // Calculate dimensions from volume
+    let w, h, d;
+    if (type === 'slab') {
+      w = Math.sqrt(volume / 0.12) || 3;
+      d = w;
+      h = 0.12;
+    } else if (type === 'column') {
+      w = 0.3;
+      d = 0.3;
+      h = Math.max(volume / (w * d), 2.5);
+    } else if (type === 'beam') {
+      w = volume / (0.3 * 0.5) || 4;
+      h = 0.5;
+      d = 0.3;
+    } else if (type === 'wall') {
+      w = Math.sqrt(volume / (0.23 * 3)) || 3;
+      h = 3;
+      d = 0.23;
+    } else if (type === 'foundation') {
+      w = Math.sqrt(volume / 0.6) || 1.2;
+      h = 0.6;
+      d = w;
+    } else {
+      w = Math.cbrt(volume) || 1;
+      h = w;
+      d = w;
+    }
+    
+    // Use parsed dimensions if available
+    const dims = element.dimensions || {};
+    if (dims.length > 0) w = dims.length;
+    if (dims.height > 0) h = dims.height;
+    if (dims.depth > 0) d = dims.depth;
+    if (dims.width > 0) w = dims.width;
+    
+    const material = new THREE.MeshStandardMaterial({
+      color: color,
+      roughness: 0.7,
+      metalness: 0.2,
+    });
+    
+    const geometry = new THREE.BoxGeometry(w, h, d);
+    const mesh = new THREE.Mesh(geometry, material);
+    
+    // Position
+    let y = h / 2;
+    if (type === 'slab') y = h / 2;
+    if (type === 'foundation') y = -h / 2;
+    
+    mesh.position.set(xOffset + w / 2, y, zOffset + d / 2);
+    scene.add(mesh);
+    
+    // Track max height
+    maxY = Math.max(maxY, y + h / 2);
+    rowMax = Math.max(rowMax, d);
+    
+    // Grid layout
+    xOffset += w + 1;
+    if (xOffset > 30) {
+      xOffset = 0;
+      zOffset += rowMax + 1;
+      rowMax = 0;
+    }
+    
+    totalVolume += volume;
+  });
+  
+  // Fit camera
+  camera.position.set(20, maxY * 1.5, 30);
+  camera.lookAt(xOffset / 2, maxY / 2, zOffset / 2);
+  
+  if (onModelLoaded) {
+    onModelLoaded({
+      elements: elements.length,
+      volume: totalVolume,
+      stories: Math.max(...elements.map(e => parseInt(e.story) || 1))
+    });
+  }
+}
+
 // Three.js IFC Viewer using Open BIM Components
-function IFCViewer({ containerRef, file, onModelLoaded }) {
+function IFCViewer({ containerRef, file, onModelLoaded, parsedElements }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [scene, setScene] = useState(null);
@@ -126,64 +238,37 @@ function IFCViewer({ containerRef, file, onModelLoaded }) {
       setError(null);
 
       try {
-        // Create URL for file
-        const fileUrl = URL.createObjectURL(file);
-
-        // Try to load with ifcopenshell-like approach
-        // Since we can't run WASM in browser, we'll create a placeholder model
-        // based on file name and size
-        
         // Clear previous meshes
         const meshesToRemove = scene.children.filter(c => c.isMesh);
         meshesToRemove.forEach(m => scene.remove(m));
 
-        // Create a simple building representation
-        const buildingHeight = 15; // meters
-        const buildingWidth = 20;
-        const buildingDepth = 15;
-
-        // Create floor plates
-        const floorMaterial = new THREE.MeshStandardMaterial({ 
-          color: 0x808080, 
-          roughness: 0.7 
-        });
-        
-        for (let i = 0; i < 5; i++) {
+        // Wait for results from parse
+        if (!parsedElements || parsedElements.length === 0) {
+          // Show placeholder until data arrives
+          const buildingHeight = 3;
+          const buildingWidth = 10;
+          const buildingDepth = 8;
+          
+          const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x808080, 
+            roughness: 0.7 
+          });
+          
+          // Single floor placeholder
           const floorGeometry = new THREE.BoxGeometry(buildingWidth, 0.15, buildingDepth);
           const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-          floor.position.y = i * 3 + 0.075;
+          floor.position.y = 0.075;
           scene.add(floor);
-        }
-
-        // Create columns
-        const columnMaterial = new THREE.MeshStandardMaterial({ 
-          color: 0xa0a0a0, 
-          roughness: 0.6 
-        });
-        const columnPositions = [
-          [-8, -6], [-8, 0], [-8, 6],
-          [0, -6], [0, 6],
-          [8, -6], [8, 0], [8, 6],
-        ];
-
-        columnPositions.forEach(([x, z]) => {
-          const columnGeometry = new THREE.BoxGeometry(0.3, buildingHeight, 0.3);
-          const column = new THREE.Mesh(columnGeometry, columnMaterial);
-          column.position.set(x, buildingHeight / 2, z);
-          scene.add(column);
-        });
-
-        // Fit camera
-        const maxDim = Math.max(buildingWidth, buildingHeight, buildingDepth);
-        camera.position.set(maxDim * 1.5, maxDim * 1.5, maxDim * 1.5);
-        camera.lookAt(0, buildingHeight / 2, 0);
-
-        if (onModelLoaded) {
-          onModelLoaded({ 
-            stories: 5, 
-            area: buildingWidth * buildingDepth * 5,
-            volume: buildingWidth * buildingHeight * buildingDepth 
-          });
+          
+          camera.position.set(20, 15, 20);
+          camera.lookAt(0, 0, 0);
+          
+          if (onModelLoaded) {
+            onModelLoaded({ stories: 1, area: buildingWidth * buildingDepth, volume: buildingWidth * buildingHeight * buildingDepth });
+          }
+        } else {
+          // Render actual parsed elements
+          renderParsedElements(scene, camera, parsedElements, onModelLoaded);
         }
 
       } catch (err) {
@@ -195,7 +280,7 @@ function IFCViewer({ containerRef, file, onModelLoaded }) {
     };
 
     loadIFC();
-  }, [file, scene, camera, onModelLoaded]);
+  }, [file, scene, camera, onModelLoaded, parsedElements]);
 
   return (
     <div className="w-full h-full relative">
@@ -388,6 +473,7 @@ function BIMIntegration() {
               containerRef={containerRef} 
               file={file} 
               onModelLoaded={handleModelLoaded}
+              parsedElements={results?.parsed_elements || results?.elements || []}
             />
           </div>
         </div>
