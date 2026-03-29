@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProject } from "../context/ProjectContext";
 import {
@@ -8,13 +8,13 @@ import {
   FaArrowRight,
   FaCalculator,
   FaFilePdf,
-  FaFileImage,
   FaCheck,
   FaExclamationTriangle,
   FaTimes,
   FaCube,
   FaIndustry,
   FaRuler,
+  FaBuilding,
 } from "react-icons/fa";
 
 function BIMIntegration() {
@@ -27,16 +27,33 @@ function BIMIntegration() {
   const [extractedData, setExtractedData] = useState(null);
   const [manualInputs, setManualInputs] = useState({
     floors: project?.buildingParams?.numFloors || 2,
+    area: project?.buildingParams?.builtUpArea || 150,
     concrete: '',
     steel: '',
     blocks: '',
     aggregate: '',
+    sand: '',
+    cement: '',
   });
 
   // Restore BIM data from context
   useEffect(() => {
     if (project?.bimData?.quantities) {
       setExtractedData(project.bimData.quantities);
+      // Also restore manual inputs from saved data
+      const saved = project.bimData.quantities;
+      if (saved) {
+        setManualInputs({
+          floors: saved.floors || 2,
+          area: saved.area || 150,
+          concrete: saved.concrete?.toString() || '',
+          steel: saved.steel?.toString() || '',
+          blocks: saved.blocks?.toString() || '',
+          aggregate: saved.aggregate?.toString() || '',
+          sand: saved.sand?.toString() || '',
+          cement: saved.cement?.toString() || '',
+        });
+      }
     }
   }, []);
 
@@ -59,6 +76,31 @@ function BIMIntegration() {
     setError(null);
   };
 
+  // Calculate estimated quantities based on project
+  const estimateQuantities = () => {
+    const area = parseFloat(manualInputs.area) || project?.buildingParams?.builtUpArea || 150;
+    const floors = parseInt(manualInputs.floors) || 2;
+    const totalArea = area * floors;
+
+    // Calibrated formulas from benchmarks
+    const concrete = Math.round(totalArea * (totalArea <= 300 ? 0.112 : totalArea <= 800 ? 0.18 : 0.25));
+    const steel = Math.round(totalArea * (totalArea <= 300 ? 10.3 : totalArea <= 800 ? 18 : 28));
+    const blocks = Math.round(totalArea * (totalArea <= 300 ? 7 : totalArea <= 800 ? 12 : 11));
+    const aggregate = Math.round(totalArea * 0.15);
+    const sand = Math.round(concrete * 0.45 * 35.31);
+    const cement = Math.round(concrete * 6.5);
+
+    setManualInputs({
+      ...manualInputs,
+      concrete: concrete.toString(),
+      steel: steel.toString(),
+      blocks: blocks.toString(),
+      aggregate: aggregate.toString(),
+      sand: sand.toString(),
+      cement: cement.toString(),
+    });
+  };
+
   // Process manual inputs
   const handleProcess = () => {
     setIsProcessing(true);
@@ -66,15 +108,18 @@ function BIMIntegration() {
     // Create quantities from manual inputs
     const quantities = {
       floors: parseInt(manualInputs.floors) || 2,
+      area: parseFloat(manualInputs.area) || 150,
       concrete: parseFloat(manualInputs.concrete) || 0,
       steel: parseFloat(manualInputs.steel) || 0,
       blocks: parseFloat(manualInputs.blocks) || 0,
       aggregate: parseFloat(manualInputs.aggregate) || 0,
+      sand: parseFloat(manualInputs.sand) || 0,
+      cement: parseFloat(manualInputs.cement) || 0,
     };
 
     // Store in project
     updateBIMData({
-      ifcFileName: file?.name || 'Document',
+      ifcFileName: file?.name || 'Manual Entry',
       ifcFileSize: file?.size || 0,
       quantities: quantities,
       materials: [],
@@ -83,27 +128,6 @@ function BIMIntegration() {
 
     setExtractedData(quantities);
     setIsProcessing(false);
-  };
-
-  // Calculate estimated quantities based on project
-  const estimateQuantities = () => {
-    const area = project?.buildingParams?.builtUpArea || 150;
-    const floors = parseInt(manualInputs.floors) || 2;
-    const totalArea = area * floors;
-
-    // Calibrated formulas
-    const concrete = totalArea * (totalArea <= 300 ? 0.112 : totalArea <= 800 ? 0.18 : 0.25);
-    const steel = totalArea * (totalArea <= 300 ? 10.3 : totalArea <= 800 ? 18 : 28);
-    const blocks = totalArea * (totalArea <= 300 ? 7 : totalArea <= 800 ? 12 : 11);
-    const aggregate = totalArea * 0.15;
-
-    setManualInputs({
-      ...manualInputs,
-      concrete: Math.round(concrete).toString(),
-      steel: Math.round(steel).toString(),
-      blocks: Math.round(blocks).toString(),
-      aggregate: Math.round(aggregate).toString(),
-    });
   };
 
   // Check if project is configured
@@ -134,11 +158,26 @@ function BIMIntegration() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Project Drawing Upload</h1>
+          <h1 className="text-2xl font-bold text-foreground">Project Document Upload</h1>
           <p className="text-foreground-secondary mt-1">
-            Upload building drawings and enter material quantities
+            Upload building drawing and enter material quantities
           </p>
         </div>
+      </div>
+
+      {/* Instructions */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+          <FaBuilding className="text-blue-500" />
+          How to Use
+        </h4>
+        <ol className="list-decimal list-inside text-sm text-foreground-secondary space-y-1">
+          <li>Upload your building drawing (PNG, JPG, or PDF)</li>
+          <li>Review the quantities in the drawing</li>
+          <li>Enter the quantities manually or click "Auto-Estimate"</li>
+          <li>Click "Save & Generate Report" to create BOQ</li>
+          <li>View Reports to see cost and material summary</li>
+        </ol>
       </div>
 
       {/* Upload Section */}
@@ -232,6 +271,21 @@ function BIMIntegration() {
             </button>
           </div>
           <div className="card-body space-y-4">
+            {/* Area */}
+            <div>
+              <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                Built-up Area (sq.m)
+              </label>
+              <input
+                type="number"
+                min="20"
+                max="10000"
+                value={manualInputs.area}
+                onChange={(e) => setManualInputs({...manualInputs, area: e.target.value})}
+                className="input w-full"
+              />
+            </div>
+
             {/* Floors */}
             <div>
               <label className="block text-sm font-medium text-foreground-secondary mb-1">
@@ -289,16 +343,30 @@ function BIMIntegration() {
               />
             </div>
 
-            {/* Aggregate */}
+            {/* Sand */}
             <div>
               <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                Aggregate (cft)
+                Sand (cft)
               </label>
               <input
                 type="number"
                 placeholder="e.g., 250"
-                value={manualInputs.aggregate}
-                onChange={(e) => setManualInputs({...manualInputs, aggregate: e.target.value})}
+                value={manualInputs.sand}
+                onChange={(e) => setManualInputs({...manualInputs, sand: e.target.value})}
+                className="input w-full"
+              />
+            </div>
+
+            {/* Cement */}
+            <div>
+              <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                Cement (bags)
+              </label>
+              <input
+                type="number"
+                placeholder="e.g., 800"
+                value={manualInputs.cement}
+                onChange={(e) => setManualInputs({...manualInputs, cement: e.target.value})}
                 className="input w-full"
               />
             </div>
@@ -332,7 +400,7 @@ function BIMIntegration() {
             <h3 className="font-semibold text-foreground">Material Quantities Summary</h3>
           </div>
           <div className="card-body">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
               <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
                 <FaCube className="text-2xl text-blue-500 mx-auto mb-2" />
                 <p className="text-xs text-foreground-secondary">Floors</p>
@@ -355,8 +423,23 @@ function BIMIntegration() {
               </div>
               <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
                 <FaRuler className="text-2xl text-yellow-500 mx-auto mb-2" />
+                <p className="text-xs text-foreground-secondary">Sand</p>
+                <p className="text-xl font-bold text-foreground">{extractedData.sand || 0} cft</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
+                <FaRuler className="text-2xl text-purple-500 mx-auto mb-2" />
                 <p className="text-xs text-foreground-secondary">Aggregate</p>
                 <p className="text-xl font-bold text-foreground">{extractedData.aggregate || 0} cft</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
+                <FaIndustry className="text-2xl text-green-500 mx-auto mb-2" />
+                <p className="text-xs text-foreground-secondary">Cement</p>
+                <p className="text-xl font-bold text-foreground">{extractedData.cement || 0} bags</p>
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
+                <FaBuilding className="text-2xl text-cyan-500 mx-auto mb-2" />
+                <p className="text-xs text-foreground-secondary">Area</p>
+                <p className="text-xl font-bold text-foreground">{extractedData.area || 0} sq.m</p>
               </div>
             </div>
             
