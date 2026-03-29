@@ -1080,7 +1080,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   // AAC Blocks
   const blockWastage = (rates?.blocks?.aac_blocks_600x200x200?.wastage || 0.05);
   const blockSize = '600x200x200';
-  const masonryQty = calculateMasonryQuantity(netMasonryArea, blockSize);
+  const masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
   
   addBoQItem(masonryWork, {
     sno: 1,
