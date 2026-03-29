@@ -743,43 +743,39 @@ function MaterialSummaryTab({ boq, project }) {
 
   // Extract material quantities from BoQ - 8 categories from database
   const extractMaterials = () => {
-    // Get rates from API or use defaults
-    const getDefaultRate = (cat) => {
-      const defaults = {
-        cement: 370,
-        steel: 72,
-        sand: 58,
-        aggregate: 42,
-        blocks: 78,
-        masonry: 350,
-        flooring: 95,
-        timber: 2500,
-      };
-      return defaults[cat] || 0;
+    // Get selected materials from project (from Material Optimizer)
+    const selectedMats = project?.materialSelections || {};
+    
+    // Get rate from selected material or use default
+    const getRate = (key, defaultRate) => {
+      const selected = selectedMats[key];
+      if (selected && selected.rate) return selected.rate;
+      if (selected && selected.cost_per_unit) return selected.cost_per_unit;
+      return defaultRate;
     };
 
     const materials = {
       cement: {
-        name: "Cement",
+        name: selectedMats.cement?.name || "Cement",
         unit: "bags",
         qty: 0,
-        rate: getDefaultRate('cement'),
+        rate: getRate('cement', 370),
         supplier: findSupplier(["cement", "ppc", "opc", "ultratech", "acc", "ramco"]),
         category: "Cement",
       },
       steel: {
-        name: "Steel (TMT Bars)",
+        name: selectedMats.steel?.name || "Steel (TMT Bars)",
         unit: "kg",
         qty: 0,
-        rate: getDefaultRate('steel'),
+        rate: getRate('steel', 72),
         supplier: findSupplier(["steel", "tmt", "tata", "jsw", "kalliyath"]),
         category: "Steel",
       },
       sand: {
-        name: "Sand (M-Sand)",
+        name: selectedMats.aggregates?.name || "Sand (M-Sand)",
         unit: "cft",
         qty: 0,
-        rate: getDefaultRate('sand'),
+        rate: getRate('aggregates', 58),
         supplier: findSupplier(["sand", "m-sand"]),
         category: "Aggregates",
       },
@@ -792,10 +788,10 @@ function MaterialSummaryTab({ boq, project }) {
         category: "Aggregates",
       },
       blocks: {
-        name: "AAC Blocks",
+        name: selectedMats.blocks?.name || "AAC Blocks",
         unit: "nos",
         qty: 0,
-        rate: getDefaultRate('blocks'),
+        rate: getRate('blocks', 78),
         supplier: findSupplier(["aac", "block"]),
         category: "Blocks",
       },
@@ -808,18 +804,18 @@ function MaterialSummaryTab({ boq, project }) {
         category: "Masonry",
       },
       flooring: {
-        name: "Flooring Tiles",
+        name: selectedMats.flooring?.name || "Flooring Tiles",
         unit: "sqft",
         qty: 0,
-        rate: getDefaultRate('flooring'),
+        rate: getRate('flooring', 95),
         supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
         category: "Flooring",
       },
       timber: {
-        name: "Timber",
+        name: selectedMats.timber?.name || "Timber",
         unit: "cft",
         qty: 0,
-        rate: getDefaultRate('timber'),
+        rate: getRate('timber', 2500),
         supplier: findSupplier(["teak", "timber", "wood", "plywood", "sal", "mahogany"]),
         category: "Timber",
       },

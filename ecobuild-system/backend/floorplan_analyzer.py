@@ -87,6 +87,12 @@ class FloorplanAnalyzer:
             # Calculate total area
             total_area = sum(r.area for r in rooms) if rooms else 0
             
+            # Apply reasonable constraints
+            if total_area > 0:
+                # Cap at reasonable limits (50-2000 sq.m for residential)
+                if total_area < 50 or total_area > 2000:
+                    total_area = 0  # Invalid, will require manual entry
+            
             # Estimate building dimensions
             if total_area > 0:
                 # Assume roughly square building

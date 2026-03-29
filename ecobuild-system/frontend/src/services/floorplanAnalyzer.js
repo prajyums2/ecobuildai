@@ -13,12 +13,11 @@ const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
  */
 export async function analyzeFloorplan(file, numFloors = 2) {
   try {
-    // Create form data
+    // Call backend API
     const formData = new FormData();
     formData.append('file', file);
     formData.append('num_floors', numFloors.toString());
 
-    // Call backend API
     const response = await fetch(`${API_URL}/api/floorplan/analyze`, {
       method: 'POST',
       body: formData,
@@ -30,9 +29,19 @@ export async function analyzeFloorplan(file, numFloors = 2) {
 
     const data = await response.json();
     
+    // Validate the detected area - cap at reasonable limits
+    let detectedArea = data.analysis?.total_area || null;
+    
+    // Apply reasonable constraints
+    if (detectedArea) {
+      // Cap minimum at 50 sq.m and maximum at 2000 sq.m for residential
+      if (detectedArea < 50) detectedArea = null;  // Too small, probably wrong
+      if (detectedArea > 2000) detectedArea = null; // Too large, probably wrong
+    }
+    
     return {
       dimensions: {
-        totalArea: data.analysis?.total_area || null,
+        totalArea: detectedArea,
         length: data.analysis?.dimensions?.length || null,
         width: data.analysis?.dimensions?.width || null,
       },
