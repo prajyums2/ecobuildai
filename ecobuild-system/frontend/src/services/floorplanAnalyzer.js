@@ -9,14 +9,18 @@ const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
  * Analyze a floorplan image using the backend API
  * @param {File} file - The floorplan image file
  * @param {number} numFloors - Number of floors
+ * @param {number|null} scaleFactor - Optional custom scale factor (m per pixel)
  * @returns {Promise<Object>} - Analysis results
  */
-export async function analyzeFloorplan(file, numFloors = 2) {
+export async function analyzeFloorplan(file, numFloors = 2, scaleFactor = null) {
   try {
     // Call backend API
     const formData = new FormData();
     formData.append('file', file);
     formData.append('num_floors', numFloors.toString());
+    if (scaleFactor !== null) {
+      formData.append('scale_factor', scaleFactor.toString());
+    }
 
     const response = await fetch(`${API_URL}/api/floorplan/analyze`, {
       method: 'POST',
@@ -29,14 +33,14 @@ export async function analyzeFloorplan(file, numFloors = 2) {
 
     const data = await response.json();
     
-    // Validate the detected area - cap at reasonable limits
+    // Validate the detected area - cap at reasonable limits (relaxed constraints)
     let detectedArea = data.analysis?.total_area || null;
     
-    // Apply reasonable constraints
+    // Apply reasonable constraints (relaxed for small floorplans)
     if (detectedArea) {
-      // Cap minimum at 50 sq.m and maximum at 2000 sq.m for residential
-      if (detectedArea < 50) detectedArea = null;  // Too small, probably wrong
-      if (detectedArea > 2000) detectedArea = null; // Too large, probably wrong
+      // Only reject clearly invalid values
+      if (detectedArea < 5) detectedArea = null;  // Too small
+      if (detectedArea > 5000) detectedArea = null; // Too large
     }
     
     return {
@@ -48,6 +52,11 @@ export async function analyzeFloorplan(file, numFloors = 2) {
       rooms: data.analysis?.rooms || [],
       quantities: data.quantities || {},
       confidence: data.confidence || 0,
+      scale: {
+        factor: data.analysis?.scale_used || null,
+        method: data.analysis?.scale_method || 'Unknown',
+        pixelsPerMeter: data.analysis?.scale_used ? (1 / data.analysis.scale_used) : null,
+      },
       raw: data,
     };
   } catch (error) {
@@ -63,6 +72,63 @@ export async function analyzeFloorplan(file, numFloors = 2) {
       rooms: [],
       quantities: {},
       confidence: 0,
+      scale: null,
+      error: error.message,
+    };
+  }
+}
+
+/**
+ * Calibrate floorplan scale using a known measurement
+ * @param {number} pixelDistance - Distance in pixels between two points
+ * @param {number} realDistance - Known real-world distance in meters
+ * @returns {Promise<Object>} - Calibration result
+ */
+export async function calibrateFloorplanScale(pixelDistance, realDistance) {
+  try {
+    const formData = new FormData();
+    formData.append('pixel_distance', pixelDistance.toString());
+    formData.append('real_distance', realDistance.toString());
+
+    const response = await fetch(`${API_URL}/api/floorplan/calibrate`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Calibration failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Calibration error:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+/**
+ * Reset floorplan scale calibration
+ * @returns {Promise<Object>} - Reset result
+ */
+export async function resetFloorplanCalibration() {
+  try {
+    const response = await fetch(`${API_URL}/api/floorplan/reset-calibration`, {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Reset failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Reset calibration error:', error);
+    return {
+      success: false,
       error: error.message,
     };
   }

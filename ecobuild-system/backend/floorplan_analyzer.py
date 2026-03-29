@@ -13,6 +13,7 @@ import numpy as np
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 import json
+import os
 
 @dataclass
 class RoomInfo:
@@ -32,6 +33,8 @@ class FloorplanAnalysis:
     openings_detected: int
     confidence: float
     dimensions: Dict[str, float]
+    scale_used: float = 0.0  # meters per pixel
+    scale_method: str = ""  # how scale was determined
 
 class FloorplanAnalyzer:
     """
@@ -54,8 +57,72 @@ class FloorplanAnalyzer:
     def __init__(self):
         self.min_room_area = 3  # sq.m
         self.max_room_area = 100  # sq.m
+        # Default scale factor (m per pixel) - can be overridden by environment
+        self.default_scale = float(os.getenv('FLOORPLAN_SCALE', '0.02'))
+        # User calibration storage
+        self._calibrated_scale: Optional[float] = None
     
-    def analyze_image(self, image_path: str) -> FloorplanAnalysis:
+    def calibrate_scale(self, pixel_distance: float, real_distance: float) -> float:
+        """Calibrate scale using a known measurement (draw a line of known length)."""
+        if pixel_distance <= 0 or real_distance <= 0:
+            raise ValueError("Distances must be positive")
+        self._calibrated_scale = real_distance / pixel_distance
+        return self._calibrated_scale
+    
+    def reset_calibration(self):
+        """Reset user calibration"""
+        self._calibrated_scale = None
+    
+    def _get_dpi_scale(self, image_path: str) -> Tuple[Optional[float], str]:
+        """Try to determine scale from image DPI metadata."""
+        try:
+            from PIL import Image
+            from PIL.ExifTags import TAGS
+            with Image.open(image_path) as img:
+                # Try EXIF first
+                exif_data = img._getexif()
+                if exif_data:
+                    x_dpi = y_dpi = None
+                    for tag_id, value in exif_data.items():
+                        tag = TAGS.get(tag_id, tag_id)
+                        if tag == 'XResolution' and value:
+                            x_dpi = value[0] / value[1] if isinstance(value, tuple) else value
+                        if tag == 'YResolution' and value:
+                            y_dpi = value[0] / value[1] if isinstance(value, tuple) else value
+                    if x_dpi and x_dpi > 0:
+                        dpi = (x_dpi + (y_dpi or x_dpi)) / 2.0
+                        return 0.0254 / dpi, f"DPI from EXIF ({dpi:.0f} DPI)"
+                
+                # Try img.info for DPI
+                if 'dpi' in img.info:
+                    dpi = img.info['dpi']
+                    avg_dpi = ((dpi[0] + dpi[1]) / 2.0) if isinstance(dpi, tuple) else float(dpi)
+                    if avg_dpi > 0:
+                        return 0.0254 / avg_dpi, f"DPI from image info ({avg_dpi:.0f} DPI)"
+        except (ImportError, Exception):
+            pass
+        return None, "No DPI metadata found"
+    
+    def _get_fallback_scale(self, img_width: int, img_height: int, img_path: str) -> Tuple[float, str]:
+        """Calculate scale based on typical floorplan image characteristics."""
+        # Try DPI first
+        dpi_scale, dpi_method = self._get_dpi_scale(img_path)
+        if dpi_scale is not None:
+            return dpi_scale, dpi_method
+        
+        # Fallback: estimate from image size assuming typical residential building (10m wide)
+        typical_building_width_m = 10.0
+        drawing_area_ratio = 0.8
+        scale = typical_building_width_m / (img_width * drawing_area_ratio)
+        return scale, f"Estimated ({img_width}px width, assumed {typical_building_width_m}m building)"
+    
+    def _get_scale(self, image_path: str, img_width: int, img_height: int) -> Tuple[float, str]:
+        """Get scale factor: user calibration > DPI > fallback estimation."""
+        if self._calibrated_scale is not None:
+            return self._calibrated_scale, "User calibrated"
+        return self._get_fallback_scale(img_width, img_height, image_path)
+    
+    def analyze_image(self, image_path: str, scale_factor: Optional[float] = None) -> FloorplanAnalysis:
         """
         Analyze floorplan image
         Returns detected rooms and quantities
@@ -78,8 +145,15 @@ class FloorplanAnalyzer:
             # Find contours
             contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             
+            # Determine scale factor (m per pixel)
+            if scale_factor is not None:
+                scale = scale_factor
+                scale_method = "User provided"
+            else:
+                scale, scale_method = self._get_scale(image_path, width, height)
+            
             # Detect rooms (enclosed areas)
-            rooms = self._detect_rooms(contours, width, height)
+            rooms = self._detect_rooms(contours, width, height, scale)
             
             # Detect walls (linear features)
             walls = self._detect_walls(contours)
@@ -111,7 +185,9 @@ class FloorplanAnalyzer:
                 walls_detected=len(walls),
                 openings_detected=0,
                 confidence=0.7 if rooms else 0.3,
-                dimensions=dimensions
+                dimensions=dimensions,
+                scale_used=scale,
+                scale_method=scale_method
             )
             
         except Exception as e:
@@ -122,11 +198,13 @@ class FloorplanAnalyzer:
                 walls_detected=0,
                 openings_detected=0,
                 confidence=0,
-                dimensions={'length': 0, 'width': 0, 'height': 0}
+                dimensions={'length': 0, 'width': 0, 'height': 0},
+                scale_used=0,
+                scale_method="Error"
             )
     
-    def _detect_rooms(self, contours, img_width, img_height) -> List[RoomInfo]:
-        """Detect rooms from contours"""
+    def _detect_rooms(self, contours, img_width, img_height, scale) -> List[RoomInfo]:
+        """Detect rooms from contours using given scale (m per pixel)"""
         rooms = []
         
         for contour in contours:
@@ -140,8 +218,7 @@ class FloorplanAnalyzer:
             # Get bounding box
             x, y, w, h = cv2.boundingRect(contour)
             
-            # Convert to meters (assume 1 pixel = 0.02m for typical floorplan)
-            scale = 0.02  # m per pixel
+            # Convert to meters using provided scale
             area_m = area_px * (scale ** 2)
             width_m = w * scale
             height_m = h * scale
@@ -215,12 +292,12 @@ class FloorplanAnalyzer:
 # Global analyzer instance
 analyzer = FloorplanAnalyzer()
 
-def analyze_floorplan(image_path: str, floors: int = 1) -> Dict:
+def analyze_floorplan(image_path: str, floors: int = 1, scale_factor: Optional[float] = None) -> Dict:
     """
     Analyze a floorplan image
     Returns analysis and quantities
     """
-    analysis = analyzer.analyze_image(image_path)
+    analysis = analyzer.analyze_image(image_path, scale_factor)
     quantities = analyzer.calculate_quantities(analysis, floors)
     
     return {
@@ -238,6 +315,39 @@ def analyze_floorplan(image_path: str, floors: int = 1) -> Dict:
             'walls': analysis.walls_detected,
             'dimensions': analysis.dimensions,
             'confidence': analysis.confidence,
+            'scale_used': analysis.scale_used,
+            'scale_method': analysis.scale_method,
         },
         'quantities': quantities,
     }
+
+def calibrate_floorplan_scale(pixel_distance: float, real_distance: float) -> Dict:
+    """
+    Calibrate the floorplan scale using a known measurement.
+    
+    Args:
+        pixel_distance: Distance in pixels between two points
+        real_distance: Known real-world distance in meters
+        
+    Returns:
+        Calibration result with scale factor
+    """
+    try:
+        scale = analyzer.calibrate_scale(pixel_distance, real_distance)
+        return {
+            'success': True,
+            'scale': scale,
+            'scale_display': f"{scale:.6f} m/pixel",
+            'pixels_per_meter': 1.0 / scale,
+            'message': f"Scale calibrated: 1 meter = {1.0/scale:.1f} pixels"
+        }
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+def reset_floorplan_calibration() -> Dict:
+    """Reset the floorplan scale calibration"""
+    analyzer.reset_calibration()
+    return {'success': True, 'message': 'Calibration reset'}

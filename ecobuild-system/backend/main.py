@@ -2354,7 +2354,8 @@ async def get_bibliography():
 @app.post("/api/floorplan/analyze")
 async def analyze_floorplan_image(
     file: UploadFile = File(...),
-    num_floors: int = Form(default=2)
+    num_floors: int = Form(default=2),
+    scale_factor: Optional[float] = Form(default=None)
 ):
     """
     Analyze floorplan image and extract quantities
@@ -2384,7 +2385,7 @@ async def analyze_floorplan_image(
         
         try:
             # Analyze floorplan
-            result = analyze_floorplan(tmp_path, num_floors)
+            result = analyze_floorplan(tmp_path, num_floors, scale_factor)
             
             return {
                 "success": True,
@@ -2435,6 +2436,33 @@ async def get_sample_analysis():
             "cement": 266,
         }
     }
+
+
+@app.post("/api/floorplan/calibrate")
+async def calibrate_floorplan_scale(
+    pixel_distance: float = Form(...),
+    real_distance: float = Form(...)
+):
+    """
+    Calibrate floorplan scale using a known measurement.
+    
+    User draws a line of known length (e.g., a wall) and provides:
+    - pixel_distance: Distance in pixels between two points
+    - real_distance: Known real-world distance in meters
+    """
+    from floorplan_analyzer import calibrate_floorplan_scale as calibrate
+    
+    result = calibrate(pixel_distance, real_distance)
+    if not result.get('success'):
+        raise HTTPException(status_code=400, detail=result.get('error', 'Calibration failed'))
+    return result
+
+
+@app.post("/api/floorplan/reset-calibration")
+async def reset_floorplan_calibration():
+    """Reset the floorplan scale calibration to default"""
+    from floorplan_analyzer import reset_floorplan_calibration as reset
+    return reset()
 
 
 if __name__ == "__main__":
