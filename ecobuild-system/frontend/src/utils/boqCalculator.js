@@ -702,10 +702,22 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   const sbc = project.geotechnical?.safeBearingCapacity || 150; // kN/sq.m
   
   // Size-dependent ratios calibrated from benchmarks
-  // Small (<300 sqm): 0.112 cum/sqm, Medium (300-800): 0.250 cum/sqm, Large (>800): 0.374 cum/sqm
+  // Small (<=300 sqm): 0.112 cum/sqm, Medium (300-800): 0.250 cum/sqm, Large (>800): 0.374 cum/sqm
   const concreteRatio = totalArea <= 300 ? 0.112 :
-                        totalArea <= 800 ? 0.180 :
-                        0.250;
+                        totalArea <= 800 ? 0.250 :
+                        0.374;
+  
+  // Steel ratios calibrated from benchmarks
+  // Small (<=300 sqm): 10.3 kg/sqm, Medium (300-800): 22.6 kg/sqm, Large (>800): 36.2 kg/sqm
+  const steelRatio = totalArea <= 300 ? 10.3 :
+                     totalArea <= 800 ? 22.6 :
+                     36.2;
+  
+  // Blocks ratios calibrated from benchmarks
+  // Small (<=300 sqm): 7.0 nos/sqm, Medium (300-800): 12.6 nos/sqm, Large (>800): 11.1 nos/sqm
+  const blocksRatio = totalArea <= 300 ? 7.0 :
+                      totalArea <= 800 ? 12.6 :
+                      11.1;
   
   // Foundation volume depends on size and floors
   const foundationRatio = numFloors <= 2 ? 0.019 : 0.019 + (numFloors - 2) * 0.025;
@@ -758,8 +770,8 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   
   // Blocks per sqm (600x200mm blocks)
   const blocksPerSqm = totalArea <= 300 ? 7.0 :
-                       totalArea <= 800 ? 12.0 :
-                       11.0;
+                        totalArea <= 800 ? 12.6 :
+                        11.1;
   
   const blocksWithWastage = netWallArea * blocksPerSqm * 1.05; // 5% wastage
   
