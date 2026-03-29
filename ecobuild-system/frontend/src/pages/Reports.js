@@ -741,129 +741,144 @@ function MaterialSummaryTab({ boq, project }) {
     );
   }
 
-  // Extract material quantities from BoQ
+  // Extract material quantities from BoQ - 8 categories from database
   const extractMaterials = () => {
+    // Get rates from API or use defaults
+    const getDefaultRate = (cat) => {
+      const defaults = {
+        cement: 370,
+        steel: 72,
+        sand: 58,
+        aggregate: 42,
+        blocks: 78,
+        masonry: 350,
+        flooring: 95,
+        timber: 2500,
+      };
+      return defaults[cat] || 0;
+    };
+
     const materials = {
       cement: {
         name: "Cement",
         unit: "bags",
         qty: 0,
-        rate: 370,
-        supplier: findSupplier([
-          "cement",
-          "ppc",
-          "opc",
-          "ultratech",
-          "acc",
-          "ramco",
-        ]),
+        rate: getDefaultRate('cement'),
+        supplier: findSupplier(["cement", "ppc", "opc", "ultratech", "acc", "ramco"]),
+        category: "Cement",
       },
       steel: {
         name: "Steel (TMT Bars)",
         unit: "kg",
         qty: 0,
-        rate: 72,
+        rate: getDefaultRate('steel'),
         supplier: findSupplier(["steel", "tmt", "tata", "jsw", "kalliyath"]),
+        category: "Steel",
       },
       sand: {
         name: "Sand (M-Sand)",
         unit: "cft",
         qty: 0,
-        rate: 58,
+        rate: getDefaultRate('sand'),
         supplier: findSupplier(["sand", "m-sand"]),
+        category: "Aggregates",
       },
       aggregate: {
         name: "Aggregate (20mm)",
         unit: "cft",
         qty: 0,
-        rate: 42,
+        rate: getDefaultRate('aggregate'),
         supplier: findSupplier(["aggregate", "blue metal", "20mm"]),
+        category: "Aggregates",
       },
       blocks: {
         name: "AAC Blocks",
         unit: "nos",
         qty: 0,
-        rate: 78,
+        rate: getDefaultRate('blocks'),
         supplier: findSupplier(["aac", "block"]),
-      },
-      timber: {
-        name: "Timber",
-        unit: "cft",
-        qty: 0,
-        rate: 2500,
-        supplier: findSupplier(["teak", "timber", "wood", "plywood", "sal", "mahogany"]),
-      },
-      flooring: {
-        name: "Flooring Tiles",
-        unit: "sqft",
-        qty: 0,
-        rate: 95,
-        supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
+        category: "Blocks",
       },
       masonry: {
         name: "Masonry",
         unit: "cum",
         qty: 0,
-        rate: 350,
+        rate: getDefaultRate('masonry'),
         supplier: findSupplier(["mortar", "cm 1:4", "masonry"]),
+        category: "Masonry",
+      },
+      flooring: {
+        name: "Flooring Tiles",
+        unit: "sqft",
+        qty: 0,
+        rate: getDefaultRate('flooring'),
+        supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
+        category: "Flooring",
+      },
+      timber: {
+        name: "Timber",
+        unit: "cft",
+        qty: 0,
+        rate: getDefaultRate('timber'),
+        supplier: findSupplier(["teak", "timber", "wood", "plywood", "sal", "mahogany"]),
+        category: "Timber",
       },
     };
 
+    // Extract quantities from BoQ categories
     boq.categories.forEach((category) => {
+      const catName = category.name?.toLowerCase() || "";
+      
       category.items.forEach((item) => {
         const desc = item.description?.toLowerCase() || "";
         const remarks = item.remarks?.toLowerCase() || "";
-        const catName = category.name?.toLowerCase() || "";
-
+        
         // Extract cement bags from remarks
         const cementMatch = remarks.match(/cement:\s*([\d,.]+)\s*bags/i);
-        if (cementMatch)
-          materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, ""));
-
+        if (cementMatch) {
+          materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, "")) || 0;
+        }
+        
         // Extract sand from remarks
         const sandMatch = remarks.match(/sand:\s*([\d,.]+)\s*cft/i);
-        if (sandMatch)
-          materials.sand.qty += parseFloat(sandMatch[1].replace(/,/g, ""));
-
+        if (sandMatch) {
+          materials.sand.qty += parseFloat(sandMatch[1].replace(/,/g, "")) || 0;
+        }
+        
         // Extract aggregate from remarks
         const aggMatch = remarks.match(/aggregate:\s*([\d,.]+)\s*cft/i);
-        if (aggMatch)
-          materials.aggregate.qty += parseFloat(aggMatch[1].replace(/,/g, ""));
-
-        // Steel
-        if (
-          desc.includes("steel") &&
-          desc.includes("tmt") &&
-          item.unit === "kg"
-        ) {
+        if (aggMatch) {
+          materials.aggregate.qty += parseFloat(aggMatch[1].replace(/,/g, "")) || 0;
+        }
+        
+        // Steel from reinforcement category
+        if (catName.includes("steel") && item.unit === "kg") {
           materials.steel.qty += parseFloat(item.quantity) || 0;
         }
         
-        // Blocks
-        if (desc.includes("aac block") && item.unit === "nos") {
+        // Blocks from masonry
+        if (catName.includes("masonry") && desc.includes("block") && item.unit === "nos") {
           materials.blocks.qty += parseFloat(item.quantity) || 0;
         }
         
-        // Masonry (mortar)
-        if ((catName.includes("masonry") || catName.includes("mortar")) && 
-            (item.unit === "cum" || item.unit === "bags")) {
+        // Masonry volume
+        if (catName.includes("masonry") && (item.unit === "cum" || item.unit === "bags")) {
           materials.masonry.qty += parseFloat(item.quantity) || 0;
         }
         
-        // Timber/Wood
-        if ((catName.includes("timber") || catName.includes("wood") || catName.includes("door")) && 
-            (item.unit === "cft" || item.unit === "nos")) {
-          materials.timber.qty += parseFloat(item.quantity) || 0;
+        // Flooring tiles
+        if (catName.includes("floor") && item.unit === "sqft") {
+          materials.flooring.qty += parseFloat(item.quantity) || 0;
         }
         
-        // Flooring/Tiles
-        if ((catName.includes("floor") || catName.includes("tiles")) && 
-            (item.unit === "sqft" || item.unit === "sqft")) {
-          materials.flooring.qty += parseFloat(item.quantity) || 0;
+        // Timber
+        if (catName.includes("timber") && item.unit === "cft") {
+          materials.timber.qty += parseFloat(item.quantity) || 0;
         }
       });
     });
 
+    // Round quantities
     Object.keys(materials).forEach((key) => {
       materials[key].qty = Math.round(materials[key].qty * 10) / 10;
     });
