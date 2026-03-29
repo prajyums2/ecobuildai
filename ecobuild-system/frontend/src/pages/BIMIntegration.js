@@ -15,7 +15,39 @@ import {
   FaIndustry,
   FaRuler,
   FaBuilding,
+  FaMagic,
+  FaHome,
+  FaBriefcase,
+  FaCity,
 } from "react-icons/fa";
+
+// Building type templates with calibrated ratios
+const BUILDING_TEMPLATES = [
+  {
+    id: 'residential-2bhk',
+    name: '2BHK House (100-150 sq.m)',
+    icon: FaHome,
+    ratios: { concrete: 0.112, steel: 10.3, blocks: 7.0, aggregate: 0.015, cement: 0.7, sand: 0.05 }
+  },
+  {
+    id: 'residential-3bhk',
+    name: '3BHK House (150-250 sq.m)',
+    icon: FaHome,
+    ratios: { concrete: 0.125, steel: 12, blocks: 7.5, aggregate: 0.017, cement: 0.75, sand: 0.055 }
+  },
+  {
+    id: 'office-small',
+    name: 'Small Office (200-400 sq.m)',
+    icon: FaBriefcase,
+    ratios: { concrete: 0.18, steel: 15, blocks: 10, aggregate: 0.022, cement: 0.85, sand: 0.06 }
+  },
+  {
+    id: 'apartment',
+    name: 'Apartment Building (500+ sq.m)',
+    icon: FaCity,
+    ratios: { concrete: 0.25, steel: 28, blocks: 11, aggregate: 0.035, cement: 1.2, sand: 0.09 }
+  },
+];
 
 function BIMIntegration() {
   const navigate = useNavigate();
@@ -25,7 +57,8 @@ function BIMIntegration() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [extractedData, setExtractedData] = useState(null);
-  const [activeStep, setActiveStep] = useState('upload'); // upload, dimensions, quantities, results
+  const [activeStep, setActiveStep] = useState('upload');
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   
   const [dimensions, setDimensions] = useState({
     length: project?.buildingParams?.builtUpArea ? Math.sqrt(project.buildingParams.builtUpArea).toFixed(1) : '',
@@ -67,7 +100,27 @@ function BIMIntegration() {
     setFile(uploadedFile);
     setFileUrl(url);
     setError(null);
-    setActiveStep('dimensions');
+    setActiveStep('template');
+  };
+
+  // Calculate quantities from template
+  const calculateFromTemplate = (template) => {
+    setSelectedTemplate(template);
+    const area = parseFloat(dimensions.builtUpArea) || project?.buildingParams?.builtUpArea || 150;
+    const floors = parseInt(dimensions.floors) || 2;
+    const totalArea = area * floors;
+    const r = template.ratios;
+
+    setManualInputs({
+      concrete: Math.round(totalArea * r.concrete).toString(),
+      steel: Math.round(totalArea * r.steel).toString(),
+      blocks: Math.round(totalArea * r.blocks).toString(),
+      aggregate: Math.round(totalArea * r.aggregate * 1000).toString(),
+      sand: Math.round(totalArea * r.cement * 5).toString(),
+      cement: Math.round(totalArea * r.cement).toString(),
+    });
+
+    setActiveStep('quantities');
   };
 
   // Calculate quantities from dimensions
@@ -78,7 +131,6 @@ function BIMIntegration() {
     const floors = parseInt(dimensions.floors) || 2;
     const totalArea = area * floors;
 
-    // Calibrated formulas
     const concrete = Math.round(totalArea * (totalArea <= 300 ? 0.112 : totalArea <= 800 ? 0.18 : 0.25));
     const steel = Math.round(totalArea * (totalArea <= 300 ? 10.3 : totalArea <= 800 ? 18 : 28));
     const blocks = Math.round(totalArea * (totalArea <= 300 ? 7 : totalArea <= 800 ? 12 : 11));
@@ -153,25 +205,28 @@ function BIMIntegration() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Project Drawing & Estimation</h1>
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <FaMagic className="text-primary" />
+            Smart Material Estimator
+          </h1>
           <p className="text-foreground-secondary mt-1">
-            Upload drawing, enter dimensions, and generate material quantities
+            Upload drawing, select building type, get instant estimates
           </p>
         </div>
       </div>
 
       {/* Progress Steps */}
       <div className="flex items-center gap-4 mb-6">
-        {['upload', 'dimensions', 'quantities', 'results'].map((step, idx) => (
+        {['upload', 'template', 'quantities', 'results'].map((step, idx) => (
           <div key={step} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
               activeStep === step 
                 ? 'bg-primary text-white' 
-                : idx < ['upload', 'dimensions', 'quantities', 'results'].indexOf(activeStep)
+                : idx < ['upload', 'template', 'quantities', 'results'].indexOf(activeStep)
                   ? 'bg-green-500 text-white'
                   : 'bg-gray-200 text-gray-500'
             }`}>
-              {idx < ['upload', 'dimensions', 'quantities', 'results'].indexOf(activeStep) ? (
+              {idx < ['upload', 'template', 'quantities', 'results'].indexOf(activeStep) ? (
                 <FaCheck />
               ) : (
                 idx + 1
@@ -187,7 +242,7 @@ function BIMIntegration() {
       {activeStep === 'upload' && (
         <div className="card">
           <div className="card-header">
-            <h3 className="font-semibold text-foreground">Step 1: Upload Drawing</h3>
+            <h3 className="font-semibold text-foreground">Step 1: Upload Your Floor Plan</h3>
           </div>
           <div className="card-body">
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center hover:border-primary transition-colors">
@@ -205,7 +260,7 @@ function BIMIntegration() {
                     Click to upload your floor plan
                   </p>
                   <p className="text-foreground-secondary text-sm">
-                    Upload PNG, JPG, or PDF of your building drawing
+                    PNG, JPG, or PDF
                   </p>
                 </div>
               </label>
@@ -220,13 +275,13 @@ function BIMIntegration() {
         </div>
       )}
 
-      {/* Step 2: Enter Dimensions */}
-      {activeStep === 'dimensions' && file && (
+      {/* Step 2: Select Building Type */}
+      {activeStep === 'template' && file && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* File Preview */}
           <div className="card">
             <div className="card-header">
-              <h3 className="font-semibold text-foreground">Uploaded Drawing</h3>
+              <h3 className="font-semibold text-foreground">Your Drawing</h3>
             </div>
             <div className="card-body">
               <div className="relative rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
@@ -234,9 +289,6 @@ function BIMIntegration() {
                   <div className="p-8 text-center">
                     <FaFilePdf className="text-6xl text-red-500 mx-auto mb-4" />
                     <p className="font-medium text-foreground">{file.name}</p>
-                    <p className="text-sm text-foreground-secondary">
-                      {(file.size / (1024 * 1024)).toFixed(2)} MB
-                    </p>
                   </div>
                 ) : (
                   <img 
@@ -246,66 +298,103 @@ function BIMIntegration() {
                   />
                 )}
               </div>
-              <div className="mt-4 flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <FaCheck className="text-green-500" />
-                <div>
-                  <p className="font-medium text-foreground">{file.name}</p>
-                  <p className="text-sm text-foreground-secondary">
-                    {(file.size / (1024 * 1024)).toFixed(2)} MB
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Dimensions Input */}
+          {/* Building Type Selection */}
           <div className="card">
             <div className="card-header">
-              <h3 className="font-semibold text-foreground">Step 2: Enter Dimensions</h3>
-              <p className="text-sm text-foreground-secondary">Enter the dimensions shown in your drawing</p>
+              <h3 className="font-semibold text-foreground">Step 2: Select Building Type</h3>
+              <p className="text-sm text-foreground-secondary">Choose the type that best matches your drawing</p>
             </div>
-            <div className="card-body space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="card-body space-y-3">
+              {BUILDING_TEMPLATES.map((template) => (
+                <button
+                  key={template.id}
+                  onClick={() => calculateFromTemplate(template)}
+                  className="w-full p-4 text-left rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-primary transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <template.icon className="text-2xl text-primary" />
+                    <div>
+                      <p className="font-medium text-foreground">{template.name}</p>
+                      <p className="text-sm text-foreground-secondary">
+                        Concrete: {template.ratios.concrete} cum/sq.m | Steel: {template.ratios.steel} kg/sq.m
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+              
+              <button
+                onClick={calculateFromDimensions}
+                className="w-full p-4 text-left rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-primary transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <FaCalculator className="text-2xl text-primary" />
+                  <div>
+                    <p className="font-medium text-foreground">Enter Custom Dimensions</p>
+                    <p className="text-sm text-foreground-secondary">
+                      Calculate based on specific dimensions
+                    </p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Review Quantities */}
+      {activeStep === 'quantities' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* File Preview */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="font-semibold text-foreground">Your Drawing</h3>
+            </div>
+            <div className="card-body">
+              <div className="relative rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+                {file?.type === 'application/pdf' ? (
+                  <div className="p-4 text-center">
+                    <FaFilePdf className="text-4xl text-red-500 mx-auto mb-2" />
+                    <p className="text-sm text-foreground">{file.name}</p>
+                  </div>
+                ) : (
+                  <img 
+                    src={fileUrl} 
+                    alt="Uploaded drawing" 
+                    className="max-w-full h-auto max-h-64 mx-auto"
+                  />
+                )}
+              </div>
+              {selectedTemplate && (
+                <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <p className="text-sm font-medium text-foreground">Template: {selectedTemplate.name}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Quantities Input */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="font-semibold text-foreground">Step 3: Review & Adjust Quantities</h3>
+              <p className="text-sm text-foreground-secondary">Review the calculated quantities and adjust if needed</p>
+            </div>
+            <div className="card-body">
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                    Length (m)
+                    Built-up Area (sq.m)
                   </label>
                   <input
                     type="number"
-                    placeholder="e.g., 12"
-                    value={dimensions.length}
-                    onChange={(e) => setDimensions({...dimensions, length: e.target.value})}
+                    value={dimensions.builtUpArea}
+                    onChange={(e) => setDimensions({...dimensions, builtUpArea: e.target.value})}
                     className="input w-full"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                    Width (m)
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="e.g., 10"
-                    value={dimensions.width}
-                    onChange={(e) => setDimensions({...dimensions, width: e.target.value})}
-                    className="input w-full"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Built-up Area (sq.m) - or will calculate from L×W
-                </label>
-                <input
-                  type="number"
-                  placeholder="e.g., 120"
-                  value={dimensions.builtUpArea}
-                  onChange={(e) => setDimensions({...dimensions, builtUpArea: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground-secondary mb-1">
                     Number of Floors
@@ -319,134 +408,95 @@ function BIMIntegration() {
                     className="input w-full"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                    Floor Height (m)
+                    Concrete (cum)
                   </label>
                   <input
                     type="number"
-                    step="0.1"
-                    value={dimensions.floorHeight}
-                    onChange={(e) => setDimensions({...dimensions, floorHeight: e.target.value})}
+                    value={manualInputs.concrete}
+                    onChange={(e) => setManualInputs({...manualInputs, concrete: e.target.value})}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                    Steel (kg)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualInputs.steel}
+                    onChange={(e) => setManualInputs({...manualInputs, steel: e.target.value})}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                    Cement (bags)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualInputs.cement}
+                    onChange={(e) => setManualInputs({...manualInputs, cement: e.target.value})}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                    Sand (cft)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualInputs.sand}
+                    onChange={(e) => setManualInputs({...manualInputs, sand: e.target.value})}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                    Blocks (nos)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualInputs.blocks}
+                    onChange={(e) => setManualInputs({...manualInputs, blocks: e.target.value})}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground-secondary mb-1">
+                    Aggregate (cft)
+                  </label>
+                  <input
+                    type="number"
+                    value={manualInputs.aggregate}
+                    onChange={(e) => setManualInputs({...manualInputs, aggregate: e.target.value})}
                     className="input w-full"
                   />
                 </div>
               </div>
 
               <button
-                onClick={calculateFromDimensions}
-                className="btn btn-primary w-full py-3"
+                onClick={handleProcess}
+                disabled={isProcessing}
+                className="btn btn-primary w-full py-3 mt-4"
               >
-                <FaCalculator className="mr-2" />
-                Calculate Quantities
+                {isProcessing ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" />
+                    Generating Report...
+                  </>
+                ) : (
+                  <>
+                    <FaCalculator className="mr-2" />
+                    Generate Report
+                  </>
+                )}
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Review Quantities */}
-      {activeStep === 'quantities' && (
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <h3 className="font-semibold text-foreground">Step 3: Review & Adjust Quantities</h3>
-            <button
-              onClick={calculateFromDimensions}
-              className="btn btn-secondary text-xs py-1 px-3"
-            >
-              Recalculate
-            </button>
-          </div>
-          <div className="card-body">
-            <p className="text-foreground-secondary text-sm mb-4">
-              Review the calculated quantities and adjust if needed based on your drawing
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Concrete (cum)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.concrete}
-                  onChange={(e) => setManualInputs({...manualInputs, concrete: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Steel (kg)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.steel}
-                  onChange={(e) => setManualInputs({...manualInputs, steel: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Cement (bags)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.cement}
-                  onChange={(e) => setManualInputs({...manualInputs, cement: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Sand (cft)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.sand}
-                  onChange={(e) => setManualInputs({...manualInputs, sand: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Blocks (nos)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.blocks}
-                  onChange={(e) => setManualInputs({...manualInputs, blocks: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-1">
-                  Aggregate (cft)
-                </label>
-                <input
-                  type="number"
-                  value={manualInputs.aggregate}
-                  onChange={(e) => setManualInputs({...manualInputs, aggregate: e.target.value})}
-                  className="input w-full"
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={handleProcess}
-              disabled={isProcessing}
-              className="btn btn-primary w-full py-3 mt-4"
-            >
-              {isProcessing ? (
-                <>
-                  <FaSpinner className="animate-spin mr-2" />
-                  Generating Report...
-                </>
-              ) : (
-                <>
-                  <FaCalculator className="mr-2" />
-                  Generate Report
-                </>
-              )}
-            </button>
           </div>
         </div>
       )}
@@ -461,7 +511,7 @@ function BIMIntegration() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
                 <FaBuilding className="text-2xl text-blue-500 mx-auto mb-2" />
-                <p className="text-xs text-foreground-secondary">Built-up Area</p>
+                <p className="text-xs text-foreground-secondary">Area</p>
                 <p className="text-xl font-bold text-foreground">{extractedData.area} sq.m</p>
               </div>
               <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
