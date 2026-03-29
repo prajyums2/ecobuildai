@@ -3,7 +3,7 @@ Main API Server for EcoBuild Backend
 FastAPI-based REST API with MongoDB and Authentication
 """
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header, status, Query
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header, status, Query, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr, Field, validator
