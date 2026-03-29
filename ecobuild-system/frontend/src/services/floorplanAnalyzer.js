@@ -146,8 +146,8 @@ function extractRoomLabels(text) {
  * Calculate areas for material estimation
  */
 function calculateAreas(dimensions, rooms) {
-  const totalBuiltUp = dimensions.totalArea || 150;
-  const numFloors = 2; // Default assumption
+  const totalBuiltUp = dimensions.totalArea || null;
+  const numFloors = null; // Will be determined from user input
   
   // Room-wise breakdown
   const roomAreas = {};
@@ -159,9 +159,14 @@ function calculateAreas(dimensions, rooms) {
 
   return {
     totalBuiltUp: totalBuiltUp,
-    totalFloorArea: totalBuiltUp * numFloors,
+    totalFloorArea: totalBuiltUp ? totalBuiltUp * 2 : null, // Estimate
     roomBreakdown: roomAreas,
     numFloors: numFloors,
+    detected: {
+      hasArea: totalBuiltUp !== null,
+      roomCount: rooms.length,
+      dimensionCount: dimensions.rooms.length,
+    }
   };
 }
 

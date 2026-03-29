@@ -62,6 +62,7 @@ function BIMIntegration() {
       // Analyze the floorplan
       const result = await analyzeFloorplan(url);
       setAnalysisResult(result);
+      console.log('Analysis result:', result);
       
       // Update inputs based on analysis
       if (result.dimensions.totalArea) {
@@ -72,13 +73,16 @@ function BIMIntegration() {
       }
 
       // Auto-calculate quantities
-      calculateQuantities(result.dimensions.totalArea || 150, manualInputs.floors);
+      const area = result.dimensions.totalArea || project?.buildingParams?.builtUpArea || null;
+      if (area) {
+        calculateQuantities(area, manualInputs.floors);
+      }
       
       setActiveStep('review');
     } catch (err) {
       console.error('Analysis error:', err);
-      setError('Failed to analyze floorplan');
-      setActiveStep('manual');
+      // Still go to review step - user can enter manually
+      setActiveStep('review');
     } finally {
       setIsAnalyzing(false);
     }
@@ -180,33 +184,41 @@ function BIMIntegration() {
       )}
 
       {/* Review Step */}
-      {activeStep === 'review' && analysisResult && (
+      {activeStep === 'review' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Image Preview */}
           <div className="card">
             <div className="card-header">
               <h3 className="font-semibold">Your Floorplan</h3>
-              {analysisResult.dimensions.totalArea && (
-                <span className="text-sm text-green-600">
-                  Detected: {analysisResult.dimensions.totalArea} sq.m
-                </span>
-              )}
+              <span className={`text-sm ${analysisResult?.dimensions.totalArea ? 'text-green-600' : 'text-yellow-600'}`}>
+                {analysisResult?.dimensions.totalArea 
+                  ? `AI Detected: ${analysisResult.dimensions.totalArea} sq.m`
+                  : 'Enter dimensions manually'}
+              </span>
             </div>
             <div className="card-body">
               <img src={fileUrl} alt="Floorplan" className="max-w-full h-auto max-h-96 mx-auto rounded-lg" />
               
-              {/* Detected Rooms */}
-              {analysisResult.rooms.length > 0 && (
-                <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <p className="text-sm font-medium mb-2">Detected Rooms:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {analysisResult.rooms.map((room, idx) => (
-                      <span key={idx} className="px-2 py-1 bg-white dark:bg-gray-700 rounded text-xs">
-                        {room.type}
-                        {room.area ? ` (${room.area.toFixed(1)} sq.m)` : ''}
-                      </span>
-                    ))}
-                  </div>
+              {/* Detected Info */}
+              {analysisResult && (
+                <div className={`mt-4 p-3 rounded-lg ${analysisResult.rooms.length > 0 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-yellow-50 dark:bg-yellow-900/20'}`}>
+                  <p className="text-sm font-medium mb-2">
+                    {analysisResult.rooms.length > 0 ? 'AI Detected:' : 'No rooms detected - enter manually:'}
+                  </p>
+                  {analysisResult.rooms.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {analysisResult.rooms.map((room, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-white dark:bg-gray-700 rounded text-xs">
+                          {room.type}
+                          {room.area ? ` (${room.area.toFixed(1)} sq.m)` : ''}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-foreground-secondary">
+                      The floorplan image may not have clear text labels. Please enter dimensions below.
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -215,8 +227,8 @@ function BIMIntegration() {
           {/* Quantities Input */}
           <div className="card">
             <div className="card-header">
-              <h3 className="font-semibold">Material Quantities</h3>
-              <p className="text-sm text-foreground-secondary">Adjust based on your floorplan</p>
+              <h3 className="font-semibold">Enter Quantities</h3>
+              <p className="text-sm text-foreground-secondary">Based on your floorplan</p>
             </div>
             <div className="card-body space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -225,8 +237,11 @@ function BIMIntegration() {
                   <input type="number" value={manualInputs.area}
                     onChange={(e) => {
                       setManualInputs({...manualInputs, area: e.target.value});
-                      calculateQuantities(parseFloat(e.target.value), manualInputs.floors);
+                      if (e.target.value && manualInputs.floors) {
+                        calculateQuantities(parseFloat(e.target.value), manualInputs.floors);
+                      }
                     }}
+                    placeholder="e.g., 150"
                     className="input w-full" />
                 </div>
                 <div>
@@ -234,17 +249,27 @@ function BIMIntegration() {
                   <input type="number" min="1" max="15" value={manualInputs.floors}
                     onChange={(e) => {
                       setManualInputs({...manualInputs, floors: e.target.value});
-                      calculateQuantities(manualInputs.area, parseInt(e.target.value));
+                      if (manualInputs.area && e.target.value) {
+                        calculateQuantities(manualInputs.area, parseInt(e.target.value));
+                      }
                     }}
                     className="input w-full" />
                 </div>
               </div>
 
-              {['concrete', 'steel', 'cement', 'sand', 'blocks', 'aggregate'].map(key => (
+              {[
+                { key: 'concrete', label: 'Concrete (cum)', unit: 'cum' },
+                { key: 'steel', label: 'Steel (kg)', unit: 'kg' },
+                { key: 'cement', label: 'Cement (bags)', unit: 'bags' },
+                { key: 'sand', label: 'Sand (cft)', unit: 'cft' },
+                { key: 'blocks', label: 'Blocks (nos)', unit: 'nos' },
+                { key: 'aggregate', label: 'Aggregate (cft)', unit: 'cft' },
+              ].map(({ key, label }) => (
                 <div key={key}>
-                  <label className="text-sm text-foreground-secondary capitalize">{key}</label>
+                  <label className="text-sm text-foreground-secondary">{label}</label>
                   <input type="number" value={manualInputs[key]}
                     onChange={(e) => setManualInputs({...manualInputs, [key]: e.target.value})}
+                    placeholder="Enter quantity"
                     className="input w-full" />
                 </div>
               ))}
