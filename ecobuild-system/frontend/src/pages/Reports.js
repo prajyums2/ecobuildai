@@ -800,12 +800,12 @@ function MaterialSummaryTab({ boq, project }) {
         rate: 95,
         supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
       },
-      paint: {
-        name: "Paint",
-        unit: "litres",
+      masonry: {
+        name: "Masonry",
+        unit: "cum",
         qty: 0,
-        rate: 280,
-        supplier: findSupplier(["paint", "asian", "berger", "nerolac"]),
+        rate: 350,
+        supplier: findSupplier(["mortar", "cm 1:4", "masonry"]),
       },
     };
 
@@ -844,6 +844,12 @@ function MaterialSummaryTab({ boq, project }) {
           materials.blocks.qty += parseFloat(item.quantity) || 0;
         }
         
+        // Masonry (mortar)
+        if ((catName.includes("masonry") || catName.includes("mortar")) && 
+            (item.unit === "cum" || item.unit === "bags")) {
+          materials.masonry.qty += parseFloat(item.quantity) || 0;
+        }
+        
         // Timber/Wood
         if ((catName.includes("timber") || catName.includes("wood") || catName.includes("door")) && 
             (item.unit === "cft" || item.unit === "nos")) {
@@ -854,12 +860,6 @@ function MaterialSummaryTab({ boq, project }) {
         if ((catName.includes("floor") || catName.includes("tiles")) && 
             (item.unit === "sqft" || item.unit === "sqft")) {
           materials.flooring.qty += parseFloat(item.quantity) || 0;
-        }
-        
-        // Paint
-        if ((desc.includes("paint") || desc.includes("emulsion")) && 
-            (item.unit === "litre" || item.unit === "litres")) {
-          materials.paint.qty += parseFloat(item.quantity) || 0;
         }
       });
     });
@@ -1073,6 +1073,16 @@ function SuppliersTab({ boq, project }) {
 
   // Calculate distance from project to supplier location
   const getDistance = (supplier) => {
+    // Use real coordinates from database if available
+    const lat = supplier.latitude;
+    const lon = supplier.longitude;
+    
+    if (lat && lon) {
+      const distance = calculateDistance(projectLat, projectLon, lat, lon);
+      return Math.round(distance * 10) / 10;
+    }
+    
+    // Fallback to district coordinates
     const supplierLocation = supplier["City / Area"] || "";
 
     // Try to match district from supplier location
@@ -1093,7 +1103,9 @@ function SuppliersTab({ boq, project }) {
     }
 
     // Calculate distance from project location
-    const distance = calculateDistance(
+    const distance = calculateDistance(projectLat, projectLon, supplierCoord.lat, supplierCoord.lon);
+    return Math.round(distance * 10) / 10;
+  };
       projectLat,
       projectLon,
       supplierCoord.lat,

@@ -226,7 +226,15 @@ class EnhancedBIMParser:
             
             # Parse each element type
             for ifc_type, element_type in type_mapping.items():
-                items = model.by_type(ifc_type)
+                try:
+                    items = model.by_type(ifc_type)
+                except Exception as e:
+                    print(f"[BIM Parser] Skipping {ifc_type} (not in schema): {str(e)}")
+                    continue
+                
+                if not items:
+                    continue
+                    
                 print(f"[BIM Parser] Found {len(items)} {ifc_type} elements")
                 
                 for item in items:
