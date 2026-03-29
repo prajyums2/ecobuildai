@@ -1106,22 +1106,6 @@ function SuppliersTab({ boq, project }) {
     const distance = calculateDistance(projectLat, projectLon, supplierCoord.lat, supplierCoord.lon);
     return Math.round(distance * 10) / 10;
   };
-      projectLat,
-      projectLon,
-      supplierCoord.lat,
-      supplierCoord.lon,
-    );
-
-    // If supplier is in same district as project, use provided distance
-    if (
-      supplier["Distance from Thrissur (km)"] !== null &&
-      selectedDistrict === "Thrissur"
-    ) {
-      return supplier["Distance from Thrissur (km)"];
-    }
-
-    return Math.round(distance * 10) / 10;
-  };
 
   // Clean rate display
   const cleanRate = (rate) => {
