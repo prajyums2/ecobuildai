@@ -59,8 +59,8 @@ function BIMIntegration() {
     setIsAnalyzing(true);
 
     try {
-      // Analyze the floorplan
-      const result = await analyzeFloorplan(url);
+      // Call backend API for analysis
+      const result = await analyzeFloorplan(uploadedFile, manualInputs.floors);
       setAnalysisResult(result);
       console.log('Analysis result:', result);
       
@@ -70,12 +70,22 @@ function BIMIntegration() {
           ...prev,
           area: result.dimensions.totalArea.toString(),
         }));
-      }
-
-      // Auto-calculate quantities
-      const area = result.dimensions.totalArea || project?.buildingParams?.builtUpArea || null;
-      if (area) {
-        calculateQuantities(area, manualInputs.floors);
+        
+        // Calculate quantities from detected area
+        const area = result.dimensions.totalArea;
+        const floors = parseInt(manualInputs.floors) || 2;
+        const totalArea = area * floors;
+        
+        setManualInputs(prev => ({
+          ...prev,
+          area: area.toString(),
+          concrete: Math.round(totalArea * 0.12).toString(),
+          steel: Math.round(totalArea * 12).toString(),
+          blocks: Math.round(totalArea * 7.5).toString(),
+          aggregate: Math.round(totalArea * 20).toString(),
+          sand: Math.round(totalArea * 15).toString(),
+          cement: Math.round(totalArea * 0.8).toString(),
+        }));
       }
       
       setActiveStep('review');

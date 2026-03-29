@@ -1,177 +1,94 @@
 /**
  * Floorplan Analyzer Service
- * Analyzes floorplan images to extract room layouts and quantities
- * 
- * This uses:
- * 1. Tesseract.js OCR for text extraction
- * 2. Basic image processing for dimension detection
- * 3. Room type classification based on size
+ * Calls backend API for intelligent floorplan analysis
  */
+
+const API_URL = 'https://ecobuildai-production-1f9d.up.railway.app';
 
 /**
- * Analyze a floorplan image and extract room information
- * @param {string} imageUrl - URL or data URL of the image
- * @returns {Promise<Object>} - Extracted data
+ * Analyze a floorplan image using the backend API
+ * @param {File} file - The floorplan image file
+ * @param {number} numFloors - Number of floors
+ * @returns {Promise<Object>} - Analysis results
  */
-export async function analyzeFloorplan(imageUrl) {
+export async function analyzeFloorplan(file, numFloors = 2) {
   try {
-    // Import Tesseract for OCR
-    const Tesseract = await import('tesseract.js');
-    
-    // Perform OCR
-    const worker = await Tesseract.createWorker('eng');
-    const { data: { text, words } } = await worker.recognize(imageUrl);
-    await worker.terminate();
+    // Create form data
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('num_floors', numFloors.toString());
 
-    // Extract dimensions
-    const dimensions = extractDimensions(text);
-    
-    // Extract room labels
-    const rooms = extractRoomLabels(text);
-    
-    // Calculate areas
-    const areas = calculateAreas(dimensions, rooms);
+    // Call backend API
+    const response = await fetch(`${API_URL}/api/floorplan/analyze`, {
+      method: 'POST',
+      body: formData,
+    });
 
+    if (!response.ok) {
+      throw new Error(`Analysis failed: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
     return {
-      text: text,
-      dimensions: dimensions,
-      rooms: rooms,
-      areas: areas,
-      confidence: text.length > 50 ? 'high' : text.length > 20 ? 'medium' : 'low',
+      dimensions: {
+        totalArea: data.analysis?.total_area || null,
+        length: data.analysis?.dimensions?.length || null,
+        width: data.analysis?.dimensions?.width || null,
+      },
+      rooms: data.analysis?.rooms || [],
+      quantities: data.quantities || {},
+      confidence: data.confidence || 0,
+      raw: data,
     };
   } catch (error) {
     console.error('Floorplan analysis error:', error);
+    
+    // Return empty result - user will enter manually
     return {
-      text: '',
-      dimensions: {},
+      dimensions: {
+        totalArea: null,
+        length: null,
+        width: null,
+      },
       rooms: [],
-      areas: {},
-      confidence: 'error',
+      quantities: {},
+      confidence: 0,
       error: error.message,
     };
   }
 }
 
 /**
- * Extract dimensions from OCR text
+ * Get sample analysis for testing
  */
-function extractDimensions(text) {
-  const dimensions = {
-    totalArea: null,
-    rooms: [],
-  };
-
-  // Pattern 1: "150 sq.m" or "150 sqm"
-  const areaPattern = /(\d+\.?\d*)\s*(?:sq\.?\s*m|sqm|square\s*meter|sq\.?\s*mt)/gi;
-  let match;
-  while ((match = areaPattern.exec(text)) !== null) {
-    const area = parseFloat(match[1]);
-    if (area > 10 && area < 10000) {
-      if (!dimensions.totalArea || area > dimensions.totalArea) {
-        dimensions.totalArea = area;
-      }
-    }
+export async function getSampleAnalysis() {
+  try {
+    const response = await fetch(`${API_URL}/api/floorplan/sample`);
+    const data = await response.json();
+    
+    return {
+      dimensions: {
+        totalArea: data.analysis?.total_area || null,
+        length: data.analysis?.dimensions?.length || null,
+        width: data.analysis?.dimensions?.width || null,
+      },
+      rooms: data.analysis?.rooms || [],
+      quantities: data.quantities || {},
+      confidence: data.analysis?.confidence || 0,
+    };
+  } catch (error) {
+    return {
+      dimensions: { totalArea: null },
+      rooms: [],
+      quantities: {},
+      confidence: 0,
+    };
   }
-
-  // Pattern 2: "12m x 10m" or "12 x 10 m"
-  const dimPattern = /(\d+\.?\d*)\s*(?:m|meter)?\s*[xX×]\s*(\d+\.?\d*)\s*(?:m|meter)?/gi;
-  while ((match = dimPattern.exec(text)) !== null) {
-    const l = parseFloat(match[1]);
-    const w = parseFloat(match[2]);
-    if (l > 0 && w > 0 && l < 100 && w < 100) {
-      dimensions.rooms.push({
-        length: l,
-        width: w,
-        area: l * w,
-      });
-    }
-  }
-
-  // Pattern 3: Room dimensions like "Bedroom 12x10"
-  const roomDimPattern = /(bedroom|living|kitchen|bathroom|toilet|study|dining|master)\s*(\d+\.?\d*)\s*[xX×]\s*(\d+\.?\d*)/gi;
-  while ((match = roomDimPattern.exec(text)) !== null) {
-    dimensions.rooms.push({
-      name: match[1],
-      length: parseFloat(match[2]),
-      width: parseFloat(match[3]),
-      area: parseFloat(match[2]) * parseFloat(match[3]),
-    });
-  }
-
-  return dimensions;
 }
 
 /**
- * Extract room labels from OCR text
- */
-function extractRoomLabels(text) {
-  const roomTypes = [
-    'bedroom', 'living room', 'kitchen', 'bathroom', 'toilet',
-    'master bedroom', 'guest room', 'study room', 'dining room',
-    'store room', 'utility', 'balcony', 'veranda', 'lobby',
-    'corridor', 'staircase', 'garage', 'car parking'
-  ];
-
-  const foundRooms = [];
-  const lowerText = text.toLowerCase();
-
-  roomTypes.forEach(room => {
-    if (lowerText.includes(room)) {
-      // Try to find dimensions next to the room label
-      const roomPattern = new RegExp(`${room}\\s*(\\d+\\.?\\d*)\\s*[xX×]\\s*(\\d+\\.?\\d*)`, 'i');
-      const match = text.match(roomPattern);
-      
-      if (match) {
-        foundRooms.push({
-          type: room,
-          length: parseFloat(match[1]),
-          width: parseFloat(match[2]),
-          area: parseFloat(match[1]) * parseFloat(match[2]),
-        });
-      } else {
-        foundRooms.push({
-          type: room,
-          length: null,
-          width: null,
-          area: null,
-        });
-      }
-    }
-  });
-
-  return foundRooms;
-}
-
-/**
- * Calculate areas for material estimation
- */
-function calculateAreas(dimensions, rooms) {
-  const totalBuiltUp = dimensions.totalArea || null;
-  const numFloors = null; // Will be determined from user input
-  
-  // Room-wise breakdown
-  const roomAreas = {};
-  rooms.forEach(room => {
-    if (room.area) {
-      roomAreas[room.type] = (roomAreas[room.type] || 0) + room.area;
-    }
-  });
-
-  return {
-    totalBuiltUp: totalBuiltUp,
-    totalFloorArea: totalBuiltUp ? totalBuiltUp * 2 : null, // Estimate
-    roomBreakdown: roomAreas,
-    numFloors: numFloors,
-    detected: {
-      hasArea: totalBuiltUp !== null,
-      roomCount: rooms.length,
-      dimensionCount: dimensions.rooms.length,
-    }
-  };
-}
-
-/**
- * Get room type from dimensions
+ * Classify room based on dimensions
  */
 export function classifyRoom(length, width, area) {
   if (area > 30) return 'Living Room';

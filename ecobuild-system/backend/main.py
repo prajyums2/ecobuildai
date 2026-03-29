@@ -2349,5 +2349,93 @@ async def get_bibliography():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ============ FLOORPLAN ANALYSIS ============
+
+@app.post("/api/floorplan/analyze")
+async def analyze_floorplan_image(
+    file: UploadFile = File(...),
+    num_floors: int = Form(default=2)
+):
+    """
+    Analyze floorplan image and extract quantities
+    
+    Accepts: PNG, JPG, PDF
+    Returns: Detected rooms, dimensions, material quantities
+    """
+    import tempfile
+    import os
+    from floorplan_analyzer import analyze_floorplan, FloorplanAnalyzer
+    
+    try:
+        # Validate file
+        allowed_types = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf']
+        if file.content_type not in allowed_types:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid file type. Allowed: {', '.join(allowed_types)}"
+            )
+        
+        # Save file temporarily
+        suffix = os.path.splitext(file.filename)[1] if file.filename else '.png'
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+            content = await file.read()
+            tmp.write(content)
+            tmp_path = tmp.name
+        
+        try:
+            # Analyze floorplan
+            result = analyze_floorplan(tmp_path, num_floors)
+            
+            return {
+                "success": True,
+                "filename": file.filename,
+                "file_size": len(content),
+                "analysis": result['analysis'],
+                "quantities": result['quantities'],
+                "confidence": result['analysis']['confidence'],
+            }
+            
+        finally:
+            # Clean up temp file
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+                
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/floorplan/sample")
+async def get_sample_analysis():
+    """Get a sample floorplan analysis for testing"""
+    return {
+        "analysis": {
+            "total_area": 180,
+            "rooms": [
+                {"name": "Living Room", "area": 35, "length": 7, "width": 5, "confidence": 0.9},
+                {"name": "Master Bedroom", "area": 20, "length": 5, "width": 4, "confidence": 0.85},
+                {"name": "Bedroom", "area": 15, "length": 4.5, "width": 3.3, "confidence": 0.85},
+                {"name": "Kitchen", "area": 12, "length": 4, "width": 3, "confidence": 0.8},
+                {"name": "Bathroom", "area": 5, "length": 2.5, "width": 2, "confidence": 0.8},
+                {"name": "Bathroom", "area": 4, "length": 2, "width": 2, "confidence": 0.8},
+            ],
+            "walls": 12,
+            "dimensions": {"length": 14, "width": 10, "height": 3.0},
+            "confidence": 0.85,
+        },
+        "quantities": {
+            "area": 180,
+            "floors": 2,
+            "concrete": 41,
+            "steel": 3696,
+            "blocks": 2520,
+            "aggregate": 1300,
+            "sand": 840,
+            "cement": 266,
+        }
+    }
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
