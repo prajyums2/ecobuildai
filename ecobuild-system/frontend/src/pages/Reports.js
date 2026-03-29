@@ -696,24 +696,27 @@ function MaterialSummaryTab({ boq, project }) {
 
     if (matching.length === 0) return null;
 
-    // Calculate distances and sort
+    // Calculate distances from project location
     const withDistance = matching.map((s) => {
-      const location = s["City / Area"] || "";
-      let coord = null;
-      for (const [district, c] of Object.entries(districtCoords)) {
-        if (location.toLowerCase().includes(district.toLowerCase())) {
-          coord = c;
-          break;
-        }
+      // Use real coordinates from database
+      const lat = s.latitude || null;
+      const lon = s.longitude || null;
+      
+      let distance;
+      if (lat && lon) {
+        // Use real coordinates
+        distance = calculateDistance(projectLat, projectLon, lat, lon);
+      } else {
+        // Fallback to calculated_distance_km from database
+        distance = s.calculated_distance_km || 0;
       }
-      if (!coord) coord = { lat: 10.5167, lon: 76.2167 };
-      const dist = calculateDistance(
-        projectLat,
-        projectLon,
-        coord.lat,
-        coord.lon,
-      );
-      return { ...s, distance: Math.round(dist * 10) / 10 };
+      
+      return { 
+        ...s, 
+        distance: Math.round(distance * 10) / 10,
+        latitude: lat,
+        longitude: lon
+      };
     });
 
     return withDistance.sort((a, b) => a.distance - b.distance)[0];
