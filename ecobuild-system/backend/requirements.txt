@@ -12,3 +12,5 @@ bcrypt==4.0.1
 email-validator==2.1.0
 python-dotenv==1.0.0
 ifcopenshell>=0.8.0
+opencv-python-headless>=4.8.0
+shapely>=2.0.0
