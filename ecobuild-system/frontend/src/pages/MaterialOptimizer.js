@@ -17,6 +17,8 @@ const CATEGORY_MAP = {
   'steel': 'steel',
   'Blocks/Bricks': 'blocks',
   'Aggregates': 'aggregates',
+  'Masonry': 'masonry',
+  'Flooring': 'flooring',
   'Hardwood': 'timber',
   'Softwood': 'timber',
 };
@@ -61,7 +63,7 @@ function MaterialOptimizer() {
           rate: 0, // Will be filled from verified data
           unit: mat.Unit || 'kg',
           carbon: 0,
-          gst: cat === 'cement' ? 28 : cat === 'concrete' || cat === 'steel' ? 18 : 5,
+          gst: cat === 'cement' ? 28 : cat === 'concrete' || cat === 'steel' ? 18 : cat === 'blocks' || cat === 'aggregates' ? 5 : 18,
           durability: 80,
           recycled: cat === 'blocks' ? 20 : 0,
           thermal: 0,
