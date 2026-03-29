@@ -40,11 +40,14 @@ function BillOfQuantities() {
       if (hasValidParams) {
         setBoqLoading(true);
         try {
+          console.log('[BillOfQuantities] Generating BoQ for:', project.name);
           const boqData = await generateBoQAsync(project);
-          console.log('BoQ generated:', boqData?.categories?.length, 'categories');
+          console.log('[BillOfQuantities] BoQ generated:', boqData);
+          console.log('[BillOfQuantities] Categories:', boqData?.categories?.length);
+          console.log('[BillOfQuantities] Grand total:', boqData?.summary?.grandTotal);
           setBoq(boqData);
         } catch (error) {
-          console.error('Failed to generate BoQ:', error);
+          console.error('[BillOfQuantities] Failed to generate BoQ:', error);
           setBoq({
             projectInfo: { name: project.name, builtUpArea: project.buildingParams?.builtUpArea || 150, numFloors: project.buildingParams?.numFloors || 2 },
             categories: [],
@@ -54,7 +57,7 @@ function BillOfQuantities() {
           setBoqLoading(false);
         }
       } else {
-        console.log('Skipping BoQ - no valid building params');
+        console.log('[BillOfQuantities] Skipping BoQ - no valid building params');
         setBoqLoading(false);
       }
     };

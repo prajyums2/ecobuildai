@@ -1458,19 +1458,21 @@ function Reports() {
       });
       
       // Only regenerate if key changed or first time
-      if (hasValidParams && currentKey !== lastGeneratedKey) {
+        if (hasValidParams && currentKey !== lastGeneratedKey) {
         setBoqLoading(true);
         try {
-          console.log("Generating BoQ - key changed:", currentKey !== lastGeneratedKey);
+          console.log("[Reports] Generating BoQ for:", project.name);
           const boqData = await generateBoQAsync(project);
-          console.log("BoQ generated:", boqData?.categories?.length, "categories");
+          console.log("[Reports] BoQ generated:", boqData);
+          console.log("[Reports] Categories:", boqData?.categories?.length);
+          console.log("[Reports] Grand total:", boqData?.summary?.grandTotal);
           setBoq(boqData);
           setBoqGenerated(true);
           setLastGeneratedKey(currentKey);
           // Update workflow to mark BOQ as generated
           completeBOQGeneration();
         } catch (error) {
-          console.error("Failed to generate BoQ:", error);
+          console.error("[Reports] Failed to generate BoQ:", error);
           setBoq({
             projectInfo: { name: project.name, builtUpArea: project.buildingParams?.builtUpArea || 150, numFloors: project.buildingParams?.numFloors || 2 },
             categories: [],
