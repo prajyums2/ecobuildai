@@ -6,6 +6,8 @@
     "@ifc-viewer/core": "^0.2.5",
     "@react-three/drei": "^9.92.0",
     "@react-three/fiber": "^8.15.0",
+    "@thatopen/components": "^3.3.3",
+    "@thatopen/components-front": "^3.3.3",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
     "fuse.js": "^7.1.0",
