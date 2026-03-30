@@ -206,6 +206,13 @@ function MaterialOptimizer() {
   };
 
   const handleSelectMaterial = (category, material) => {
+    console.log('=== MATERIAL SELECTION DEBUG ===');
+    console.log('Category:', category);
+    console.log('Material Name:', material.name);
+    console.log('Material Rate:', material.rate);
+    console.log('Material Unit:', material.unit);
+    console.log('Full Material Object:', material);
+    
     setSelectedMaterials(prev => ({
       ...prev,
       [category]: material

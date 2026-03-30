@@ -746,76 +746,90 @@ function MaterialSummaryTab({ boq, project }) {
     // Get selected materials from project (from Material Optimizer)
     const selectedMats = project?.materialSelections || {};
     
+    // DEBUG: Log selected materials
+    console.log('=== REPORTS MATERIALS DEBUG ===');
+    console.log('selectedMats keys:', Object.keys(selectedMats));
+    console.log('selectedMats:', selectedMats);
+    console.log('cement:', selectedMats.cement);
+    console.log('steel:', selectedMats.steel);
+    console.log('timber:', selectedMats.timber);
+    console.log('blocks:', selectedMats.blocks);
+    
     // Get rate from selected material or use default
     const getRate = (key, defaultRate) => {
       const selected = selectedMats[key];
-      if (selected && selected.rate) return selected.rate;
+      console.log(`getRate(${key}):`, selected ? selected.name : 'NOT FOUND', 'rate:', selected?.rate, 'defaultRate:', defaultRate);
+      if (selected && selected.rate) {
+        console.log(`Using selected rate for ${key}:`, selected.rate);
+        return selected.rate;
+      }
       if (selected && selected.cost_per_unit) return selected.cost_per_unit;
+      console.log(`Using default rate for ${key}:`, defaultRate);
       return defaultRate;
     };
 
     const materials = {
       cement: {
         name: selectedMats.cement?.name || "Cement",
-        unit: "bags",
+        unit: selectedMats.cement?.unit || "bags",
         qty: 0,
-        rate: getRate('cement', 370),
+        rate: selectedMats.cement?.rate || 370,
         supplier: findSupplier(["cement", "ppc", "opc", "ultratech", "acc", "ramco"]),
         category: "Cement",
       },
       steel: {
         name: selectedMats.steel?.name || "Steel (TMT Bars)",
-        unit: "kg",
+        unit: selectedMats.steel?.unit || "kg",
         qty: 0,
-        rate: getRate('steel', 72),
+        rate: selectedMats.steel?.rate || 72,
         supplier: findSupplier(["steel", "tmt", "tata", "jsw", "kalliyath"]),
         category: "Steel",
       },
       sand: {
         name: selectedMats.aggregates?.name || "Sand (M-Sand)",
-        unit: "cft",
+        unit: selectedMats.aggregates?.unit || "cft",
         qty: 0,
-        rate: getRate('aggregates', 58),
+        rate: selectedMats.aggregates?.rate || 58,
         supplier: findSupplier(["sand", "m-sand"]),
         category: "Aggregates",
       },
       aggregate: {
-        name: "Aggregate (20mm)",
+        name: selectedMats.aggregates?.name || "Aggregate (20mm)",
         unit: "cft",
         qty: 0,
-        rate: getRate('aggregate', 42),
+        rate: selectedMats.aggregates?.rate || 42,
         supplier: findSupplier(["aggregate", "blue metal", "20mm"]),
         category: "Aggregates",
       },
       blocks: {
         name: selectedMats.blocks?.name || "AAC Blocks",
-        unit: "nos",
+        unit: selectedMats.blocks?.unit || "nos",
         qty: 0,
-        rate: getRate('blocks', 78),
+        rate: selectedMats.blocks?.rate || 78,
         supplier: findSupplier(["aac", "block"]),
         category: "Blocks",
       },
       masonry: {
-        name: "Masonry",
-        unit: "cum",
+        name: selectedMats.masonry?.name || "Masonry",
+        unit: selectedMats.masonry?.unit || "cum",
         qty: 0,
-        rate: getRate('masonry', 350),
+        rate: selectedMats.masonry?.rate || 350,
         supplier: findSupplier(["mortar", "cm 1:4", "masonry"]),
         category: "Masonry",
       },
       flooring: {
         name: selectedMats.flooring?.name || "Flooring Tiles",
-        unit: "sqft",
+        unit: selectedMats.flooring?.unit || "sqft",
         qty: 0,
-        rate: getRate('flooring', 95),
+        rate: selectedMats.flooring?.rate || 95,
         supplier: findSupplier(["tiles", "vitrified", "ceramic", "granite", "marble"]),
         category: "Flooring",
       },
       timber: {
         name: selectedMats.timber?.name || "Timber",
-        unit: "cft",
+        unit: selectedMats.timber?.unit || "cft",
         qty: 0,
-        rate: getRate('timber', 2500),
+        rate: selectedMats.timber?.rate || 2500,
         supplier: findSupplier(["teak", "timber", "wood", "plywood", "sal", "mahogany"]),
         category: "Timber",
       },
