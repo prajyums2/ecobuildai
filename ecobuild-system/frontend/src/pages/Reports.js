@@ -742,15 +742,15 @@ function MaterialSummaryTab({ boq, project }) {
   }
 
   // Extract material quantities from BoQ - 8 categories from database
-  const extractMaterials = () => {
+  const extractMaterials = (matSelections) => {
     // Get selected materials from project (from Material Optimizer)
-    const selectedMats = materialSelections; // Use the fallback-enabled variable
+    // Use passed parameter or fall back to project context
+    const selectedMats = matSelections || project?.materialSelections || getMaterialSelectionsFromStorage();
     
-    // Only log for debugging if we have actual data
-    if (Object.keys(selectedMats).length > 0) {
-      console.log('=== REPORTS MATERIALS (FROM CONTEXT/LOCALSTORAGE) ===');
-      console.log('selectedMats keys:', Object.keys(selectedMats));
-    }
+    // Debug output
+    console.log('=== EXTRACTING MATERIALS ===');
+    console.log('selectedMats keys:', Object.keys(selectedMats));
+    console.log('Using fallback from:', selectedMats ? 'parameter/context/storage' : 'none');
     
     // Get rate from selected material or use default
     const getRate = (key, defaultRate) => {
@@ -893,7 +893,7 @@ function MaterialSummaryTab({ boq, project }) {
     return materials;
   };
 
-  const materials = extractMaterials();
+  const materials = extractMaterials(materialSelections);
   const materialList = Object.values(materials).filter((m) => m.qty > 0);
 
   return (
