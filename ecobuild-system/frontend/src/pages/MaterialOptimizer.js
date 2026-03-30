@@ -19,6 +19,7 @@ const CATEGORY_MAP = {
   'Aggregates': 'aggregates',
   'Masonry': 'masonry',
   'Flooring': 'flooring',
+  'Timber': 'timber',
   'Hardwood': 'timber',
   'Softwood': 'timber',
 };
@@ -421,6 +422,43 @@ function MaterialOptimizer() {
       {error && (
         <div className="p-3 bg-error-bg border border-error rounded-lg text-error text-sm">
           {error}
+        </div>
+      )}
+
+      {/* Optimization Results Display */}
+      {results && Object.keys(results).length > 0 && (
+        <div className="card">
+          <div className="card-header">
+            <h4 className="font-semibold text-foreground">Optimization Results</h4>
+            <p className="text-xs text-foreground-secondary">Materials ranked by score. Top 3 options shown for each category:</p>
+          </div>
+          <div className="card-body">
+            {Object.entries(results).map(([cat, mats]) => (
+              <div key={cat} className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h5 className="font-semibold text-sm capitalize mb-2">{cat}</h5>
+                <div className="space-y-2">
+                  {mats.slice(0, 3).map((mat) => (
+                    <div key={mat.id} className="flex justify-between items-center p-2 bg-white dark:bg-gray-700 rounded border border-border">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${mat.rank === 1 ? 'bg-yellow-500 text-white' : mat.rank === 2 ? 'bg-gray-400 text-white' : 'bg-orange-300 text-white'}`}>
+                          {mat.rank}
+                        </span>
+                        <span className={mat.recommended ? 'text-primary font-medium' : ''}>
+                          {mat.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-mono">₹{mat.rate}/{mat.unit}</span>
+                        <span className={`font-bold text-sm ${mat.score >= 70 ? 'text-green-600' : mat.score >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                          Score: {Math.round(mat.score)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
