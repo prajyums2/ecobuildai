@@ -213,11 +213,19 @@ function MaterialOptimizer() {
     console.log('Material Unit:', material.unit);
     console.log('Full Material Object:', material);
     
+    const materialToSave = {
+      ...material,
+      // Ensure rate and unit are saved
+      rate: material.rate || 0,
+      unit: material.unit || 'nos'
+    };
+    
     setSelectedMaterials(prev => ({
       ...prev,
-      [category]: material
+      [category]: materialToSave
     }));
-    saveMaterialSelection(category, material);
+    saveMaterialSelection(category, materialToSave);
+    console.log('Saved material selection for:', category, materialToSave.name);
   };
 
   const calculateScore = (material, mode) => {
@@ -485,7 +493,16 @@ function MaterialOptimizer() {
               ))}
             </div>
             <button
-              onClick={() => navigate('/reports')}
+              onClick={() => {
+                // Save all selected materials before navigating
+                Object.entries(selectedMaterials).forEach(([cat, mat]) => {
+                  saveMaterialSelection(cat, mat);
+                });
+                console.log('=== SAVED ALL MATERIALS BEFORE NAVIGATION ===');
+                console.log('selectedMaterials:', selectedMaterials);
+                completeMaterialsSelection();
+                navigate('/reports');
+              }}
               className="btn btn-primary w-full mt-4"
             >
               View Reports

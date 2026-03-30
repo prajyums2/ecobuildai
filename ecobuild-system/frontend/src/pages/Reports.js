@@ -744,16 +744,13 @@ function MaterialSummaryTab({ boq, project }) {
   // Extract material quantities from BoQ - 8 categories from database
   const extractMaterials = () => {
     // Get selected materials from project (from Material Optimizer)
-    const selectedMats = project?.materialSelections || {};
+    const selectedMats = materialSelections; // Use the fallback-enabled variable
     
-    // DEBUG: Log selected materials
-    console.log('=== REPORTS MATERIALS DEBUG ===');
-    console.log('selectedMats keys:', Object.keys(selectedMats));
-    console.log('selectedMats:', selectedMats);
-    console.log('cement:', selectedMats.cement);
-    console.log('steel:', selectedMats.steel);
-    console.log('timber:', selectedMats.timber);
-    console.log('blocks:', selectedMats.blocks);
+    // Only log for debugging if we have actual data
+    if (Object.keys(selectedMats).length > 0) {
+      console.log('=== REPORTS MATERIALS (FROM CONTEXT/LOCALSTORAGE) ===');
+      console.log('selectedMats keys:', Object.keys(selectedMats));
+    }
     
     // Get rate from selected material or use default
     const getRate = (key, defaultRate) => {
@@ -1326,15 +1323,38 @@ function SuppliersTab({ boq, project }) {
 }
 
 function Reports() {
-  const navigate = useNavigate();
   const { project, completeBOQGeneration } = useProject();
   const { engineer, isConfigured: isEngineerConfigured } = useEngineer();
+  const navigate = useNavigate();
   const reportRef = useRef();
   const [activeTab, setActiveTab] = useState("boq");
   const [exporting, setExporting] = useState(false);
   const [boq, setBoq] = useState(null);
   const [boqLoading, setBoqLoading] = useState(true);
   const [citations, setCitations] = useState(null);
+  
+  // Fallback: Try to get material selections from localStorage directly
+  const getMaterialSelectionsFromStorage = () => {
+    try {
+      const stored = localStorage.getItem('ecobuild-projects');
+      if (stored) {
+        const projects = JSON.parse(stored);
+        const currentId = localStorage.getItem('ecobuild-current-project-id');
+        const current = projects.find(p => p.id === currentId);
+        if (current?.materialSelections) {
+          console.log('=== FOUND MATERIALS IN LOCALSTORAGE ===');
+          console.log('materialSelections:', current.materialSelections);
+          return current.materialSelections;
+        }
+      }
+    } catch (e) {
+      console.error('Error reading from localStorage:', e);
+    }
+    return {};
+  };
+  
+  // Use material selections from project context OR localStorage fallback
+  const materialSelections = project?.materialSelections || getMaterialSelectionsFromStorage();
 
   // ============================================
   // CALCULATED VALUES (ACCURATE)
