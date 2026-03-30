@@ -741,16 +741,33 @@ function MaterialSummaryTab({ boq, project }) {
     );
   }
 
+  // Helper to get material selections with fallback
+  const getMaterialSelections = () => {
+    if (project && project.materialSelections && Object.keys(project.materialSelections).length > 0) {
+      return project.materialSelections;
+    }
+    // Fallback to localStorage
+    try {
+      const stored = localStorage.getItem('ecobuild-projects');
+      if (stored) {
+        const projects = JSON.parse(stored);
+        const currentId = localStorage.getItem('ecobuild-current-project-id');
+        const current = projects.find(p => p.id === currentId);
+        if (current?.materialSelections && Object.keys(current.materialSelections).length > 0) {
+          return current.materialSelections;
+        }
+      }
+    } catch (e) { console.error('Error:', e); }
+    return {};
+  };
+
   // Extract material quantities from BoQ - 8 categories from database
-  const extractMaterials = (matSelections) => {
+  const extractMaterials = () => {
     // Get selected materials from project (from Material Optimizer)
-    // Use passed parameter or fall back to project context
-    const selectedMats = matSelections || project?.materialSelections || getMaterialSelectionsFromStorage();
+    const selectedMats = getMaterialSelections();
     
-    // Debug output
     console.log('=== EXTRACTING MATERIALS ===');
     console.log('selectedMats keys:', Object.keys(selectedMats));
-    console.log('Using fallback from:', selectedMats ? 'parameter/context/storage' : 'none');
     
     // Get rate from selected material or use default
     const getRate = (key, defaultRate) => {
@@ -761,7 +778,6 @@ function MaterialSummaryTab({ boq, project }) {
         return selected.rate;
       }
       if (selected && selected.cost_per_unit) return selected.cost_per_unit;
-      console.log(`Using default rate for ${key}:`, defaultRate);
       return defaultRate;
     };
 
@@ -893,7 +909,7 @@ function MaterialSummaryTab({ boq, project }) {
     return materials;
   };
 
-  const materials = extractMaterials(materialSelections);
+  const materials = extractMaterials();
   const materialList = Object.values(materials).filter((m) => m.qty > 0);
 
   return (
