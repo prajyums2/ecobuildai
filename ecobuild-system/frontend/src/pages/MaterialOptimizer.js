@@ -160,12 +160,12 @@ function MaterialOptimizer() {
       const autoSelected = {};
       selectedCategories.forEach(cat => {
         if (optimizationResults[cat] && optimizationResults[cat].length > 0) {
-          const top = optimizationResults[cat][0];
-          autoSelected[cat] = top;
-          setSelectedMaterials(prev => ({ ...prev, [cat]: top }));
-          saveMaterialSelection(cat, top);
+          autoSelected[cat] = optimizationResults[cat][0];
         }
       });
+
+      setSelectedMaterials(autoSelected);
+      saveMaterialSelection('batch', autoSelected);
 
       completeMaterialsSelection();
     } catch (err) {

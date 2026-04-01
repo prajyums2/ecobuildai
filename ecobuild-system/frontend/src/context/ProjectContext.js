@@ -255,9 +255,22 @@ export function ProjectProvider({ children }) {
   };
 
   const saveMaterialSelection = (category, material) => {
-    updateCurrentProject({
-      materialSelections: { ...project.materialSelections, [category]: material }
-    });
+    setProjects(prev => prev.map(p => {
+      if (p.id === currentProjectId) {
+        let newSelections;
+        if (category === 'batch' && typeof material === 'object') {
+          newSelections = { ...p.materialSelections, ...material };
+        } else {
+          newSelections = { ...p.materialSelections, [category]: material };
+        }
+        return {
+          ...p,
+          materialSelections: newSelections,
+          lastModified: new Date().toISOString()
+        };
+      }
+      return p;
+    }));
   };
 
   const updateBIMData = (bimData) => {
