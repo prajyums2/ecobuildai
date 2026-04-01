@@ -678,7 +678,7 @@ export function calculatePaintQuantity(area, coats = 2) {
  * @param {Object} project - Project data
  * @param {Object} rates - Material rates (optional, defaults to FALLBACK_RATES)
  */
-export function generateBoQ(project, rates = FALLBACK_RATES) {
+export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections = {}) {
   const { buildingParams, buildingClassification } = project;
   
   // Calculate derived quantities
@@ -774,6 +774,20 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
                         11.1;
   
   const blocksWithWastage = netWallArea * blocksPerSqm * 1.05; // 5% wastage
+  
+  // Resolve rates from optimizer selections, falling back to API/fallback rates
+  const cementSelection = materialSelections.cement;
+  const steelSelection = materialSelections.steel;
+  const concreteSelection = materialSelections.concrete;
+  const masonrySelection = materialSelections.masonry;
+  const aggregatesSelection = materialSelections.aggregates;
+
+  const resolvedCementRate = cementSelection?.rate || rates?.cement?.opc_53?.rate || 420;
+  const resolvedSteelRate = steelSelection?.rate || rates?.steel?.tmt_fe500?.rate || 72;
+  const resolvedConcreteRate = concreteSelection?.rate || rates?.concrete?.m25?.rate || 7200;
+  const resolvedBlockRate = masonrySelection?.rate || rates?.blocks?.aac_200?.rate || 78;
+  const resolvedSandRate = aggregatesSelection?.rate || rates?.aggregate?.m_sand?.rate || 58;
+  const resolvedAggregateRate = aggregatesSelection?.rate || rates?.aggregate?.crushed_20mm?.rate || 42;
   
   // Plaster areas - based on wall area
   const internalPlasterArea = netWallArea * 1.5; // Internal walls (both sides) + ceiling
@@ -874,8 +888,9 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M20 grade PCC (1:1.5:3) below foundation including formwork',
     quantity: pccVolume.toFixed(3),
     unit: 'cum',
-    rate: 5200,
+    rate: Math.round(resolvedConcreteRate * 0.72),
     remarks: `Cement: ${pccConcrete.cement.bags} bags, Sand: ${pccConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${pccConcrete.aggregate.cft.toFixed(2)} cft`,
+
   });
   
   // Foundation concrete
@@ -885,7 +900,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M25 grade RCC for foundation including formwork and curing',
     quantity: foundationVolume.toFixed(3),
     unit: 'cum',
-    rate: 7200,
+    rate: Math.round(resolvedConcreteRate),
     remarks: `Cement: ${footingConcrete.cement.bags} bags, Sand: ${footingConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${footingConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -896,7 +911,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M25 grade RCC for columns including formwork and curing',
     quantity: columnVolume.toFixed(3),
     unit: 'cum',
-    rate: 7800,
+    rate: Math.round(resolvedConcreteRate * 1.08),
     remarks: `Cement: ${columnConcrete.cement.bags} bags, Sand: ${columnConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${columnConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -907,7 +922,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M25 grade RCC for beams including formwork and curing',
     quantity: beamVolume.toFixed(3),
     unit: 'cum',
-    rate: 7500,
+    rate: Math.round(resolvedConcreteRate * 1.04),
     remarks: `Cement: ${beamConcrete.cement.bags} bags, Sand: ${beamConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${beamConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -918,7 +933,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M25 grade RCC for slabs including formwork and curing',
     quantity: slabVolume.toFixed(3),
     unit: 'cum',
-    rate: 7200,
+    rate: Math.round(resolvedConcreteRate),
     remarks: `Cement: ${slabConcrete.cement.bags} bags, Sand: ${slabConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${slabConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -929,7 +944,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M20 grade RCC for lintels including formwork and curing',
     quantity: lintelVolume.toFixed(3),
     unit: 'cum',
-    rate: 7500,
+    rate: Math.round(resolvedConcreteRate * 1.04),
     remarks: `Cement: ${lintelConcrete.cement.bags} bags, Sand: ${lintelConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${lintelConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -940,7 +955,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying M20 grade RCC for sunshades/chajjas including formwork and curing',
     quantity: sunshadeVolume.toFixed(3),
     unit: 'cum',
-    rate: 7800,
+    rate: Math.round(resolvedConcreteRate * 1.08),
     remarks: `Cement: ${sunshadeConcrete.cement.bags} bags, Sand: ${sunshadeConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${sunshadeConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
@@ -954,11 +969,11 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
   };
   
   // Steel for each element - with defensive checks
-  const steelRate = rates?.steel?.tmt_fe500?.rate || 72;
+  const steelRate = resolvedSteelRate;
   const steelWastage = rates?.steel?.tmt_fe500?.wastage || 0.05;
   const bindingWireRate = rates?.steel?.binding_wire?.rate || 85;
   const bindingWireWastage = rates?.steel?.binding_wire?.wastage || 0.03;
-  const cementRate = rates?.cement?.opc_53?.rate || 420;
+  const cementRate = resolvedCementRate;
   const cementWastage = rates?.cement?.opc_53?.wastage || 0.02;
   
   const footingSteel = calculateSteelQuantity(foundationVolume, 'footing');
@@ -967,7 +982,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and fixing Fe500 TMT steel bars for foundation including cutting, bending, binding with binding wire',
     quantity: applyWastage(footingSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
-    rate: steelRate + 18,
+    rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${footingSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
@@ -977,7 +992,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and fixing Fe500 TMT steel bars for columns including cutting, bending, binding',
     quantity: applyWastage(columnSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
-    rate: steelRate + 18,
+    rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${columnSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
@@ -987,7 +1002,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and fixing Fe500 TMT steel bars for beams including cutting, bending, binding',
     quantity: applyWastage(beamSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
-    rate: steelRate + 18,
+    rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${beamSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
@@ -997,7 +1012,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and fixing Fe500 TMT steel bars for slab including cutting, bending, binding',
     quantity: applyWastage(slabSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
-    rate: steelRate + 18,
+    rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${slabSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
@@ -1007,7 +1022,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and fixing Fe500 TMT steel bars for lintels including cutting, bending, binding',
     quantity: applyWastage(lintelSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
-    rate: steelRate + 18,
+    rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${lintelSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
@@ -1099,7 +1114,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES) {
     description: 'Providing and laying AAC blocks of size 600x200x200mm in CM 1:4 including curing',
     quantity: applyWastage(masonryQty.blocks, blockWastage),
     unit: 'nos',
-    rate: (rates?.blocks?.aac_blocks_600x200x200?.rate || 52) + 15,
+    rate: resolvedBlockRate,
     remarks: `Raw: ${masonryQty.blocks} nos + ${(blockWastage * 100).toFixed(0)}% breakage`,
   });
   
@@ -1715,7 +1730,8 @@ export function clearRatesCache() {
  */
 export async function generateBoQAsync(project) {
   const rates = await fetchMaterialRates();
-  return generateBoQ(project, rates);
+  const materialSelections = project?.materialSelections || {};
+  return generateBoQ(project, rates, materialSelections);
 }
 
 /**
