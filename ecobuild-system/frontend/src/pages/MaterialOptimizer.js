@@ -42,6 +42,7 @@ function MaterialOptimizer() {
   const [optimizing, setOptimizing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [ahpMode, setAhpMode] = useState('simple'); // 'simple' or 'advanced'
 
   // Fetch materials from database
   useEffect(() => {
@@ -54,30 +55,34 @@ function MaterialOptimizer() {
       const response = await ecoBuildAPI.getMaterials({ limit: 100 });
       const mats = response.data.materials || [];
       
-      // Group by category
+      // Group by category using new schema field names
       const grouped = {};
       mats.forEach(mat => {
-        const rawCat = mat.Category || 'Other';
-        const cat = CATEGORY_MAP[rawCat] || rawCat.toLowerCase();
+        const cat = (mat.category || 'other').toLowerCase();
         
         if (!grouped[cat]) grouped[cat] = [];
         
-        // Transform to optimizer format
+        // Extract from nested schema
+        const phys = mat.physical_properties || {};
+        const env = mat.environmental_properties || {};
+        const civ = mat.civil_properties || {};
+        const fin = mat.financial_properties || {};
+        
         grouped[cat].push({
           id: mat._id,
-          name: mat.MaterialName,
-          materialCode: mat.MaterialCode,
-          rate: 0, // Will be filled from verified data
-          unit: mat.Unit || 'kg',
-          carbon: 0,
-          gst: cat === 'cement' ? 28 : cat === 'concrete' || cat === 'steel' ? 18 : cat === 'blocks' || cat === 'aggregates' ? 5 : 18,
-          durability: 80,
-          recycled: cat === 'blocks' ? 20 : 0,
-          thermal: 0,
-          grade: mat.GradeOrModel,
-          bisCode: mat['BIS Code'],
-          applications: mat.Applications,
-          description: mat.Description,
+          name: mat.name || 'Unknown',
+          materialCode: mat.material_code || '',
+          rate: fin.cost_per_unit || 0,
+          unit: fin.unit_type || 'kg',
+          carbon: env.embodied_carbon || 0,
+          gst: fin.gst_rate || 18,
+          durability: civ.durability_years || 50,
+          recycled: env.recycled_content || 0,
+          thermal: phys.thermal_conductivity || 0,
+          grade: civ.structural_grade || '',
+          bisCode: civ.is_code || '',
+          applications: mat.description || '',
+          description: mat.description || '',
           recommended: false,
         });
       });
@@ -233,8 +238,6 @@ function MaterialOptimizer() {
     saveMaterialSelection(category, materialToSave);
     console.log('Saved material selection for:', category, materialToSave.name);
   };
-
-  const [ahpMode, setAhpMode] = useState('simple'); // 'simple' or 'advanced'
 
   const calculateScore = (material, mode) => {
     const weights = ahpMode === 'simple'
