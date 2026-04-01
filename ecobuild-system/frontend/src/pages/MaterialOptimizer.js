@@ -144,6 +144,14 @@ function MaterialOptimizer() {
     setError(null);
 
     try {
+      console.log('[Optimizer] Selected categories:', selectedCategories);
+      console.log('[Optimizer] dbMaterials keys:', Object.keys(dbMaterials));
+      Object.entries(dbMaterials).forEach(([cat, mats]) => {
+        const withRates = mats.filter(m => m.rate > 0);
+        console.log(`  ${cat}: ${mats.length} total, ${withRates.length} with rates`);
+        withRates.slice(0, 2).forEach(m => console.log(`    - ${m.name}: Rs${m.rate}/${m.unit}`));
+      });
+
       const optimizationResults = {};
       selectedCategories.forEach(cat => {
         const mats = dbMaterials[cat] || [];
@@ -153,6 +161,7 @@ function MaterialOptimizer() {
           .sort((a, b) => b.score - a.score)
           .map((mat, idx) => ({ ...mat, rank: idx + 1 }));
         optimizationResults[cat] = scored;
+        console.log(`  ${cat}: ${scored.length} scored`);
       });
 
       setResults(optimizationResults);
@@ -164,8 +173,30 @@ function MaterialOptimizer() {
         }
       });
 
+      console.log('[Optimizer] autoSelected keys:', Object.keys(autoSelected));
+      Object.entries(autoSelected).forEach(([k, v]) => {
+        console.log(`  ${k}: ${v.name} @ Rs${v.rate}/${v.unit}`);
+      });
+
       setSelectedMaterials(autoSelected);
+
+      // Save to context
       saveMaterialSelection('batch', autoSelected);
+
+      // ALSO save directly to localStorage as reliable fallback
+      try {
+        const projects = JSON.parse(localStorage.getItem('ecobuild-projects') || '[]');
+        const currentId = localStorage.getItem('ecobuild-current-project-id');
+        const idx = projects.findIndex(p => p.id === currentId);
+        if (idx >= 0) {
+          projects[idx].materialSelections = { ...projects[idx].materialSelections, ...autoSelected };
+          projects[idx].lastModified = new Date().toISOString();
+          localStorage.setItem('ecobuild-projects', JSON.stringify(projects));
+          console.log('[Optimizer] Saved to localStorage:', Object.keys(autoSelected));
+        }
+      } catch (e) {
+        console.error('[Optimizer] localStorage save failed:', e);
+      }
 
       completeMaterialsSelection();
     } catch (err) {
