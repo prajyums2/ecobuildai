@@ -261,10 +261,12 @@ class SeismicAnalyzer:
         # Floor forces
         floor_shears = []
         cumulative_shear = Vb
+        overturning_moment = 0.0
         
         for i in range(num_floors - 1, -1, -1):
             Fi = (floor_weights[i] * heights[i] / total_Wi_hi) * Vb
             cumulative_shear -= Fi
+            overturning_moment += Fi * heights[i]
             
             floor_shears.append({
                 "floor": i + 1,
@@ -272,7 +274,7 @@ class SeismicAnalyzer:
                 "weight_kn": round(floor_weights[i], 2),
                 "seismic_force_kn": round(Fi, 2),
                 "shear_force_kn": round(cumulative_shear, 2),
-                "overturning_moment_knm": round(cumulative_shear * heights[i] * 0.5, 2)
+                "overturning_moment_knm": round(overturning_moment, 2)
             })
         
         # Reverse to show bottom floor first

@@ -10,6 +10,12 @@ const OPTIMIZATION_MODES = [
   { id: 'luxury', label: 'Luxury', description: '70% property-weight', icon: FaChartBar },
 ];
 
+const AHP_WEIGHT_PROFILES = {
+  sustainability: { cost: 0.15, strength: 0.25, sustainability: 0.60 },
+  luxury: { cost: 0.10, strength: 0.60, sustainability: 0.30 },
+  balanced: { cost: 0.33, strength: 0.34, sustainability: 0.33 },
+};
+
 const CATEGORY_MAP = {
   'Concrete': 'concrete',
   'Cement': 'cement',
@@ -228,19 +234,30 @@ function MaterialOptimizer() {
     console.log('Saved material selection for:', category, materialToSave.name);
   };
 
+  const [ahpMode, setAhpMode] = useState('simple'); // 'simple' or 'advanced'
+
   const calculateScore = (material, mode) => {
-    const weights = {
-      sustainability: { cost: 0.2, carbon: 0.5, durability: 0.2, recycled: 0.1 },
-      balanced: { cost: 0.3, carbon: 0.3, durability: 0.25, recycled: 0.15 },
-      luxury: { cost: 0.1, carbon: 0.2, durability: 0.5, recycled: 0.2 }
-    };
+    const weights = ahpMode === 'simple'
+      ? AHP_WEIGHT_PROFILES
+      : {
+          sustainability: { cost: 0.2, carbon: 0.5, durability: 0.2, recycled: 0.1 },
+          balanced: { cost: 0.3, carbon: 0.3, durability: 0.25, recycled: 0.15 },
+          luxury: { cost: 0.1, carbon: 0.2, durability: 0.5, recycled: 0.2 }
+        };
     const w = weights[mode] || weights.balanced;
-    
+
+    if (ahpMode === 'simple') {
+      const costScore = material.rate > 0 ? Math.max(0, 100 - (material.rate / 50)) : 50;
+      const strengthScore = material.durability || 50;
+      const sustainabilityScore = Math.max(0, 100 - (material.carbon * 50)) * 0.5 + ((material.recycled || 0) * 2) * 0.5;
+      return costScore * (w.cost || 0) + strengthScore * (w.strength || 0) + sustainabilityScore * (w.sustainability || 0);
+    }
+
     const costScore = material.rate > 0 ? Math.max(0, 100 - (material.rate / 50)) : 50;
     const carbonScore = Math.max(0, 100 - (material.carbon * 50));
     const durabilityScore = material.durability || 50;
     const recycledScore = (material.recycled || 0) * 2;
-    
+
     return (
       costScore * w.cost +
       carbonScore * w.carbon +
@@ -304,7 +321,7 @@ function MaterialOptimizer() {
           <h3 className="font-semibold text-foreground">Optimization Mode</h3>
         </div>
         <div className="card-body">
-          <div className="flex gap-4">
+          <div className="flex gap-4 mb-4">
             {OPTIMIZATION_MODES.map((m) => (
               <button
                 key={m.id}
@@ -316,6 +333,26 @@ function MaterialOptimizer() {
                 <span className="block text-xs opacity-70 mt-1">{m.description}</span>
               </button>
             ))}
+          </div>
+          <div className="flex items-center gap-4 pt-3 border-t border-border">
+            <span className="text-sm text-foreground-secondary">AHP Mode:</span>
+            <button
+              onClick={() => setAhpMode('simple')}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${ahpMode === 'simple' ? 'bg-primary text-white' : 'bg-background-tertiary text-foreground-secondary hover:bg-background-secondary'}`}
+            >
+              Simple (Report) — Cost/Strength/Sustainability
+            </button>
+            <button
+              onClick={() => setAhpMode('advanced')}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${ahpMode === 'advanced' ? 'bg-primary text-white' : 'bg-background-tertiary text-foreground-secondary hover:bg-background-secondary'}`}
+            >
+              Advanced — 6 Criteria
+            </button>
+            <span className="text-xs text-foreground-muted ml-2">
+              {ahpMode === 'simple'
+                ? `Weights: Cost ${AHP_WEIGHT_PROFILES[mode].cost}, Strength ${AHP_WEIGHT_PROFILES[mode].strength}, Sustainability ${AHP_WEIGHT_PROFILES[mode].sustainability}`
+                : 'Carbon, Recycled, Cost, Durability, Thermal, Aesthetics'}
+            </span>
           </div>
         </div>
       </div>

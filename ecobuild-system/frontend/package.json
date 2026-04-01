@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@heyputer/puter.js": "^2.2.14",
     "@react-three/drei": "^9.92.0",
     "@react-three/fiber": "^8.15.0",
     "axios": "^1.6.2",

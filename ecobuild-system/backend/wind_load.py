@@ -230,13 +230,13 @@ class WindLoadCalculator:
         G = self.calculate_gust_factor(building_height, terrain)
         
         # Calculate forces for both directions
-        # Normal to long face
+        # Normal to long face (IS 875 Part 3: Pz * Cp * G * A)
         wind_area_long = building_height * building_width
-        Fx_long = 0.6 * (Vz/52) ** 2 * wind_area_long * G  # Simplified
+        Fx_long = Pz * (Cp_long - Cp_leeward_long) * G * wind_area_long / 1000  # kN
         
         # Normal to short face  
         wind_area_short = building_height * building_length
-        Fy_short = 0.6 * (Vz/52) ** 2 * wind_area_short * G
+        Fy_short = Pz * (Cp_short - Cp_leeward_short) * G * wind_area_short / 1000  # kN
         
         # Total wind force
         total_force = max(Fx_long, Fy_short)

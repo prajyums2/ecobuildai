@@ -1,324 +1,305 @@
-// EcoBuild AI Service
-// Uses local expert system for construction recommendations
+// EcoBuild AI Service - Powered by Puter.js (Free, Unlimited AI)
+// Uses puter.ai.chat() for real AI responses with no API key needed
+
+import { puter } from '@heyputer/puter.js';
+
+const AI_MODEL = 'gpt-4.1-nano';
 
 /**
- * Generate AI response based on project data
+ * Generate AI response using Puter.js
  */
 export async function generateAIResponse(question, project, chatHistory = [], boqData = null, carbonData = null) {
-  return generateExpertResponse(question, project, boqData, carbonData);
+  const systemPrompt = buildSystemPrompt(project, boqData, carbonData);
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...chatHistory.slice(-10).map(msg => ({
+      role: msg.role === 'user' ? 'user' : 'assistant',
+      content: msg.content
+    })),
+    { role: 'user', content: question }
+  ];
+
+  try {
+    const response = await puter.ai.chat(messages, { model: AI_MODEL });
+    return typeof response === 'string' ? response : response.message?.content || response;
+  } catch (error) {
+    console.warn('Puter.js AI failed, falling back to local:', error.message);
+    return generateFallbackResponse(question, project, boqData, carbonData);
+  }
 }
 
 /**
- * Generate AI recommendations for the Reports section
+ * Generate streaming AI response
  */
-export function generateAIRecommendations(project, boq, carbon) {
-  const bp = project?.buildingParams || {};
-  const recommendations = [];
-  
-  const builtUpArea = bp.builtUpArea || 0;
-  const numFloors = bp.numFloors || 1;
-  const totalArea = builtUpArea * numFloors;
-  const carbonTotal = carbon?.total || 0;
-  const boqTotal = boq?.summary?.grandTotal || 0;
-  
-  // Cement recommendations
-  recommendations.push({
-    category: 'Materials',
-    priority: 'High',
-    title: 'Use PPC Cement for 35% Lower Carbon',
-    description: 'PPC (Fly Ash) cement reduces embodied carbon by 35% compared to OPC 53. It also has better durability and workability in Kerala\'s humid climate.',
-    impact: 'Save ' + Math.round(carbonTotal * 0.15) + ' kg CO2',
-    carbonReduction: Math.round(carbonTotal * 0.15),
-    costImpact: 'Save 5-10% on cement cost',
-  });
-  
-  // Block recommendations
-  recommendations.push({
-    category: 'Materials',
-    priority: 'Medium',
-    title: 'Use AAC Blocks Instead of Clay Bricks',
-    description: 'AAC blocks are 50% lighter than traditional clay bricks, reducing foundation load and transport emissions. They also provide better thermal insulation.',
-    impact: 'Better thermal comfort + 30% less transport emissions',
-    carbonReduction: Math.round(totalArea * 0.5),
-    costImpact: 'Similar cost, faster construction',
-  });
-  
-  // Steel optimization
-  recommendations.push({
-    category: 'Structural',
-    priority: 'High',
-    title: 'Optimize Steel Reinforcement',
-    description: 'Using Fe500D steel allows for 15% less steel consumption compared to Fe415 while maintaining structural integrity per IS 456:2000.',
-    impact: 'Reduce steel by 15%',
-    carbonReduction: Math.round(carbonTotal * 0.1),
-    costImpact: 'Save Rs ' + Math.round(totalArea * 50),
-  });
-  
-  // Water conservation
-  if (!bp.hasRainwaterHarvesting) {
-    recommendations.push({
-      category: 'Sustainability',
-      priority: 'High',
-      title: 'Add Rainwater Harvesting System',
-      description: 'Rainwater harvesting is mandatory in Kerala for buildings >100 sq.m plot area. It also provides 10 GRIHA points.',
-      impact: '10 GRIHA points + water savings',
-      carbonReduction: 0,
-      costImpact: 'Investment: Rs 25,000-50,000',
-    });
+export async function generateAIResponseStream(question, project, chatHistory = [], onChunk) {
+  const systemPrompt = buildSystemPrompt(project);
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...chatHistory.slice(-10).map(msg => ({
+      role: msg.role === 'user' ? 'user' : 'assistant',
+      content: msg.content
+    })),
+    { role: 'user', content: question }
+  ];
+
+  try {
+    const response = await puter.ai.chat(messages, { model: AI_MODEL, stream: true });
+    let fullText = '';
+    for await (const part of response) {
+      if (part?.text) {
+        fullText += part.text;
+        if (onChunk) onChunk(part.text, fullText);
+      }
+    }
+    return fullText;
+  } catch (error) {
+    console.warn('Puter.js streaming failed:', error.message);
+    return generateFallbackResponse(question, project);
   }
-  
-  // Solar water heater
-  if (!bp.hasSolarWaterHeater) {
-    recommendations.push({
-      category: 'Sustainability',
-      priority: 'Medium',
-      title: 'Install Solar Water Heater',
-      description: 'Solar water heaters save electricity and provide 10 GRIHA points. ROI is typically 3-4 years.',
-      impact: '10 GRIHA points + 60% water heating savings',
-      carbonReduction: Math.round(totalArea * 0.2),
-      costImpact: 'Investment: Rs 30,000-60,000',
-    });
-  }
-  
-  // Sustainable priority
-  if (bp.sustainabilityPriority !== 'high') {
-    recommendations.push({
-      category: 'Sustainability',
-      priority: 'Low',
-      title: 'Increase Sustainability Priority',
-      description: 'Setting sustainability priority to "High" unlocks additional GRIHA points and improves overall green building rating.',
-      impact: 'Additional GRIHA points',
-      carbonReduction: 0,
-      costImpact: 'No additional cost',
-    });
-  }
-  
-  // Cost optimization for large projects
-  if (totalArea > 500) {
-    recommendations.push({
-      category: 'Cost',
-      priority: 'Medium',
-      title: 'Bulk Purchase Materials',
-      description: 'For projects above 500 sq.m, negotiate bulk discounts with suppliers. Cement and steel typically offer 5-10% bulk discounts.',
-      impact: 'Save 5-10% on material costs',
-      carbonReduction: 0,
-      costImpact: 'Save Rs ' + Math.round(boqTotal * 0.05),
-    });
-  }
-  
-  return recommendations;
 }
 
 /**
- * Expert system for construction advice
+ * Analyze floorplan image using Puter.js vision
  */
-function generateExpertResponse(question, project, boq, carbon) {
-  const q = question.toLowerCase().trim();
-  const bp = project?.buildingParams || {};
-  
-  const builtUpArea = bp.builtUpArea || 0;
-  const numFloors = bp.numFloors || 1;
-  const totalArea = builtUpArea * numFloors;
-  
-  // Greeting
-  if (['hi', 'hello', 'hey', 'namaste'].some(g => q.includes(g))) {
-    return `Namaste! I'm your EcoBuild construction assistant.
+export async function analyzeFloorplan(imageDataUrl) {
+  const prompt = `You are a civil engineering assistant analyzing an architectural floor plan. Identify and list:
 
-Your project: ${project?.name || 'Not configured'}
-Size: ${totalArea} sq.m across ${numFloors} floors
+1. All rooms visible (bedrooms, bathrooms, kitchen, living room, etc.)
+2. Approximate dimensions of each room in meters (estimate from the drawing scale if visible)
+3. Total built-up area estimate in square meters
+4. Number of floors (if indicated)
+5. Wall thickness estimates
+6. Door and window locations
 
-I can help with:
-- Material selection and optimization
-- Cost estimation and savings
-- Sustainability ratings (GRIHA/IGBC/LEED)
-- Structural design and IS codes
-- Kerala building regulations
+Respond in this exact JSON format:
+{
+  "rooms": [
+    {"name": "Living Room", "length_m": 4.5, "width_m": 3.5, "area_sqm": 15.75},
+    ...
+  ],
+  "total_built_up_sqm": 120,
+  "num_floors": 1,
+  "wall_thickness_mm": 230,
+  "doors": 6,
+  "windows": 8,
+  "notes": "Any additional observations"
+}
 
-What would you like to know?`;
+If the image is not a floor plan or cannot be analyzed, respond with: {"error": "Could not analyze image", "rooms": []}`;
+
+  try {
+    const response = await puter.ai.chat(prompt, imageDataUrl, { model: AI_MODEL });
+    const text = typeof response === 'string' ? response : response.message?.content || response;
+    return parseFloorplanResponse(text);
+  } catch (error) {
+    console.warn('Floorplan analysis failed:', error.message);
+    return {
+      error: 'AI analysis unavailable. Please enter quantities manually.',
+      rooms: []
+    };
   }
-  
-  // GRIHA/Sustainability
-  if (q.includes('griha') || q.includes('sustainab') || q.includes('green building')) {
-    const score = calculateGRIHAScore(bp);
-    return `GRIHA Rating for your project:
+}
 
-YOUR PROJECT: ${project?.name || 'Unnamed'}
-Size: ${totalArea} sq.m
-Current Score: ${score}/100
+/**
+ * Generate AI recommendations for Reports page
+ */
+export async function generateAIRecommendations(project, boq, carbon, materials) {
+  const prompt = `You are an expert civil engineer and sustainability consultant for construction in Kerala, India.
 
-GRIHA RATING LEVELS:
-- 1-Star: 36-45 points
-- 2-Star: 46-54 points
-- 3-Star: 55-64 points (Good)
-- 4-Star: 65-74 points (Very Good)
-- 5-Star: 75-100 points (Excellent)
-
-YOUR CURRENT FEATURES:
-- Rainwater Harvesting: ${bp.hasRainwaterHarvesting ? 'Yes (+10 pts)' : 'No'}
-- Solar Water Heater: ${bp.hasSolarWaterHeater ? 'Yes (+10 pts)' : 'No'}
-- STP: ${bp.hasSTP ? 'Yes (+8 pts)' : 'No'}
-
-TO IMPROVE YOUR SCORE:
-1. Add Rainwater Harvesting: +10 points
-2. Add Solar Water Heater: +10 points
-3. Add STP: +8 points
-4. Set priority to High: +5 points
-
-With these additions, your score could reach ${score + 33}/100.`;
-  }
-  
-  // Carbon/Environment
-  if (q.includes('carbon') || q.includes('co2') || q.includes('environment') || q.includes('emission')) {
-    const carbonTotal = carbon?.total || 0;
-    return `Carbon Footprint Analysis:
-
-YOUR PROJECT: ${project?.name || 'Unnamed'}
-Total Embodied Carbon: ${(carbonTotal / 1000).toFixed(1)} tonnes CO2
-
-MAJOR CARBON CONTRIBUTORS:
-1. Cement: ~45% of total (OPC = 0.93 kg CO2/kg)
-2. Steel: ~35% of total (Fe500 = 2.5 kg CO2/kg)
-3. Aggregates: ~10% of total
-4. Blocks: ~5% of total
-5. Transport: ~5% of total
-
-REDUCTION STRATEGIES:
-- Use PPC cement: 35% less carbon
-- Use Fe500D steel: allows 15% reduction
-- Use AAC blocks: 30% lighter
-- Use M-sand instead of river sand
-- Local materials: reduce transport emissions
-
-These changes can reduce your carbon footprint by 20-30%.`;
-  }
-  
-  // Materials
-  if (q.includes('material') || q.includes('cement') || q.includes('steel') || q.includes('brick')) {
-    return `Material Recommendations for Kerala Climate:
-
-CEMENT:
-- PPC (Fly Ash): Rs 370/bag - RECOMMENDED
-  • 35% less carbon than OPC
-  • Better durability in humid climate
-  • IS 1489 compliant
-
-- OPC 53: Rs 420/bag
-  • Higher strength
-  • More carbon intensive
-
-STEEL:
-- Fe 500 TMT: Rs 72/kg - STANDARD
-  • IS 1786 compliant
-  • Good ductility
-  • IS 456 recommends 0.8% for columns
-
-- Fe 500D: Rs 75/kg - BETTER
-  • Higher elongation
-  • Better for seismic zones
-
-BLOCKS:
-- AAC Blocks: Rs 78/nos - RECOMMENDED
-  • 50% lighter than clay bricks
-  • Better thermal insulation
-  • Faster construction
-
-- Fly Ash Bricks: Rs 10/nos
-  • Eco-friendly (60% fly ash)
-  • Lower embodied carbon
-
-SAND:
-- M-Sand: Rs 58/cft - RECOMMENDED
-  • Manufactured (consistent quality)
-  • No environmental issues
-  • IS 383 compliant`;
-  }
-  
-  // Cost/Budget
-  if (q.includes('cost') || q.includes('budget') || q.includes('price') || q.includes('estimate') || q.includes('expensive')) {
-    const baseCost = totalArea * 16000;
-    return `Cost Estimate for your project:
+Analyze this project and provide specific, actionable recommendations:
 
 PROJECT: ${project?.name || 'Unnamed'}
-Area: ${totalArea} sq.m (${numFloors} floors)
 Location: ${project?.location?.district || 'Kerala'}
+Built-up area: ${project?.buildingParams?.builtUpArea || 'N/A'} sqm
+Floors: ${project?.buildingParams?.numFloors || 'N/A'}
 
-BREAKDOWN (Kerala 2026):
-- Structure (RCC): Rs ${Math.round(baseCost * 0.35).toLocaleString()}
-- Masonry: Rs ${Math.round(baseCost * 0.15).toLocaleString()}
-- Finishes: Rs ${Math.round(baseCost * 0.25).toLocaleString()}
-- Doors/Windows: Rs ${Math.round(baseCost * 0.10).toLocaleString()}
-- Electrical: Rs ${Math.round(baseCost * 0.08).toLocaleString()}
-- Plumbing: Rs ${Math.round(baseCost * 0.07).toLocaleString()}
-────────────────────────
-TOTAL: Rs ${Math.round(baseCost).toLocaleString()}
+${boq ? `BOQ TOTAL: Rs ${(boq.summary?.grandTotal || 0).toLocaleString()}
+Concrete: ${boq.summary?.concrete || 0} cum
+Steel: ${boq.summary?.steel || 0} kg
+Blocks: ${boq.summary?.blocks || 0} nos` : ''}
 
-Per sq.m: Rs 16,000
+${carbon ? `Embodied Carbon: ${(carbon.total || 0).toLocaleString()} kg CO2` : ''}
 
-SAVINGS TIPS:
-1. Use PPC cement: 5-10% cheaper
-2. Use AAC blocks: faster construction
-3. Bulk purchase: 5-8% discount
-4. Standardize sizes: reduces wastage`;
+${materials ? `Selected Materials: ${materials.map(m => m.name).join(', ')}` : ''}
+
+Provide 5-7 specific recommendations covering:
+1. Material alternatives to reduce carbon
+2. Cost optimization strategies
+3. Structural efficiency improvements
+4. Kerala-specific climate considerations
+5. Green building certification tips (GRIHA/IGBC/LEED)
+
+Format each recommendation with:
+- Title
+- Specific action
+- Expected impact (cost/carbon savings with numbers)
+- Priority (High/Medium/Low)
+
+Keep it concise and practical.`;
+
+  try {
+    const response = await puter.ai.chat(prompt, { model: AI_MODEL });
+    return typeof response === 'string' ? response : response.message?.content || response;
+  } catch (error) {
+    console.warn('AI recommendations failed:', error.message);
+    return generateFallbackRecommendations(project, boq, carbon);
   }
-  
-  // Structural
-  if (q.includes('structural') || q.includes('column') || q.includes('beam') || q.includes('foundation') || q.includes('is 456') || q.includes('design')) {
-    return `Structural Design Information:
-
-YOUR PROJECT: ${project?.name || 'Unnamed'}
-Area: ${totalArea} sq.m, Floors: ${numFloors}
-
-MATERIAL REQUIREMENTS:
-- Cement: ${Math.round(totalArea * 4.5)} bags
-- Steel: ${Math.round(totalArea * 70)} kg
-- Sand: ${Math.round(totalArea * 0.03 * 35.31)} cft
-- Aggregate: ${Math.round(totalArea * 0.05 * 35.31)} cft
-
-TYPICAL MEMBER SIZES:
-- Slab: 125-150mm thick
-- Beam: 230x450mm
-- Column: 230x300mm
-- Footing: 1.0-1.5m depth
-
-IS CODES:
-- IS 456:2000 - Concrete design
-- IS 1893:2016 - Seismic (Kerala: Zone III)
-- IS 875 - Loads
-- IS 10262:2019 - Mix design
-
-The BoQ calculator uses these standards to generate accurate material quantities.`;
-  }
-  
-  // Default
-  return `I can help you with:
-
-- Sustainability ratings (GRIHA, IGBC, LEED)
-- Material recommendations for Kerala climate
-- Cost estimation and budget planning
-- Structural design and IS codes
-- Building regulations
-
-Try asking:
-"How can I improve my sustainability score?"
-"What materials should I use?"
-"What's the estimated cost?"
-"Explain GRIHA ratings"
-
-Or check the Reports section for detailed analysis.`;
 }
 
 /**
- * Calculate GRIHA score based on project parameters
+ * Generate AI executive summary for reports
  */
-function calculateGRIHAScore(bp) {
-  if (!bp) return 0;
-  let score = 15; // Base
-  if (bp.hasRainwaterHarvesting) score += 10;
-  if (bp.hasSolarWaterHeater) score += 10;
-  if (bp.hasSTP) score += 8;
-  if (bp.sustainabilityPriority === 'high') score += 12;
-  else if (bp.sustainabilityPriority === 'medium') score += 7;
-  return Math.min(100, score);
+export async function generateExecutiveSummary(project, boq, carbon, sustainability) {
+  const prompt = `Write a professional executive summary for this construction project report:
+
+PROJECT: ${project?.name || 'Unnamed'}
+Location: ${project?.location?.district || 'Kerala'}, India
+Type: ${project?.buildingParams?.buildingType || 'Residential'}
+Built-up area: ${project?.buildingParams?.builtUpArea || 'N/A'} sqm
+Floors: ${project?.buildingParams?.numFloors || 'N/A'}
+
+${boq ? `Estimated Cost: Rs ${(boq.summary?.grandTotal || 0).toLocaleString()}
+Total Concrete: ${boq.summary?.concrete || 0} cum
+Total Steel: ${boq.summary?.steel || 0} kg
+Total Blocks: ${boq.summary?.blocks || 0} nos` : ''}
+
+${carbon ? `Embodied Carbon: ${(carbon.total || 0).toLocaleString()} kg CO2` : ''}
+
+${sustainability ? `GRIHA Score: ${sustainability.griha || 'N/A'}
+IGBC Score: ${sustainability.igbc || 'N/A'}
+LEED Score: ${sustainability.leed || 'N/A'}` : ''}
+
+Write a 3-4 paragraph executive summary covering: project overview, key findings, sustainability assessment, and recommendations. Use professional engineering language. Reference relevant IS codes where applicable.`;
+
+  try {
+    const response = await puter.ai.chat(prompt, { model: AI_MODEL });
+    return typeof response === 'string' ? response : response.message?.content || response;
+  } catch (error) {
+    console.warn('Executive summary generation failed:', error.message);
+    return 'Executive summary generation unavailable. Please review the detailed reports below.';
+  }
 }
 
-export default generateAIResponse;
+/**
+ * Compare material alternatives using AI
+ */
+export async function compareMaterials(materialA, materialB, criteria) {
+  const prompt = `Compare these two construction materials for use in Kerala, India:
+
+Material A: ${materialA?.name || 'N/A'}
+- Cost: Rs ${materialA?.financial_properties?.cost_per_unit || 'N/A'} per ${materialA?.financial_properties?.unit_type || 'unit'}
+- Embodied Carbon: ${materialA?.environmental_properties?.embodied_carbon || 'N/A'} kg CO2/unit
+- Compressive Strength: ${materialA?.physical_properties?.compressive_strength || 'N/A'} MPa
+- Recycled Content: ${materialA?.environmental_properties?.recycled_content || 0}%
+- Durability: ${materialA?.civil_properties?.durability_years || 'N/A'} years
+
+Material B: ${materialB?.name || 'N/A'}
+- Cost: Rs ${materialB?.financial_properties?.cost_per_unit || 'N/A'} per ${materialB?.financial_properties?.unit_type || 'unit'}
+- Embodied Carbon: ${materialB?.environmental_properties?.embodied_carbon || 'N/A'} kg CO2/unit
+- Compressive Strength: ${materialB?.physical_properties?.compressive_strength || 'N/A'} MPa
+- Recycled Content: ${materialB?.environmental_properties?.recycled_content || 0}%
+- Durability: ${materialB?.civil_properties?.durability_years || 'N/A'} years
+
+Criteria: ${criteria || 'cost, carbon, durability, strength'}
+
+Provide a detailed comparison with a clear recommendation for Kerala's tropical climate (high rainfall, humidity, seismic Zone III). Include IS code references where relevant.`;
+
+  try {
+    const response = await puter.ai.chat(prompt, { model: AI_MODEL });
+    return typeof response === 'string' ? response : response.message?.content || response;
+  } catch (error) {
+    console.warn('Material comparison failed:', error.message);
+    return 'Material comparison unavailable.';
+  }
+}
+
+// ============ HELPER FUNCTIONS ============
+
+function buildSystemPrompt(project, boqData, carbonData) {
+  const projectInfo = project ? `
+Project: ${project.name || 'Unnamed'}
+Location: ${project.location?.district || 'Kerala'}
+Built-up area: ${project.buildingParams?.builtUpArea || 'N/A'} sqm
+Floors: ${project.buildingParams?.numFloors || 'N/A'}
+Building type: ${project.buildingParams?.buildingType || 'Residential'}
+` : 'No project configured yet.';
+
+  return `You are EcoBuild AI, an expert civil engineering assistant for sustainable construction in Kerala, India.
+
+Your expertise includes:
+- Indian Standards: IS 456:2000 (RCC), IS 875 (Loads), IS 1893:2016 (Seismic), IS 10262:2019 (Mix Design)
+- Green Building: GRIHA, IGBC, LEED rating systems
+- Kerala-specific: Laterite soil, high rainfall (2800mm/year), coastal exposure, Seismic Zone III
+- Material optimization using AHP (Analytical Hierarchy Process)
+- Cost estimation with Kerala market rates (2026)
+- Bill of Quantities (BoQ) preparation
+- Sustainability metrics: embodied carbon, recycled content, lifecycle assessment
+
+Current project context:
+${projectInfo}
+
+${boqData ? `BoQ Summary: Total Rs ${(boqData.summary?.grandTotal || 0).toLocaleString()}` : ''}
+${carbonData ? `Carbon: ${(carbonData.total || 0).toLocaleString()} kg CO2` : ''}
+
+Guidelines:
+- Always reference relevant IS codes when discussing structural matters
+- Provide specific numbers and calculations when possible
+- Consider Kerala's tropical climate in all recommendations
+- Prioritize sustainable and eco-friendly options
+- Be concise but thorough
+- If unsure, acknowledge limitations and suggest consulting a licensed structural engineer`;
+}
+
+function parseFloorplanResponse(text) {
+  try {
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]);
+    }
+  } catch (e) {
+    console.warn('Failed to parse floorplan JSON:', e);
+  }
+  return { error: 'Could not parse AI response', rooms: [], raw: text };
+}
+
+function generateFallbackResponse(question, project, boqData, carbonData) {
+  const q = question.toLowerCase();
+  if (q.includes('griha') || q.includes('sustainab') || q.includes('green')) {
+    return 'For GRIHA certification, focus on: rainwater harvesting (+10 pts), solar water heater (+10 pts), energy efficiency (+28 pts max), and sustainable materials (+28 pts max). Kerala\'s climate is ideal for passive cooling strategies.';
+  }
+  if (q.includes('carbon') || q.includes('co2')) {
+    return 'Embodied carbon in construction comes primarily from cement (~45%) and steel (~35%). Use PPC cement (35% less carbon than OPC), Fe500D steel (allows 15% reduction), and AAC blocks for significant carbon savings.';
+  }
+  if (q.includes('cost') || q.includes('budget')) {
+    return 'Typical construction cost in Kerala (2026): Rs 1,600-2,200/sqft for residential. Use bulk purchasing (5-10% savings), PPC cement (5% cheaper), and standardized dimensions to reduce costs.';
+  }
+  return 'I can help with material selection, cost estimation, sustainability ratings, structural design, and Kerala building regulations. What would you like to know?';
+}
+
+function generateFallbackRecommendations(project, boq, carbon) {
+  return `**Material Recommendations:**
+1. **Use PPC Cement** - 35% lower embodied carbon than OPC, better durability in Kerala's humid climate
+2. **AAC Blocks over Clay Bricks** - 50% lighter, better thermal insulation, faster construction
+3. **Fe500D Steel** - Higher ductility for seismic Zone III, allows 15% less steel consumption
+
+**Cost Optimization:**
+- Bulk purchase cement and steel for 5-10% discount
+- Use M-sand instead of river sand (Rs 58 vs Rs 85/cft)
+- Standardize room dimensions to reduce material wastage
+
+**Sustainability:**
+- Add rainwater harvesting (mandatory in Kerala, +10 GRIHA points)
+- Install solar water heater (+10 GRIHA points, 3-4 year ROI)
+- Use fly ash concrete for 20% carbon reduction`;
+}
+
+export default {
+  generateAIResponse,
+  generateAIResponseStream,
+  analyzeFloorplan,
+  generateAIRecommendations,
+  generateExecutiveSummary,
+  compareMaterials
+};

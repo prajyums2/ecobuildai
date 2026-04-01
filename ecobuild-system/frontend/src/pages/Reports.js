@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
 import { useProject } from "../context/ProjectContext";
 import { useEngineer } from "../context/EngineerContext";
 import { ecoBuildAPI } from "../services/api";
-import { generateAIResponse } from "../services/aiService";
+import { generateAIResponse, generateAIRecommendations, generateExecutiveSummary } from "../services/aiService";
 import {
   FaFilePdf,
   FaFileExcel,
@@ -281,8 +282,35 @@ function AIRecommendationsTab({
   embodiedCarbon,
   sustainabilityScore,
 }) {
-  const recommendations = useMemo(
-    () => generateRecommendations(project, boq, embodiedCarbon),
+  const [aiRecommendations, setAiRecommendations] = useState(null);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [aiError, setAiError] = useState(null);
+
+  // Load AI recommendations
+  useEffect(() => {
+    let mounted = true;
+    setIsLoadingAI(true);
+    setAiError(null);
+
+    generateAIRecommendations(project, boq, embodiedCarbon, Object.values(project?.materialSelections || {}))
+      .then((result) => {
+        if (mounted) {
+          setAiRecommendations(result);
+          setIsLoadingAI(false);
+        }
+      })
+      .catch((err) => {
+        if (mounted) {
+          setAiError(err.message);
+          setIsLoadingAI(false);
+        }
+      });
+
+    return () => { mounted = false; };
+  }, [project?.name, project?.buildingParams?.builtUpArea, boq?.summary?.grandTotal]);
+
+  const fallbackRecommendations = useMemo(
+    () => generateRecommendationsFallback(project, boq, embodiedCarbon),
     [project, boq, embodiedCarbon],
   );
 
@@ -385,7 +413,7 @@ function AIRecommendationsTab({
             </span>
           </div>
           <p className="text-2xl font-bold text-foreground">
-            {recommendations.length}
+            {(aiRecommendations || fallbackRecommendations).length}
           </p>
           <p className="text-xs text-foreground-secondary mt-1">
             Optimization opportunities
@@ -400,66 +428,87 @@ function AIRecommendationsTab({
           AI-Powered Recommendations
         </h3>
 
-        <div className="space-y-4">
-          {recommendations.map((rec, idx) => {
-            const Icon = getCategoryIcon(rec.category);
-            return (
-              <div
-                key={idx}
-                className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-foreground">
-                      <Icon className="text-lg" />
+        {isLoadingAI ? (
+          <div className="flex items-center justify-center py-12">
+            <FaSpinner className="animate-spin text-primary text-2xl mr-3" />
+            <span className="text-foreground-secondary">Generating AI recommendations...</span>
+          </div>
+        ) : aiError ? (
+          <div className="space-y-4">
+            <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">AI unavailable, showing local recommendations</p>
+            </div>
+            <div className="space-y-4">
+              {fallbackRecommendations.map((rec, idx) => {
+                const Icon = getCategoryIcon(rec.category);
+                return (
+                  <div
+                    key={idx}
+                    className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-foreground">
+                          <Icon className="text-lg" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">{rec.title}</h4>
+                          <span className={`text-xs px-2 py-0.5 rounded-full border ${getPriorityColor(rec.priority)}`}>
+                            {rec.priority} Priority
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-sm text-foreground-secondary">{rec.category}</span>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">
-                        {rec.title}
-                      </h4>
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded-full border ${getPriorityColor(rec.priority)}`}
-                      >
-                        {rec.priority} Priority
-                      </span>
+                    <p className="text-sm text-foreground-secondary mb-3">{rec.description}</p>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-foreground-muted">Impact: {rec.impact}</span>
+                      {rec.carbonReduction > 0 && (
+                        <span className="text-green-600 dark:text-green-400">-{rec.carbonReduction} kg CO2</span>
+                      )}
                     </div>
                   </div>
-                  <span className="text-sm text-foreground-secondary">
-                    {rec.category}
-                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ) : aiRecommendations ? (
+          <div className="prose prose-sm max-w-none dark:prose-invert">
+            <ReactMarkdown>{aiRecommendations}</ReactMarkdown>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {fallbackRecommendations.map((rec, idx) => {
+              const Icon = getCategoryIcon(rec.category);
+              return (
+                <div
+                  key={idx}
+                  className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-foreground">
+                        <Icon className="text-lg" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground">{rec.title}</h4>
+                        <span className={`text-xs px-2 py-0.5 rounded-full border ${getPriorityColor(rec.priority)}`}>
+                          {rec.priority} Priority
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-foreground-secondary">{rec.category}</span>
+                  </div>
+                  <p className="text-sm text-foreground-secondary mb-3">{rec.description}</p>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground-muted">Impact: {rec.impact}</span>
+                    {rec.carbonReduction > 0 && (
+                      <span className="text-green-600 dark:text-green-400">-{rec.carbonReduction} kg CO2</span>
+                    )}
+                  </div>
                 </div>
-                <p className="text-sm text-foreground-secondary mb-3">
-                  {rec.description}
-                </p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground-muted">
-                    Impact: {rec.impact}
-                  </span>
-                  {rec.carbonReduction > 0 && (
-                    <span className="text-green-600 dark:text-green-400">
-                      -{rec.carbonReduction} kg CO2
-                    </span>
-                  )}
-                  {rec.pointValue > 0 && (
-                    <span className="text-blue-600 dark:text-blue-400">
-                      +{rec.pointValue} points
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {recommendations.length === 0 && (
-          <div className="p-8 text-center text-foreground-secondary">
-            <FaCheckCircle className="text-4xl text-green-500 mx-auto mb-4" />
-            <p className="text-lg font-medium">
-              Great job! No critical issues found.
-            </p>
-            <p className="text-sm">
-              Your project is well optimized for sustainability and cost.
-            </p>
+              );
+            })}
           </div>
         )}
       </div>
@@ -492,7 +541,7 @@ function AIRecommendationsTab({
 /**
  * Generate AI recommendations based on project data
  */
-function generateRecommendations(project, boq, carbon) {
+function generateRecommendationsFallback(project, boq, carbon) {
   const bp = project?.buildingParams || {};
   const materials = project?.materialSelections || {};
   const recommendations = [];

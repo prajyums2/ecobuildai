@@ -383,13 +383,14 @@ class KeralaEnvironmentalEngine:
         
         # HVAC load calculation (simplified)
         # Q = U × A × ΔT × t
+        num_floors = max(1, building_area // 100)  # Estimate floors from area
         envelope_area = building_area * 1.4  # Assume 40% vertical envelope
         
         # Wall heat gain
         wall_heat_gain = wall_u_value * envelope_area * temp_diff * 24 * 365  # Wh/year
         
-        # Roof heat gain (assume 20% of floor area is roof for multi-story)
-        roof_area = building_area * 0.2
+        # Roof heat gain (roof area = floor area / number of floors)
+        roof_area = building_area / num_floors
         roof_heat_gain = roof_u_value * roof_area * temp_diff * 24 * 365
         
         # Total cooling load

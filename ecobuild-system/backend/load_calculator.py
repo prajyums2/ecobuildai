@@ -197,10 +197,10 @@ class LoadCalculator:
         floor_live = self.calculate_live_load(occupancy)
         
         # Live load reduction (IS 875 Part 2, Table 2)
-        # Reduction allowed for floors 2-5
+        # Reduction increases with number of floors (up to 50% for 5+ floors)
         reduction_factor = 1.0
         if num_floors >= 2:
-            reduction_factor = 1.0 - (0.05 * min(num_floors - 1, 3))
+            reduction_factor = 1.0 - (0.10 * min(num_floors - 1, 5))
         
         for floor_num in range(1, num_floors + 1):
             # Reduce live load for upper floors
