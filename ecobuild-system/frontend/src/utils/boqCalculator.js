@@ -1730,7 +1730,30 @@ export function clearRatesCache() {
  */
 export async function generateBoQAsync(project) {
   const rates = await fetchMaterialRates();
-  const materialSelections = project?.materialSelections || {};
+  
+  // Read material selections from project, fallback to localStorage
+  let materialSelections = project?.materialSelections || {};
+  if (Object.keys(materialSelections).length === 0) {
+    try {
+      const stored = localStorage.getItem('ecobuild-projects');
+      if (stored) {
+        const projects = JSON.parse(stored);
+        const currentId = localStorage.getItem('ecobuild-current-project-id');
+        const current = projects.find(p => p.id === currentId);
+        if (current?.materialSelections) {
+          materialSelections = current.materialSelections;
+        }
+      }
+    } catch (e) {
+      console.warn('[BoQ] Failed to read material selections from localStorage:', e);
+    }
+  }
+  
+  console.log('[BoQ] Using material selections:', Object.keys(materialSelections));
+  Object.entries(materialSelections).forEach(([k, v]) => {
+    console.log(`  ${k}: ${v?.name} @ Rs${v?.rate}/${v?.unit}`);
+  });
+  
   return generateBoQ(project, rates, materialSelections);
 }
 
