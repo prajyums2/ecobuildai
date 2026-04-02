@@ -48,33 +48,36 @@ class AHPEngine:
         self._suppliers_db = None
         
     def _set_weights(self) -> Dict[str, float]:
-        """Configure criteria weights based on optimization mode"""
+        """Configure criteria weights based on optimization mode (includes IS code compliance)"""
         if self.mode == OptimizationMode.SUSTAINABILITY:
             return {
-                'embodied_carbon': 0.35,
-                'recycled_content': 0.20,
+                'embodied_carbon': 0.30,
+                'recycled_content': 0.15,
                 'cost': 0.10,
                 'durability': 0.15,
-                'thermal_performance': 0.15,
-                'aesthetics': 0.05
+                'thermal_performance': 0.10,
+                'aesthetics': 0.05,
+                'is_code_compliance': 0.15
             }
         elif self.mode == OptimizationMode.LUXURY:
             return {
                 'embodied_carbon': 0.10,
                 'recycled_content': 0.05,
                 'cost': 0.10,
-                'durability': 0.30,
-                'thermal_performance': 0.20,
-                'aesthetics': 0.25
+                'durability': 0.25,
+                'thermal_performance': 0.10,
+                'aesthetics': 0.20,
+                'is_code_compliance': 0.20
             }
         else:  # BALANCED
             return {
-                'embodied_carbon': 0.20,
-                'recycled_content': 0.15,
+                'embodied_carbon': 0.15,
+                'recycled_content': 0.10,
                 'cost': 0.20,
-                'durability': 0.20,
-                'thermal_performance': 0.15,
-                'aesthetics': 0.10
+                'durability': 0.15,
+                'thermal_performance': 0.10,
+                'aesthetics': 0.10,
+                'is_code_compliance': 0.20
             }
     
     def _load_materials(self) -> Dict[str, Material]:
@@ -339,9 +342,13 @@ class AHPEngine:
     
     def optimize_materials(self, 
                           required_materials: List[str],
-                          site_coords: Tuple[float, float]) -> Dict:
-        """Run complete AHP optimization"""
+                          site_coords: Tuple[float, float],
+                          building_params: Optional[Dict] = None) -> Dict:
+        """Run complete AHP optimization with IS code compliance filter"""
+        from is_code_filter import ISCodeFilter
+        
         results = {}
+        is_filter = ISCodeFilter(building_params)
         
         # Ensure materials are loaded
         materials = self.materials_db
@@ -359,7 +366,45 @@ class AHPEngine:
                 print(f"[AHP Engine] No materials found for category: {mat_category}")
                 continue
             
-            print(f"[AHP Engine] Found {len(alternatives)} alternatives for {mat_category}")
+            # IS CODE COMPLIANCE FILTER - eliminate non-compliant materials
+            compliant_alts = []
+            non_compliant_count = 0
+            for mat in alternatives:
+                mat_dict = {
+                    'category': mat.category,
+                    'physical_properties': {
+                        'compressive_strength': mat.compressive_strength,
+                        'tensile_strength': getattr(mat, 'tensile_strength', 0),
+                        'yield_strength': 0,
+                        'water_absorption': getattr(mat, 'water_absorption', 0),
+                    },
+                    'environmental_properties': {
+                        'embodied_carbon': mat.embodied_carbon,
+                        'recycled_content': mat.recycled_content,
+                    },
+                    'civil_properties': {
+                        'durability_years': mat.durability_years,
+                        'is_code': getattr(mat, 'is_code', ''),
+                    }
+                }
+                check_results = is_filter.check_material_compliance(mat_dict)
+                has_fail = any(r.status.value == 'fail' for r in check_results)
+                
+                if has_fail:
+                    non_compliant_count += 1
+                    print(f"[AHP Engine] FILTERED OUT: {mat.name} - IS code non-compliant")
+                else:
+                    compliant_alts.append(mat)
+            
+            if non_compliant_count > 0:
+                print(f"[AHP Engine] Filtered out {non_compliant_count} non-compliant materials for {mat_category}")
+            
+            if not compliant_alts:
+                print(f"[AHP Engine] WARNING: No compliant materials for {mat_category}, using all")
+                compliant_alts = alternatives
+            
+            alternatives = compliant_alts
+            print(f"[AHP Engine] {len(alternatives)} IS-compliant alternatives for {mat_category}")
                 
             # Calculate logistics carbon
             logistics_scores = []
@@ -371,33 +416,59 @@ class AHPEngine:
                 else:
                     logistics_scores.append(0)
             
-            # Build decision matrix
+            # Calculate IS code compliance scores
+            compliance_scores = []
+            for mat in alternatives:
+                mat_dict = {
+                    'category': mat.category,
+                    'physical_properties': {
+                        'compressive_strength': mat.compressive_strength,
+                        'tensile_strength': getattr(mat, 'tensile_strength', 0),
+                        'yield_strength': 0,
+                        'water_absorption': getattr(mat, 'water_absorption', 0),
+                    },
+                    'environmental_properties': {
+                        'embodied_carbon': mat.embodied_carbon,
+                        'recycled_content': mat.recycled_content,
+                    },
+                    'civil_properties': {
+                        'durability_years': mat.durability_years,
+                        'is_code': getattr(mat, 'is_code', ''),
+                    }
+                }
+                score = is_filter.get_compliance_score(mat_dict)
+                compliance_scores.append(score)
+            
+            # Build decision matrix (7 criteria including IS code compliance)
             criteria_values = np.array([
                 [m.embodied_carbon for m in alternatives],
                 [m.recycled_content for m in alternatives],
                 [m.cost_per_unit for m in alternatives],
                 [m.durability_years for m in alternatives],
                 [m.thermal_conductivity for m in alternatives],
-                [m.aesthetic_rating for m in alternatives]
+                [m.aesthetic_rating for m in alternatives],
+                compliance_scores
             ])
             
             # Normalize
             normalized = np.zeros_like(criteria_values, dtype=float)
-            normalized[0] = self.normalize_matrix(criteria_values[0], 'cost')  # Lower carbon is better
+            normalized[0] = self.normalize_matrix(criteria_values[0], 'cost')
             normalized[1] = self.normalize_matrix(criteria_values[1], 'benefit')
-            normalized[2] = self.normalize_matrix(criteria_values[2], 'cost')  # Lower cost is better
+            normalized[2] = self.normalize_matrix(criteria_values[2], 'cost')
             normalized[3] = self.normalize_matrix(criteria_values[3], 'benefit')
-            normalized[4] = self.normalize_matrix(criteria_values[4], 'cost')  # Lower thermal cond. is better
+            normalized[4] = self.normalize_matrix(criteria_values[4], 'cost')
             normalized[5] = self.normalize_matrix(criteria_values[5], 'benefit')
+            normalized[6] = compliance_scores  # Already 0-1 scale
             
-            # Weighted sum
+            # Weighted sum (7 criteria)
             weights_array = np.array([
                 self.criteria_weights['embodied_carbon'],
                 self.criteria_weights['recycled_content'],
                 self.criteria_weights['cost'],
                 self.criteria_weights['durability'],
                 self.criteria_weights['thermal_performance'],
-                self.criteria_weights['aesthetics']
+                self.criteria_weights['aesthetics'],
+                self.criteria_weights['is_code_compliance']
             ])
             
             scores = np.dot(weights_array, normalized)
@@ -409,6 +480,7 @@ class AHPEngine:
                     'material': alternatives[i],
                     'score': float(scores[i]),
                     'logistics_carbon': float(logistics_scores[i]),
+                    'is_code_compliance': float(compliance_scores[i]),
                     'rank': idx + 1
                 }
                 for idx, i in enumerate(ranked_indices)

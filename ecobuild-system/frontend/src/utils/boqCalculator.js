@@ -756,12 +756,53 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const totalConcreteVolume = foundationVolume + columnVolume + beamVolume + 
                               slabVolume + lintelVolume + sunshadeVolume + parapetVolume + staircaseVolume;
   
-  // Masonry calculation - size-dependent blocks per sqm
-  // Calibrated from benchmarks:
-  // Small buildings (200 sqm): 7.0 blocks/sqm
-  // Medium buildings (750 sqm): 12.6 blocks/sqm
-  // Large buildings (1750 sqm): 11.1 blocks/sqm
+  // ===== OPENING CALCULATIONS (Doors, Windows, Ventilators) =====
+  // Standard Kerala residential opening sizes (IS 4362:1967 - Modular Co-ordination)
+  const openingSizes = {
+    mainDoor: { width: 1.0, height: 2.1, area: 2.1 },       // 1000×2100mm
+    internalDoor: { width: 0.8, height: 2.0, area: 1.6 },    // 800×2000mm
+    bathroomDoor: { width: 0.75, height: 2.0, area: 1.5 },   // 750×2000mm
+    window: { width: 1.2, height: 1.2, area: 1.44 },         // 1200×1200mm
+    ventilator: { width: 0.6, height: 0.6, area: 0.36 },     // 600×600mm
+    kitchenWindow: { width: 0.9, height: 0.9, area: 0.81 },  // 900×900mm
+  };
+
+  // Estimate opening counts per floor based on building size
+  const roomsPerFloor = Math.max(3, Math.round(builtUpArea / 25)); // ~25 sqm per room
+  const bedrooms = Math.max(2, Math.round(roomsPerFloor * 0.5));
+  const bathrooms = Math.max(1, Math.round(roomsPerFloor * 0.3));
+  const windowsPerRoom = 2; // Standard: 2 windows per room
+
+  const openingsPerFloor = {
+    mainDoors: 1,
+    internalDoors: bedrooms + 1, // bedrooms + living/kitchen
+    bathroomDoors: bathrooms,
+    windows: bedrooms * windowsPerRoom + 2, // bedroom windows + living/kitchen windows
+    ventilators: bathrooms + 1, // bathroom + kitchen ventilators
+    kitchenWindows: 1,
+  };
+
+  // Total openings across all floors
+  const totalOpenings = {
+    mainDoors: openingsPerFloor.mainDoors,
+    internalDoors: openingsPerFloor.internalDoors * numFloors,
+    bathroomDoors: openingsPerFloor.bathroomDoors * numFloors,
+    windows: openingsPerFloor.windows * numFloors,
+    ventilators: openingsPerFloor.ventilators * numFloors,
+    kitchenWindows: openingsPerFloor.kitchenWindows * numFloors,
+  };
+
+  // Calculate total opening areas
+  const doorArea = (totalOpenings.mainDoors * openingSizes.mainDoor.area) +
+                   (totalOpenings.internalDoors * openingSizes.internalDoor.area) +
+                   (totalOpenings.bathroomDoors * openingSizes.bathroomDoor.area);
   
+  const windowArea = (totalOpenings.windows * openingSizes.window.area) +
+                     (totalOpenings.ventilators * openingSizes.ventilator.area) +
+                     (totalOpenings.kitchenWindows * openingSizes.kitchenWindow.area);
+
+  const totalOpeningArea = doorArea + windowArea;
+
   // Wall area per sqm of floor area
   const wallAreaPerSqm = totalArea <= 300 ? 0.9 :
                          totalArea <= 800 ? 1.2 :
@@ -769,16 +810,35 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   
   const totalWallArea = totalArea * wallAreaPerSqm;
   
-  // Opening deduction (doors + windows)
-  const openingRatio = numFloors <= 2 ? 0.20 : 0.25;
-  const netWallArea = totalWallArea * (1 - openingRatio);
-  
+  // Net wall area after deducting openings
+  const netWallArea = Math.max(0, totalWallArea - totalOpeningArea);
+
+  // Lintel concrete above openings (150mm deep × 200mm wide, extends 150mm each side)
+  const totalDoorWidth = totalOpenings.mainDoors * openingSizes.mainDoor.width +
+                         totalOpenings.internalDoors * openingSizes.internalDoor.width +
+                         totalOpenings.bathroomDoors * openingSizes.bathroomDoor.width;
+  const totalWindowWidth = totalOpenings.windows * openingSizes.window.width +
+                           totalOpenings.ventilators * openingSizes.ventilator.width +
+                           totalOpenings.kitchenWindows * openingSizes.kitchenWindow.width;
+  const totalLintelLength = (totalDoorWidth + totalWindowWidth) * 1.3; // 30% extra for overlap
+  const lintelVolumeOpenings = totalLintelLength * 0.15 * 0.2; // 150mm × 200mm lintel
+  // Add to existing lintel volume
+  const totalLintelVolume = lintelVolume + lintelVolumeOpenings;
+
   // Blocks per sqm (600x200mm blocks)
   const blocksPerSqm = totalArea <= 300 ? 7.0 :
                         totalArea <= 800 ? 12.6 :
                         11.1;
   
   const blocksWithWastage = netWallArea * blocksPerSqm * 1.05; // 5% wastage
+
+  // Plaster areas - wall area minus openings PLUS opening sides (jambs)
+  const jambArea = (totalOpenings.mainDoors + totalOpenings.internalDoors + totalOpenings.bathroomDoors) * 2 * 0.15 * 2.0 + // door jambs (150mm wall, 2 sides)
+                   totalOpenings.windows * 2 * 0.15 * 1.2 + // window jambs
+                   totalOpenings.ventilators * 2 * 0.15 * 0.6; // ventilator jambs
+
+  const internalPlasterArea = (netWallArea * 1.5) + jambArea; // Internal walls (both sides) + ceiling + jambs
+  const externalPlasterArea = (netWallArea * 0.3) + (doorArea * 0.1); // External walls + door soffits
   
   // Resolve rates from optimizer selections, falling back to API/fallback rates
   const cementSelection = materialSelections.cement;
@@ -794,11 +854,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const resolvedSandRate = aggregatesSelection?.rate || rates?.aggregate?.m_sand?.rate || 58;
   const resolvedAggregateRate = aggregatesSelection?.rate || rates?.aggregate?.crushed_20mm?.rate || 42;
   
-  // Plaster areas - based on wall area
-  const internalPlasterArea = netWallArea * 1.5; // Internal walls (both sides) + ceiling
-  const externalPlasterArea = netWallArea * 0.3; // External walls only
-  
-  // Total plaster area
+  // Total plaster area (already calculated above with opening deductions)
   const totalPlasterArea = internalPlasterArea + externalPlasterArea;
   
   // Flooring area - based on actual footprint (not total area)
@@ -962,12 +1018,12 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     remarks: `Cement: ${slabConcrete.cement.bags} bags, Sand: ${slabConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${slabConcrete.aggregate.cft.toFixed(2)} cft`,
   });
   
-  // Lintel concrete
-  const lintelConcrete = calculateConcreteQuantities(lintelVolume, 'm20');
+  // Lintel concrete (includes lintels above openings)
+  const lintelConcrete = calculateConcreteQuantities(totalLintelVolume, 'm20');
   addBoQItem(concreteWork, {
     sno: 6,
     description: 'Providing and laying M20 grade RCC for lintels including formwork and curing',
-    quantity: lintelVolume.toFixed(3),
+    quantity: totalLintelVolume.toFixed(3),
     unit: 'cum',
     rate: Math.round(resolvedConcreteRate * 1.04),
     remarks: `Cement: ${lintelConcrete.cement.bags} bags, Sand: ${lintelConcrete.sand.cft.toFixed(2)} cft, Aggregate: ${lintelConcrete.aggregate.cft.toFixed(2)} cft`,
@@ -1041,7 +1097,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     remarks: `Raw: ${slabSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
   
-  const lintelSteel = calculateSteelQuantity(lintelVolume, 'lintel');
+  const lintelSteel = calculateSteelQuantity(totalLintelVolume, 'lintel');
   addBoQItem(steelWork, {
     sno: 5,
     description: 'Providing and fixing Fe500 TMT steel bars for lintels including cutting, bending, binding',
@@ -1299,52 +1355,50 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     subTotal: 0,
   };
   
-  // Main door
-  const mainDoors = numFloors;
+  // Main door (1 per floor)
   addBoQItem(doorsWindows, {
     sno: 1,
-    description: 'Providing and fixing teak wood paneled door with teak wood frame, including fixtures and fittings',
-    quantity: mainDoors,
+    description: `Providing and fixing teak wood paneled door (${openingSizes.mainDoor.width*1000}x${openingSizes.mainDoor.height*1000}mm) with teak wood frame, including fixtures and fittings`,
+    quantity: totalOpenings.mainDoors,
     unit: 'nos',
     rate: 25000,
   });
   
-  // Internal doors
-  const internalDoors = Math.ceil(totalArea / 100); // 1 per 100 sqm
+  // Internal doors (bedrooms + living)
   addBoQItem(doorsWindows, {
     sno: 2,
-    description: 'Providing and fixing flush door with hardwood frame, including fixtures',
-    quantity: internalDoors,
+    description: `Providing and fixing flush door (${openingSizes.internalDoor.width*1000}x${openingSizes.internalDoor.height*1000}mm) with hardwood frame, including fixtures`,
+    quantity: totalOpenings.internalDoors,
     unit: 'nos',
     rate: rates.doors_windows.flush_door.rate + 2000,
   });
   
   // Bathroom doors
-  const bathroomDoors = numFloors * 2;
   addBoQItem(doorsWindows, {
     sno: 3,
-    description: 'Providing and fixing PVC door for bathrooms, including fixtures',
-    quantity: bathroomDoors,
+    description: `Providing and fixing PVC door (${openingSizes.bathroomDoor.width*1000}x${openingSizes.bathroomDoor.height*1000}mm) for bathrooms, including fixtures`,
+    quantity: totalOpenings.bathroomDoors,
     unit: 'nos',
     rate: 4500,
   });
   
-  // Windows
-  const windowArea = totalArea * 0.12; // 12% of floor area
+  // Windows (UPVC)
+  const totalWindowAreaSqft = (totalOpenings.windows * openingSizes.window.area +
+                               totalOpenings.kitchenWindows * openingSizes.kitchenWindow.area) * 10.764;
   addBoQItem(doorsWindows, {
     sno: 4,
-    description: 'Providing and fixing UPVC sliding windows with glass and mosquito mesh',
-    quantity: windowArea.toFixed(2),
+    description: `Providing and fixing UPVC sliding windows (${openingSizes.window.width*1000}x${openingSizes.window.height*1000}mm) with glass and mosquito mesh`,
+    quantity: totalWindowAreaSqft.toFixed(2),
     unit: 'sqft',
     rate: rates.doors_windows.upvc_window.rate + 100,
   });
   
   // MS Grill
-  const grillArea = windowArea * 0.8; // 80% of window area
+  const grillArea = totalWindowAreaSqft * 0.8;
   addBoQItem(doorsWindows, {
     sno: 5,
     description: 'Providing and fixing 12mm square MS grill with 4 inch spacing for windows',
-    quantity: (grillArea * 5).toFixed(2), // Approx 5kg per sqft
+    quantity: (grillArea * 5).toFixed(2),
     unit: 'kg',
     rate: rates.doors_windows.ms_grill.rate + 45,
   });
