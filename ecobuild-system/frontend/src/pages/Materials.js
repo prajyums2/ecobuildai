@@ -38,8 +38,8 @@ import {
   FaThLarge,
   FaAngleLeft,
   FaAngleRight,
-  FaAnglesLeft,
-  FaAnglesRight,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
 } from "react-icons/fa";
 
 const MATERIAL_CATEGORIES = [
@@ -1931,7 +1931,7 @@ function Materials() {
                     disabled={currentPage === 1}
                     className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    <FaAnglesLeft className="text-xs" />
+                    <FaAngleDoubleLeft className="text-xs" />
                   </button>
                   <button
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -1978,7 +1978,7 @@ function Materials() {
                     disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)}
                     className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    <FaAnglesRight className="text-xs" />
+                    <FaAngleDoubleRight className="text-xs" />
                   </button>
                 </div>
               </div>
@@ -2091,7 +2091,7 @@ function Materials() {
                 </span>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <FaAnglesLeft className="text-xs" />
+                    <FaAngleDoubleLeft className="text-xs" />
                   </button>
                   <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
                     <FaAngleLeft className="text-xs" />
@@ -2113,7 +2113,7 @@ function Materials() {
                     <FaAngleRight className="text-xs" />
                   </button>
                   <button onClick={() => setCurrentPage(Math.ceil(filteredMaterials.length / itemsPerPage))} disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <FaAnglesRight className="text-xs" />
+                    <FaAngleDoubleRight className="text-xs" />
                   </button>
                 </div>
               </div>
