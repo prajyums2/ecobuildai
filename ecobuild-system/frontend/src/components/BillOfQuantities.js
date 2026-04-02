@@ -12,7 +12,8 @@ import {
   FaSpinner,
   FaSyncAlt,
   FaCheckCircle,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaCalculator
 } from 'react-icons/fa';
 import { useProject } from '../context/ProjectContext';
 import { 
