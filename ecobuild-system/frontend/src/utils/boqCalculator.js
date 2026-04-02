@@ -1731,22 +1731,27 @@ export function clearRatesCache() {
 export async function generateBoQAsync(project) {
   const rates = await fetchMaterialRates();
   
-  // Read material selections from project, fallback to localStorage
-  let materialSelections = project?.materialSelections || {};
-  if (Object.keys(materialSelections).length === 0) {
-    try {
-      const stored = localStorage.getItem('ecobuild-projects');
-      if (stored) {
-        const projects = JSON.parse(stored);
-        const currentId = localStorage.getItem('ecobuild-current-project-id');
-        const current = projects.find(p => p.id === currentId);
-        if (current?.materialSelections) {
-          materialSelections = current.materialSelections;
-        }
+  // ALWAYS read latest material selections from localStorage (source of truth)
+  // The optimizer saves directly to localStorage, which is more reliable than React state
+  let materialSelections = {};
+  try {
+    const stored = localStorage.getItem('ecobuild-projects');
+    if (stored) {
+      const projects = JSON.parse(stored);
+      const currentId = localStorage.getItem('ecobuild-current-project-id');
+      const current = projects.find(p => p.id === currentId);
+      if (current?.materialSelections) {
+        materialSelections = current.materialSelections;
       }
-    } catch (e) {
-      console.warn('[BoQ] Failed to read material selections from localStorage:', e);
     }
+  } catch (e) {
+    console.warn('[BoQ] Failed to read from localStorage, using project:', e);
+    materialSelections = project?.materialSelections || {};
+  }
+  
+  // Fallback to project if localStorage is empty
+  if (Object.keys(materialSelections).length === 0) {
+    materialSelections = project?.materialSelections || {};
   }
   
   console.log('[BoQ] Using material selections:', Object.keys(materialSelections));
