@@ -31,6 +31,7 @@ import {
   FaPaperPlane,
   FaSyncAlt,
   FaTimes,
+  FaBuilding,
 } from "react-icons/fa";
 import BillOfQuantities from "../components/BillOfQuantities";
 import AIReportReview from "../components/AIReportReview";
