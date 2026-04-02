@@ -328,13 +328,20 @@ async def delete_project(
 async def optimize_materials(
     data: dict,
 ):
-    """Optimize material selection based on sustainability/luxury/balanced mode using MongoDB materials (public)"""
+    """Optimize material selection with IS code compliance filter"""
     try:
         mode_str = data.get('mode', 'balanced')
         mode = OptimizationMode(mode_str)
         categories = data.get('required_materials', [])
+        building_params = data.get('building_params', {})
         
         print(f"[OPTIMIZE] Request received - mode: {mode_str}, categories: {categories}")
+        
+        # IS Code Compliance Filter
+        from is_code_filter import ISCodeFilter
+        is_filter = ISCodeFilter(building_params)
+        seismic_reqs = is_filter.get_seismic_requirements()
+        exposure_reqs = is_filter.get_exposure_requirements()
         
         # Use direct MongoDB query to get materials
         collection = get_materials_collection()
@@ -358,25 +365,42 @@ async def optimize_materials(
                 "message": "No materials found in database"
             }
         
-        # Debug: print first material's category
-        if all_db_materials:
-            print(f"[OPTIMIZE] First material category: {all_db_materials[0].get('category')}")
-        
-        # Filter materials by requested categories - simple string comparison
+        # Filter materials by requested categories
         all_materials = []
         for category in categories:
             for mat in all_db_materials:
                 mat_cat = mat.get('category', '')
                 
                 if str(mat_cat).lower() == category.lower():
-                    # Filter out work items (carbon >= 30 indicates work items, not materials)
-                    # Actual materials have carbon < 30 kg CO2/unit
                     env_props = mat.get('environmental_properties') or {}
                     carbon = env_props.get('embodied_carbon', 0) or 0
-                    if carbon and float(carbon) < 30:  # Only actual materials, not work items
+                    if carbon and float(carbon) < 30:
                         all_materials.append(mat)
         
-        print(f"[OPTIMIZE] Matched materials (after filtering work items): {len(all_materials)}")
+        print(f"[OPTIMIZE] Matched materials (before IS filter): {len(all_materials)}")
+        
+        # IS CODE COMPLIANCE FILTER
+        compliant_materials = []
+        non_compliant_count = 0
+        for mat in all_materials:
+            check_results = is_filter.check_material_compliance(mat)
+            has_fail = any(r.status.value == 'fail' for r in check_results)
+            
+            if has_fail:
+                non_compliant_count += 1
+                print(f"[OPTIMIZE] FILTERED OUT: {mat.get('name')} - IS code non-compliant")
+            else:
+                compliant_materials.append(mat)
+        
+        if non_compliant_count > 0:
+            print(f"[OPTIMIZE] Filtered out {non_compliant_count} non-compliant materials")
+        
+        if not compliant_materials:
+            print(f"[OPTIMIZE] WARNING: No compliant materials, using all")
+            compliant_materials = all_materials
+        
+        all_materials = compliant_materials
+        print(f"[OPTIMIZE] IS-compliant materials: {len(all_materials)}")
         
         if not all_materials:
             return {
@@ -385,18 +409,19 @@ async def optimize_materials(
                 "message": f"No materials found for categories: {categories}"
             }
         
-        # Convert to AHP Material objects using dictionary access
+        # Convert to AHP Material objects
         ahp_materials = []
         for mat in all_materials:
-            # Extract properties from dictionary
             env_props = mat.get('environmental_properties') or {}
             civil_props = mat.get('civil_properties') or {}
             financial_props = mat.get('financial_properties') or {}
             physical_props = mat.get('physical_properties') or {}
             supplier_info = mat.get('supplier') or {}
             
-            # Get category as string
             mat_cat = mat.get('category', '')
+            
+            # IS code compliance score
+            compliance_score = is_filter.get_compliance_score(mat)
             
             ahp_mat = AHPMaterial(
                 id=str(mat.get('_id', '')),
@@ -411,6 +436,8 @@ async def optimize_materials(
                 compressive_strength=physical_props.get('compressive_strength', 0) or 0,
                 supplier_id=supplier_info.get('supplier_name', 'unknown') or 'unknown'
             )
+            ahp_mat.is_code = civil_props.get('is_code', '')
+            ahp_mat.compliance_score = compliance_score
             ahp_materials.append(ahp_mat)
         
         # Group materials by category
@@ -421,33 +448,36 @@ async def optimize_materials(
                 materials_by_category[cat] = []
             materials_by_category[cat].append(mat)
         
-        # Set weights based on mode
+        # Set weights based on mode (includes IS code compliance)
         if mode == OptimizationMode.SUSTAINABILITY:
             weights = {
-                'embodied_carbon': 0.35,
-                'recycled_content': 0.20,
+                'embodied_carbon': 0.30,
+                'recycled_content': 0.15,
                 'cost': 0.10,
                 'durability': 0.15,
-                'thermal_performance': 0.15,
-                'aesthetics': 0.05
+                'thermal_performance': 0.10,
+                'aesthetics': 0.05,
+                'is_code_compliance': 0.15
             }
         elif mode == OptimizationMode.LUXURY:
             weights = {
                 'embodied_carbon': 0.10,
                 'recycled_content': 0.05,
                 'cost': 0.10,
-                'durability': 0.30,
-                'thermal_performance': 0.20,
-                'aesthetics': 0.25
+                'durability': 0.25,
+                'thermal_performance': 0.10,
+                'aesthetics': 0.20,
+                'is_code_compliance': 0.20
             }
         else:  # BALANCED
             weights = {
-                'embodied_carbon': 0.20,
-                'recycled_content': 0.15,
+                'embodied_carbon': 0.15,
+                'recycled_content': 0.10,
                 'cost': 0.20,
-                'durability': 0.20,
-                'thermal_performance': 0.15,
-                'aesthetics': 0.10
+                'durability': 0.15,
+                'thermal_performance': 0.10,
+                'aesthetics': 0.10,
+                'is_code_compliance': 0.20
             }
         
         # Score and rank materials for each category
@@ -461,22 +491,22 @@ async def optimize_materials(
             # Calculate scores
             scored_materials = []
             for mat in materials_list:
-                # Normalize values (lower is better for carbon and cost, higher for others)
-                carbon_score = 1 / (mat.embodied_carbon + 0.01)  # Lower carbon = higher score
-                recycled_score = mat.recycled_content / 100  # Already 0-1
-                cost_score = 1 / (mat.cost_per_unit + 0.01)  # Lower cost = higher score
-                durability_score = mat.durability_years / 100  # Normalize to 0-1
-                thermal_score = 1 / (mat.thermal_conductivity + 0.01)  # Lower conductivity = better insulation
-                aesthetic_score = mat.aesthetic_rating / 10  # Normalize to 0-1
+                carbon_score = 1 / (mat.embodied_carbon + 0.01)
+                recycled_score = mat.recycled_content / 100
+                cost_score = 1 / (mat.cost_per_unit + 0.01)
+                durability_score = mat.durability_years / 100
+                thermal_score = 1 / (mat.thermal_conductivity + 0.01)
+                aesthetic_score = mat.aesthetic_rating / 10
+                compliance_score = getattr(mat, 'compliance_score', 0.5)
                 
-                # Calculate weighted score
                 total_score = (
                     weights['embodied_carbon'] * carbon_score +
                     weights['recycled_content'] * recycled_score +
                     weights['cost'] * cost_score +
                     weights['durability'] * durability_score +
                     weights['thermal_performance'] * thermal_score +
-                    weights['aesthetics'] * aesthetic_score
+                    weights['aesthetics'] * aesthetic_score +
+                    weights['is_code_compliance'] * compliance_score
                 )
                 
                 scored_materials.append({
@@ -490,6 +520,8 @@ async def optimize_materials(
                     'thermal_conductivity': mat.thermal_conductivity,
                     'durability_years': mat.durability_years,
                     'compressive_strength': mat.compressive_strength,
+                    'is_code': getattr(mat, 'is_code', ''),
+                    'compliance_score': compliance_score,
                     'supplier_id': mat.supplier_id,
                     'details': {
                         'carbon_score': round(carbon_score, 3),
@@ -497,7 +529,8 @@ async def optimize_materials(
                         'cost_score': round(cost_score, 3),
                         'durability_score': round(durability_score, 3),
                         'thermal_score': round(thermal_score, 3),
-                        'aesthetic_score': round(aesthetic_score, 3)
+                        'aesthetic_score': round(aesthetic_score, 3),
+                        'compliance_score': round(compliance_score, 3)
                     }
                 })
             
