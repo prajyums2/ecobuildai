@@ -22,7 +22,17 @@ export async function generateAIResponse(question, project, chatHistory = [], bo
 
   try {
     const response = await puter.ai.chat(messages, { model: AI_MODEL });
-    return typeof response === 'string' ? response : response.message?.content || response;
+    const rawResponse = typeof response === 'string' ? response : response.message?.content || response;
+    
+    // Validate AI response for IS code compliance and rate bounds
+    const { response: cleanedResponse, warnings } = validateAIResponse(rawResponse, { question, project });
+    
+    // Append warnings if any
+    if (warnings.length > 0) {
+      return cleanedResponse + '\n\n---\n**AI Validation Notes:**\n' + warnings.join('\n');
+    }
+    
+    return cleanedResponse;
   } catch (error) {
     console.warn('Puter.js AI failed, falling back to local:', error.message);
     return generateFallbackResponse(question, project, boqData, carbonData);
@@ -215,6 +225,80 @@ Provide a detailed comparison with a clear recommendation for Kerala's tropical 
   }
 }
 
+// ============ AI VALIDATION LAYER ============
+
+// Valid IS codes that AI can reference
+const VALID_IS_CODES = [
+  'IS 456:2000', 'IS 875', 'IS 875 Part 1:1987', 'IS 875 Part 2:1987',
+  'IS 875 Part 3:2015', 'IS 875 Part 5:1987', 'IS 1893:2016', 'IS 13920:2016',
+  'IS 800:2007', 'IS 1343:2012', 'IS 12269:2013', 'IS 1489:2015',
+  'IS 455:2015', 'IS 8112:2013', 'IS 1786:2008', 'IS 432:1982',
+  'IS 383:2016', 'IS 2185:2013', 'IS 1077:1992', 'IS 12894:2010',
+  'IS 1905:1987', 'IS 2250:1981', 'IS 2062:2011', 'IS 4926:2003',
+  'IS 3620:1979', 'IS 15658:2006', 'IS 15622:2006', 'IS 2619:2003',
+  'IS 2645:2003', 'IS 15477:2019', 'IS 15304:2003', 'IS 2202:1994',
+  'IS 399:1963', 'IS 710:2019', 'IS 4984:2016', 'IS 3043:2018',
+  'IS 1948:1961', 'IS 10262:2019', 'IS 1200', 'IS 1661:1972',
+  'IS 2571:1970', 'IS 3861:1966'
+];
+
+// Kerala 2026 market rate bounds (min, max) for key materials
+const RATE_BOUNDS = {
+  cement: { min: 350, max: 450, unit: 'bag' },
+  steel: { min: 65, max: 85, unit: 'kg' },
+  concrete: { min: 4500, max: 8000, unit: 'cum' },
+  sand: { min: 50, max: 100, unit: 'cft' },
+  aggregate: { min: 35, max: 55, unit: 'cft' },
+  blocks: { min: 10, max: 80, unit: 'nos' },
+  bricks: { min: 8, max: 15, unit: 'nos' },
+  tiles: { min: 40, max: 180, unit: 'sqft' },
+  paint: { min: 200, max: 500, unit: 'liter' },
+  waterproofing: { min: 250, max: 500, unit: 'sqm' },
+};
+
+/**
+ * Validate AI response for IS code compliance and rate bounds
+ * Returns cleaned response with warnings if issues found
+ */
+export function validateAIResponse(response, context = {}) {
+  const warnings = [];
+  let cleaned = response;
+
+  // Check for invalid IS codes
+  const isCodeRegex = /IS\s+\d{4}[:\d]*/gi;
+  const foundCodes = cleaned.match(isCodeRegex) || [];
+  foundCodes.forEach(code => {
+    const normalized = code.replace(/\s+/g, ' ').trim();
+    const isValid = VALID_IS_CODES.some(valid => valid.startsWith(normalized) || normalized.startsWith(valid));
+    if (!isValid) {
+      warnings.push(`⚠️ IS code "${code}" may be incorrect. Verify against IS code database.`);
+      cleaned = cleaned.replace(code, `${code} [VERIFY]`);
+    }
+  });
+
+  // Check for LEED references (removed from scope)
+  if (cleaned.toLowerCase().includes('leed')) {
+    warnings.push('⚠️ LEED rating system is not used in this project. Use GRIHA or IGBC instead.');
+    cleaned = cleaned.replace(/LEED/gi, 'GRIHA/IGBC');
+  }
+
+  // Check rate bounds if rates are mentioned
+  const rateRegex = /₹?\s*([\d,]+)\s*\/\s*(bag|kg|cum|cft|nos|sqft|sqm|liter)/gi;
+  let match;
+  while ((match = rateRegex.exec(cleaned)) !== null) {
+    const rate = parseFloat(match[1].replace(/,/g, ''));
+    const unit = match[2].toLowerCase();
+    
+    for (const [category, bounds] of Object.entries(RATE_BOUNDS)) {
+      if (unit === bounds.unit && (rate < bounds.min * 0.5 || rate > bounds.max * 2)) {
+        warnings.push(`⚠️ Rate ₹${rate}/${unit} seems outside normal range (₹${bounds.min}-₹${bounds.max}/${unit})`);
+      }
+    }
+  }
+
+  return { response: cleaned, warnings };
+}
+
 // ============ HELPER FUNCTIONS ============
 
 function buildSystemPrompt(project, boqData, carbonData) {
@@ -228,14 +312,60 @@ Building type: ${project.buildingParams?.buildingType || 'Residential'}
 
   return `You are EcoBuild AI, an expert civil engineering assistant for sustainable construction in Kerala, India.
 
-Your expertise includes:
-- Indian Standards: IS 456:2000 (RCC), IS 875 (Loads), IS 1893:2016 (Seismic), IS 10262:2019 (Mix Design)
-- Green Building: GRIHA, IGBC, LEED rating systems
-- Kerala-specific: Laterite soil, high rainfall (2800mm/year), coastal exposure, Seismic Zone III
-- Material optimization using AHP (Analytical Hierarchy Process)
-- Cost estimation with Kerala market rates (2026)
-- Bill of Quantities (BoQ) preparation
-- Sustainability metrics: embodied carbon, recycled content, lifecycle assessment
+Your expertise includes ALL these Indian Standards:
+
+STRUCTURAL:
+- IS 456:2000 - Plain and Reinforced Concrete (min grades, reinforcement, cover)
+- IS 875 Part 1:1987 - Dead Loads (unit weights for materials)
+- IS 875 Part 2:1987 - Imposed/Live Loads (occupancy types)
+- IS 875 Part 3:2015 - Wind Loads (wind speeds, pressure coefficients)
+- IS 1893:2016 - Earthquake Resistant Design (zone factors, response spectra)
+- IS 13920:2016 - Ductile Detailing of RCC (hoops, confinement zones)
+- IS 800:2007 - General Construction in Steel
+- IS 1343:2012 - Prestressed Concrete
+
+MATERIALS:
+- IS 12269:2013 - OPC 53 Grade Cement
+- IS 1489:2015 - PPC Fly Ash Cement
+- IS 455:2015 - Portland Slag Cement
+- IS 8112:2013 - OPC 43 Grade Cement
+- IS 1786:2008 - High Strength Deformed Steel Bars (Fe415, Fe500, Fe550)
+- IS 432:1982 - Mild Steel Bars for RCC
+- IS 383:2016 - Coarse and Fine Aggregate
+- IS 2185:2013 - Concrete Masonry Units (AAC, solid, hollow blocks)
+- IS 1077:1992 - Burnt Clay Bricks
+- IS 12894:2010 - Fly Ash Bricks
+- IS 1905:1987 - Code of Practice for Masonry
+- IS 2250:1981 - Masonry Mortar
+- IS 2062:2011 - Structural Steel Plates
+- IS 4926:2003 - Ready Mixed Concrete
+- IS 3620:1979 - Laterite Stone
+- IS 15658:2006 - Pre-cast Concrete Blocks
+
+FINISHING & OTHERS:
+- IS 15622:2006 - Ceramic/Vitrified Tiles
+- IS 2619:2003 - Emulsion Paints
+- IS 2645:2003 - Waterproofing Compounds
+- IS 15477:2019 - Tile Adhesives
+- IS 15304:2003 - Bituminous Membranes
+- IS 2202:1994 - Flush Doors
+- IS 399:1963 - Teak Wood
+- IS 710:2019 - Marine Plywood
+- IS 4984:2016 - HDPE Water Supply Pipes
+- IS 3043:2018 - Earthing/Grounding
+- IS 1948:1961 - Bamboo Products
+
+Green Building: GRIHA v3.1, IGBC (India only - no LEED)
+Kerala-specific: Laterite soil, high rainfall (2800mm/year), coastal exposure, Seismic Zone III
+
+CRITICAL RULES:
+1. NEVER invent IS code numbers - only use codes listed above
+2. NEVER suggest rates outside ±25% of Kerala 2026 market rates
+3. NEVER remove safety-critical items (cover blocks, binding wire, waterproofing)
+4. NEVER change IS code minimum requirements
+5. Always suggest PPC/PSC cement over OPC for Kerala (lower carbon, better durability)
+6. Seismic Zone III requires minimum Fe415D steel, M20 concrete
+7. For coastal areas, use PSC cement (IS 455) for corrosion resistance
 
 Current project context:
 ${projectInfo}

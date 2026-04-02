@@ -2,6 +2,7 @@
 // Validates quantities, suggests rates, and optimizes BoQ
 
 import { puter } from '@heyputer/puter.js';
+import { validateAIResponse } from './aiService';
 
 const AI_MODEL = 'gpt-4.1-nano';
 
