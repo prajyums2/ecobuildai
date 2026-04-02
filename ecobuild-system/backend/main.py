@@ -906,23 +906,22 @@ async def get_environmental_data(
         
         engine = KeralaEnvironmentalEngine()
         
-        # Get district and environmental data from engine
-        district_data = engine.get_district_data(lat, lon)
-        climate = engine.get_climate_data(lat, lon)
-        seismic = engine.get_seismic_zone(lat, lon)
-        wind = engine.get_wind_speed(lat, lon)
-        rainfall = engine.get_rainfall(lat, lon)
-        soil = engine.get_soil_type(lat, lon)
-        material_recommendations = engine.get_material_recommendations(lat, lon)
+        # Get environmental data from engine
+        env_data = engine.get_environmental_data(lat, lon)
         
         return {
-            "district": district_data.get('district', 'Thrissur'),
-            "climate": climate,
-            "rainfall": rainfall,
-            "seismic": seismic,
-            "wind": wind,
-            "soil": soil,
-            "material_recommendations": material_recommendations,
+            "district": env_data.get('location', {}).get('district', 'Thrissur'),
+            "climate": {
+                "temperature": env_data.get('climate', {}).get('avg_temperature_c', 27.5),
+                "humidity": env_data.get('climate', {}).get('avg_humidity_percent', 78)
+            },
+            "rainfall": {"annual": env_data.get('climate', {}).get('rainfall_intensity_mm_year', 2800)},
+            "seismic": {"zone": env_data.get('geotechnical', {}).get('seismic_zone', 'III')},
+            "wind": {"speed": env_data.get('climate', {}).get('wind_speed_m_s', 15.5)},
+            "soil": {"type": env_data.get('geotechnical', {}).get('soil_type', 'Lateritic')},
+            "solar_radiation": env_data.get('climate', {}).get('solar_radiation_kwh_m2_day', 5.2),
+            "groundwater_depth": env_data.get('geotechnical', {}).get('groundwater_depth_m', 8.5),
+            "material_recommendations": env_data.get('material_recommendations', {}),
             "coordinates": {"lat": lat, "lon": lon}
         }
     except Exception as e:
