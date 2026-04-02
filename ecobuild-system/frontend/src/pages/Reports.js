@@ -31,8 +31,6 @@ import {
   FaPaperPlane,
   FaSyncAlt,
   FaTimes,
-  FaCheckCircle,
-  FaExclamationTriangle,
 } from "react-icons/fa";
 import BillOfQuantities from "../components/BillOfQuantities";
 import AIReportReview from "../components/AIReportReview";
