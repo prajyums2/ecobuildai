@@ -31,8 +31,11 @@ import {
   FaPaperPlane,
   FaSyncAlt,
   FaTimes,
+  FaCheckCircle,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import BillOfQuantities from "../components/BillOfQuantities";
+import AIReportReview from "../components/AIReportReview";
 import {
   generateBoQAsync,
   exportBoQToCSV,
@@ -1356,6 +1359,41 @@ function Reports() {
   const [aiValidation, setAiValidation] = useState(null);
   const [aiOptimization, setAiOptimization] = useState(null);
   const [citations, setCitations] = useState(null);
+  const [lastGeneratedState, setLastGeneratedState] = useState(null);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const getCurrentState = () => ({
+    materials: JSON.stringify(project?.materialSelections || {}),
+    builtUpArea: project?.buildingParams?.builtUpArea,
+    numFloors: project?.buildingParams?.numFloors,
+    height: project?.buildingParams?.height,
+    district: project?.location?.district,
+  });
+
+  const getChangeSummary = () => {
+    if (!lastGeneratedState) return 'Report not yet generated';
+    const current = getCurrentState();
+    const changes = [];
+    if (current.materials !== lastGeneratedState.materials) {
+      const prevKeys = Object.keys(JSON.parse(lastGeneratedState.materials));
+      const currKeys = Object.keys(JSON.parse(current.materials));
+      const added = currKeys.filter(k => !prevKeys.includes(k));
+      const removed = prevKeys.filter(k => !currKeys.includes(k));
+      const changed = currKeys.filter(k => prevKeys.includes(k) && JSON.parse(current.materials)[k]?.rate !== JSON.parse(lastGeneratedState.materials)[k]?.rate);
+      if (added.length) changes.push(`${added.join(', ')} added`);
+      if (removed.length) changes.push(`${removed.join(', ')} removed`);
+      if (changed.length) changes.push(`${changed.length} rate(s) changed`);
+    }
+    if (current.builtUpArea !== lastGeneratedState.builtUpArea) changes.push(`Area changed`);
+    if (current.numFloors !== lastGeneratedState.numFloors) changes.push(`Floors changed`);
+    return changes.length > 0 ? changes.join(' | ') : 'No changes since last generation';
+  };
+
+  useEffect(() => {
+    if (lastGeneratedState) {
+      setHasChanges(JSON.stringify(getCurrentState()) !== JSON.stringify(lastGeneratedState));
+    }
+  }, [project?.materialSelections, project?.buildingParams?.builtUpArea, project?.buildingParams?.numFloors, project?.location?.district]);
   
   // Fallback: Try to get material selections from localStorage directly
   const getMaterialSelectionsFromStorage = () => {
@@ -1539,6 +1577,8 @@ function Reports() {
           setBoq(boqData);
           setBoqGenerated(true);
           setLastGeneratedKey(currentKey);
+          setLastGeneratedState(getCurrentState());
+          setHasChanges(false);
           completeBOQGeneration();
 
           // Run AI validation in background (non-blocking)
@@ -1968,7 +2008,7 @@ function Reports() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
+      {/* Header with State Tracking */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
@@ -1978,12 +2018,29 @@ function Reports() {
             Generate Quantity Survey, Bill of Quantities (BoQ), and
             Sustainability Assessment reports
           </p>
+          {boq && (
+            <div className="mt-2 flex items-center gap-2">
+              {hasChanges ? (
+                <>
+                  <FaExclamationTriangle className="text-yellow-500 text-xs" />
+                  <span className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">{getChangeSummary()}</span>
+                </>
+              ) : (
+                <>
+                  <FaCheckCircle className="text-green-500 text-xs" />
+                  <span className="text-xs text-green-600 dark:text-green-400 font-medium">Up to date</span>
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-2 print:hidden">
-          <button onClick={handleRefreshBoQ} className="btn btn-secondary">
-            <FaSyncAlt className="mr-2" />
-            Refresh
-          </button>
+          {hasChanges && boq && (
+            <button onClick={handleRefreshBoQ} className="btn btn-primary">
+              <FaSyncAlt className="mr-2" />
+              Regenerate Report
+            </button>
+          )}
           <button onClick={handlePrint} className="btn btn-secondary">
             <FaPrint className="mr-2" />
             Print
@@ -1999,7 +2056,7 @@ function Reports() {
           <button
             onClick={handleExportPDF}
             disabled={exporting}
-            className="btn btn-primary"
+            className="btn btn-secondary"
           >
             <FaFilePdf className="mr-2" />
             Export PDF
@@ -2063,6 +2120,17 @@ function Reports() {
         >
           <FaIndustry />
           Suppliers
+        </button>
+        <button
+          onClick={() => setActiveTab("aireview")}
+          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === "aireview"
+              ? "border-purple-500 text-purple-600 dark:text-purple-400"
+              : "border-transparent text-foreground-secondary hover:text-foreground"
+          }`}
+        >
+          <FaRobot />
+          AI Review
         </button>
         <button
           onClick={() => setActiveTab("sustainability")}
@@ -2259,6 +2327,21 @@ function Reports() {
           className="print:hidden"
         >
           <SuppliersTab boq={boq} project={project} />
+        </div>
+
+        <div
+          data-tab-content="aireview"
+          style={{ display: activeTab === "aireview" ? "block" : "none" }}
+          className="print:hidden"
+        >
+          <AIReportReview
+            boq={boq}
+            project={project}
+            materialSelections={materialSelections}
+            onApplyChanges={(suggestion) => {
+              console.log('[AI Review] Applied suggestion:', suggestion);
+            }}
+          />
         </div>
 
         <div

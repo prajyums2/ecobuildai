@@ -719,9 +719,14 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                       totalArea <= 800 ? 12.6 :
                       11.1;
   
-  // Foundation volume depends on size and floors
-  const foundationRatio = numFloors <= 2 ? 0.019 : 0.019 + (numFloors - 2) * 0.025;
-  const foundationVolume = totalArea * foundationRatio * foundationDepth / 1.5;
+  // Foundation volume — realistic isolated footing calculation
+  // For 2-floor: ~6-8 columns with 1.5m×1.5m×1.5m footings + grade beam
+  // For 3-floor+: larger footings + more columns
+  const numColumns = Math.max(6, Math.ceil(Math.sqrt(footprintArea) * 2));
+  const footingSize = numFloors <= 2 ? 1.5 : numFloors <= 3 ? 1.8 : 2.0;
+  const footingVolume = numColumns * footingSize * footingSize * foundationDepth;
+  const gradeBeamVolume = buildingPerimeter * 0.3 * 0.4; // 300mm×400mm grade beam
+  const foundationVolume = footingVolume + gradeBeamVolume;
   
   // Column concrete: varies with floors
   const columnRatio = 0.0083 + (numFloors - 1) * 0.004;
@@ -831,17 +836,17 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     subTotal: 0,
   };
   
-  // Excavation for foundation
-  const excavationVolume = foundationVolume * 1.5; // 50% extra for working space
+  // Excavation for foundation (including working space)
+  const excavationVolume = foundationVolume * 2.0; // 100% extra for working space
   addBoQItem(earthwork, {
     sno: 1,
     description: 'Excavation for foundation in all types of soil including leveling and dressing',
     quantity: excavationVolume.toFixed(2),
     unit: 'cum',
-    rate: 450, // ₹450/cum for manual excavation
+    rate: 450,
   });
   
-  // Backfilling
+  // Backfilling with compaction
   const backfillVolume = excavationVolume - foundationVolume;
   addBoQItem(earthwork, {
     sno: 2,
@@ -851,8 +856,8 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     rate: 320,
   });
   
-  // Soling (if required)
-  const solingArea = foundationVolume / foundationDepth * 1.2; // Approximate area from volume
+  // Soling (40mm stone under footing)
+  const solingArea = foundationVolume / foundationDepth * 1.5;
   addBoQItem(earthwork, {
     sno: 3,
     description: 'Providing and laying 150mm thick soling with 40mm hard granite stone under footing',
@@ -862,13 +867,33 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   });
   
   // Disposal of surplus earth
-  const surplusEarth = excavationVolume * 0.3; // 30% surplus
+  const surplusEarth = excavationVolume * 0.4; // 40% surplus
   addBoQItem(earthwork, {
     sno: 4,
-    description: 'Disposal of surplus earth within 1km lead including loading and unloading',
+    description: 'Disposal of surplus earth within 5km lead including loading and unloading',
     quantity: surplusEarth.toFixed(2),
     unit: 'cum',
-    rate: 280,
+    rate: 350,
+  });
+  
+  // Anti-termite treatment
+  const plinthArea = footprintArea;
+  addBoQItem(earthwork, {
+    sno: 5,
+    description: 'Providing and applying anti-termite treatment (ATT) to plinth area and foundation trenches',
+    quantity: plinthArea.toFixed(2),
+    unit: 'sqm',
+    rate: 25,
+  });
+  
+  // PCC bed below foundation
+  const pccBedArea = foundationVolume / foundationDepth * 1.3;
+  addBoQItem(earthwork, {
+    sno: 6,
+    description: 'Providing and laying 75mm thick PCC (1:4:8) bed below foundation',
+    quantity: pccBedArea.toFixed(2),
+    unit: 'sqm',
+    rate: 180,
   });
   
   boq.categories.push(earthwork);

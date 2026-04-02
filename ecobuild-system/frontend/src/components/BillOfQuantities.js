@@ -6,11 +6,13 @@ import {
   FaFileExcel, 
   FaChevronDown, 
   FaChevronUp,
-  FaCalculator,
   FaBuilding,
   FaRupeeSign,
   FaPercentage,
-  FaSpinner
+  FaSpinner,
+  FaSyncAlt,
+  FaCheckCircle,
+  FaExclamationTriangle
 } from 'react-icons/fa';
 import { useProject } from '../context/ProjectContext';
 import { 
@@ -21,49 +23,89 @@ import {
   formatNumber
 } from '../utils/boqCalculator';
 
-function BillOfQuantities() {
+function BillOfQuantities({ onBoQUpdate }) {
   const { project, updateAnalysisResults } = useProject();
   const [expandedCategories, setExpandedCategories] = useState({});
   const [activeTab, setActiveTab] = useState('detailed');
   const [exporting, setExporting] = useState(false);
   const [boq, setBoq] = useState(null);
-  const [boqLoading, setBoqLoading] = useState(true);
+  const [boqLoading, setBoqLoading] = useState(false);
+  const [lastGeneratedState, setLastGeneratedState] = useState(null);
+  const [hasChanges, setHasChanges] = useState(false);
   const boqRef = useRef();
-  
-  // Fetch BoQ data asynchronously - runs when project changes
+
+  // Detect changes since last BoQ generation
+  const getCurrentState = () => ({
+    materials: JSON.stringify(project?.materialSelections || {}),
+    builtUpArea: project?.buildingParams?.builtUpArea,
+    numFloors: project?.buildingParams?.numFloors,
+    height: project?.buildingParams?.height,
+    district: project?.location?.district,
+  });
+
+  const getChangeSummary = () => {
+    if (!lastGeneratedState) return 'Never generated';
+    const current = getCurrentState();
+    const changes = [];
+    if (current.materials !== lastGeneratedState.materials) {
+      const prevKeys = Object.keys(JSON.parse(lastGeneratedState.materials));
+      const currKeys = Object.keys(JSON.parse(current.materials));
+      const added = currKeys.filter(k => !prevKeys.includes(k));
+      const removed = prevKeys.filter(k => !currKeys.includes(k));
+      const changed = currKeys.filter(k => prevKeys.includes(k) && JSON.parse(current.materials)[k]?.rate !== JSON.parse(lastGeneratedState.materials)[k]?.rate);
+      if (added.length) changes.push(`${added.join(', ')} added`);
+      if (removed.length) changes.push(`${removed.join(', ')} removed`);
+      if (changed.length) changes.push(`${changed.length} material rates changed`);
+    }
+    if (current.builtUpArea !== lastGeneratedState.builtUpArea) changes.push(`Area: ${lastGeneratedState.builtUpArea} → ${current.builtUpArea} sqm`);
+    if (current.numFloors !== lastGeneratedState.numFloors) changes.push(`Floors: ${lastGeneratedState.numFloors} → ${current.numFloors}`);
+    if (current.district !== lastGeneratedState.district) changes.push(`Location changed`);
+    return changes.length > 0 ? changes.join(' | ') : 'No changes since last generation';
+  };
+
+  useEffect(() => {
+    setHasChanges(JSON.stringify(getCurrentState()) !== JSON.stringify(lastGeneratedState));
+  }, [project?.materialSelections, project?.buildingParams?.builtUpArea, project?.buildingParams?.numFloors, project?.location?.district]);
+
+  // Initial BoQ generation
   useEffect(() => {
     const fetchBoQ = async () => {
-      // Only generate if we have valid building params
       const builtUpArea = project?.buildingParams?.builtUpArea;
       const hasValidParams = builtUpArea && builtUpArea > 0;
       
-      if (hasValidParams) {
+      if (hasValidParams && !boq) {
         setBoqLoading(true);
         try {
           console.log('[BillOfQuantities] Generating BoQ for:', project.name);
           const boqData = await generateBoQAsync(project);
-          console.log('[BillOfQuantities] BoQ generated:', boqData);
-          console.log('[BillOfQuantities] Categories:', boqData?.categories?.length);
-          console.log('[BillOfQuantities] Grand total:', boqData?.summary?.grandTotal);
           setBoq(boqData);
+          setLastGeneratedState(getCurrentState());
+          if (onBoQUpdate) onBoQUpdate(boqData);
         } catch (error) {
           console.error('[BillOfQuantities] Failed to generate BoQ:', error);
-          setBoq({
-            projectInfo: { name: project.name, builtUpArea: project.buildingParams?.builtUpArea || 150, numFloors: project.buildingParams?.numFloors || 2 },
-            categories: [],
-            summary: { subTotal: 0, gstRate: 18, gstAmount: 0, grandTotal: 0 }
-          });
         } finally {
           setBoqLoading(false);
         }
-      } else {
-        console.log('[BillOfQuantities] Skipping BoQ - no valid building params');
-        setBoqLoading(false);
       }
     };
 
     fetchBoQ();
-  }, [project?.id, project?.buildingParams?.builtUpArea]);
+  }, []);
+
+  const handleRegenerate = async () => {
+    setBoqLoading(true);
+    try {
+      const boqData = await generateBoQAsync(project);
+      setBoq(boqData);
+      setLastGeneratedState(getCurrentState());
+      setHasChanges(false);
+      if (onBoQUpdate) onBoQUpdate(boqData);
+    } catch (error) {
+      console.error('[BillOfQuantities] Regenerate failed:', error);
+    } finally {
+      setBoqLoading(false);
+    }
+  };
 
   const materialSummary = boq ? generateMaterialSummary(boq) : { cement: 0, steel: 0, aggregate: 0, blocks: 0 };
   
@@ -507,28 +549,46 @@ function BillOfQuantities() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header with State Tracking */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <FaCalculator className="text-blue-500" />
+            <FaBuilding className="text-blue-500" />
             Bill of Quantities
           </h1>
           <p className="text-foreground-secondary mt-1">
-            Comprehensive cost estimate based on Thrissur market rates
+            Comprehensive cost estimate based on {project?.location?.district || 'Thrissur'} market rates
           </p>
+          {boq && (
+            <div className="mt-2 flex items-center gap-2">
+              {hasChanges ? (
+                <>
+                  <FaExclamationTriangle className="text-yellow-500 text-xs" />
+                  <span className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">{getChangeSummary()}</span>
+                </>
+              ) : (
+                <>
+                  <FaCheckCircle className="text-green-500 text-xs" />
+                  <span className="text-xs text-green-600 dark:text-green-400 font-medium">Up to date</span>
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={handleSaveBoQ}
-            className="btn btn-secondary"
-          >
-            <FaCalculator className="mr-2" />
-            Calculate & Save
-          </button>
+          {hasChanges && boq && (
+            <button
+              onClick={handleRegenerate}
+              disabled={boqLoading}
+              className="btn btn-primary"
+            >
+              {boqLoading ? <FaSpinner className="animate-spin mr-2" /> : <FaSyncAlt className="mr-2" />}
+              Regenerate Report
+            </button>
+          )}
           <button
             onClick={handleExportCSV}
-            disabled={exporting}
+            disabled={exporting || !boq}
             className="btn btn-secondary"
           >
             <FaFileExcel className="mr-2" />
@@ -536,7 +596,7 @@ function BillOfQuantities() {
           </button>
           <button
             onClick={handleExportPDF}
-            disabled={exporting}
+            disabled={exporting || !boq}
             className="btn btn-secondary"
           >
             <FaFilePdf className="mr-2" />
@@ -544,13 +604,32 @@ function BillOfQuantities() {
           </button>
           <button
             onClick={handlePrint}
-            className="btn btn-primary"
+            disabled={!boq}
+            className="btn btn-secondary"
           >
             <FaPrint className="mr-2" />
             Print
           </button>
         </div>
       </div>
+
+      {/* Summary Cards */}
+      {boq && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+            <p className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase">Sub-Total</p>
+            <p className="text-2xl font-bold text-blue-700 dark:text-blue-300 mt-1">₹{(boq.summary?.subTotal || 0).toLocaleString('en-IN')}</p>
+          </div>
+          <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+            <p className="text-xs text-green-600 dark:text-green-400 font-medium uppercase">GST (18%)</p>
+            <p className="text-2xl font-bold text-green-700 dark:text-green-300 mt-1">₹{(boq.summary?.gstAmount || 0).toLocaleString('en-IN')}</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium uppercase">Grand Total</p>
+            <p className="text-2xl font-bold text-purple-700 dark:text-purple-300 mt-1">₹{(boq.summary?.grandTotal || 0).toLocaleString('en-IN')}</p>
+          </div>
+        </div>
+      )}
       
       {/* Tabs */}
       <div className="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700">
