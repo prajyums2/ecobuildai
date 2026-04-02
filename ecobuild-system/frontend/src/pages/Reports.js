@@ -63,36 +63,41 @@ import {
 function calculateGRIHAScore(project, boqCarbon) {
   let score = 0;
 
-  // Site & Planning (max 20 points)
   const hasRWH = project.buildingParams?.hasRainwaterHarvesting;
   const plotArea = project.buildingParams?.plotArea || 200;
   const builtUpArea = project.buildingParams?.builtUpArea || 150;
   const far = builtUpArea / plotArea;
 
+  // Site & Planning (max 15 points)
   if (hasRWH) score += 7;
   if (far <= 1.5) score += 5;
   if (far <= 1.0) score += 3;
 
-  // Water Efficiency (max 15 points)
-  if (hasRWH) score += 5;
+  // Water Efficiency (max 10 points)
   if (project.buildingParams?.hasSTP) score += 5;
-  if (project.buildingParams?.hasRainwaterHarvesting) score += 5;
+  if (project.buildingParams?.hasWaterEfficientFixtures) score += 5;
 
   // Energy Performance (max 25 points)
   if (project.buildingParams?.hasSolarWaterHeater) score += 12;
-  if (project.buildingParams?.sustainabilityPriority === "high") score += 8;
-  else if (project.buildingParams?.sustainabilityPriority === "medium") score += 5;
-
-  // Materials & Resources (max 25 points)
+  if (project.buildingParams?.hasSolarPanels) score += 8;
   const sustainabilityPriority = project.buildingParams?.sustainabilityPriority;
-  if (sustainabilityPriority === "high") score += 12;
-  else if (sustainabilityPriority === "medium") score += 7;
-  else score += 3;
+  if (sustainabilityPriority === "high") score += 5;
+  else if (sustainabilityPriority === "medium") score += 3;
 
-  // Low embodied carbon bonus (max 15 points)
-  if (boqCarbon > 0 && boqCarbon < 50000) score += 15;
-  else if (boqCarbon > 0 && boqCarbon < 100000) score += 10;
-  else if (boqCarbon > 0) score += 5;
+  // Materials & Resources (max 28 points)
+  const matSelections = project.materialSelections || {};
+  const hasLowCarbonMat = Object.values(matSelections).some(m => (m.carbon || 0) < 1);
+  if (hasLowCarbonMat) score += 8;
+  const hasRecycledMat = Object.values(matSelections).some(m => (m.recycled || 0) > 20);
+  if (hasRecycledMat) score += 8;
+  if (sustainabilityPriority === "high") score += 7;
+  else if (sustainabilityPriority === "medium") score += 4;
+  else score += 2;
+
+  // Low embodied carbon bonus (max 12 points)
+  if (boqCarbon > 0 && boqCarbon < 50000) score += 12;
+  else if (boqCarbon > 0 && boqCarbon < 100000) score += 8;
+  else if (boqCarbon > 0) score += 4;
 
   return Math.min(100, score);
 }
@@ -107,7 +112,7 @@ function calculateIGBCScore(project, boqCarbon) {
 
   // Sustainable Sites (max 15 points)
   if (project.buildingParams?.hasRainwaterHarvesting) score += 8;
-  if (project.location?.district) score += 7;
+  if (far <= 1.5) score += 7;
 
   // Water Efficiency (max 20 points)
   if (project.buildingParams?.hasRainwaterHarvesting) score += 8;
@@ -120,13 +125,16 @@ function calculateIGBCScore(project, boqCarbon) {
   else if (sustainabilityPriority === "medium") score += 5;
 
   // Materials & Resources (max 25 points)
-  if (sustainabilityPriority === "high") score += 12;
-  else if (sustainabilityPriority === "medium") score += 7;
+  const matSelections = project.materialSelections || {};
+  const hasRecycledMat = Object.values(matSelections).some(m => (m.recycled || 0) > 20);
+  if (hasRecycledMat) score += 10;
+  if (sustainabilityPriority === "high") score += 10;
+  else if (sustainabilityPriority === "medium") score += 5;
   else score += 3;
 
   // Indoor Environment Quality (max 15 points)
-  score += 8; // Natural ventilation assumed for Kerala climate
-  if (far <= 1.5) score += 7; // Open space
+  if (project.buildingParams?.hasNaturalVentilation) score += 8;
+  if (far <= 1.5) score += 7;
 
   return Math.min(100, score);
 }

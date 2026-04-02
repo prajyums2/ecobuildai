@@ -152,6 +152,45 @@ IS_CODE_REQUIREMENTS: Dict[str, ISCodeRequirement] = {
         is_code="IS 2645:2003", name="Waterproofing", category="finish",
         min_durability=10, notes="As per IS 2645 for integral waterproofing"
     ),
+    # ADDITIONAL IS CODES
+    "steel_structural": ISCodeRequirement(
+        is_code="IS 2062:2011", name="Structural Steel", category="steel",
+        min_tensile_strength=250.0, min_durability=50,
+        notes="General construction steel as per IS 2062"
+    ),
+    "steel_mild": ISCodeRequirement(
+        is_code="IS 432:1982", name="Mild Steel Bars", category="steel",
+        min_tensile_strength=250.0, min_durability=50,
+        notes="Mild steel for non-structural RCC as per IS 432"
+    ),
+    "concrete_rmc": ISCodeRequirement(
+        is_code="IS 4926:2003", name="Ready Mix Concrete", category="concrete",
+        min_compressive_strength=20.0, min_durability=50,
+        notes="RMC quality control as per IS 4926"
+    ),
+    "masonry_laterite": ISCodeRequirement(
+        is_code="IS 3620:1979", name="Laterite Stone", category="masonry",
+        min_compressive_strength=3.5, max_water_absorption=12.0, min_durability=75,
+        notes="Kerala laterite stone as per IS 3620"
+    ),
+    "masonry_precast": ISCodeRequirement(
+        is_code="IS 15658:2006", name="Pre-cast Concrete", category="masonry",
+        min_compressive_strength=15.0, min_durability=50,
+        notes="Pre-cast concrete elements as per IS 15658"
+    ),
+    "finish_hdpe": ISCodeRequirement(
+        is_code="IS 4984:2016", name="HDPE Pipes", category="finish",
+        min_durability=50, notes="HDPE water supply pipes as per IS 4984"
+    ),
+    "finish_earthing": ISCodeRequirement(
+        is_code="IS 3043:2018", name="Earthing Electrode", category="finish",
+        min_durability=30, notes="Earthing/grounding as per IS 3043"
+    ),
+    "timber_bamboo": ISCodeRequirement(
+        is_code="IS 1948:1961", name="Bamboo Products", category="timber",
+        min_compressive_strength=20.0, min_durability=10,
+        notes="Bamboo composite boards as per IS 1948"
+    ),
 }
 
 class ISCodeFilter:

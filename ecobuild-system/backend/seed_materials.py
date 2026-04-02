@@ -2647,6 +2647,428 @@ MATERIALS_DATA = [
         "is_active": True,
         "tags": ["waterproofing", "bitumen", "terrace", "APP"]
     },
+
+    # ========================================================================
+    # MISSING IS CODE MATERIALS - Critical additions for 95+ accuracy
+    # ========================================================================
+
+    # IS 800:2007 - General Construction in Steel
+    {
+        "name": "Structural Steel Plates (IS 2062)",
+        "category": "steel",
+        "subcategory": "Structural Steel",
+        "description": "Hot-rolled structural steel plates for general construction, IS 2062:2011 compliant",
+        "financial_properties": {
+            "cost_per_unit": 75,
+            "unit_type": "kg",
+            "currency": "INR",
+            "retail_price": 80,
+            "wholesale_price": 72,
+            "bulk_price": 68,
+            "gst_rate": 18,
+            "minimum_order_quantity": 500,
+            "price_volatility": "High",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 2.4,
+            "embodied_energy": 24.0,
+            "recycled_content": 15,
+            "recyclable": True,
+            "epd_available": True
+        },
+        "physical_properties": {
+            "density": 7850,
+            "specific_gravity": 7.85,
+            "compressive_strength": 250,
+            "thermal_conductivity": 50.0,
+            "yield_strength": 250,
+            "tensile_strength": 410
+        },
+        "civil_properties": {
+            "structural_grade": "E250",
+            "design_strength": 250,
+            "durability_years": 50,
+            "weather_resistance": "Medium",
+            "wastage_percentage": 8,
+            "is_code": "IS 2062:2011",
+            "quality_grade": "Standard",
+            "green_building_cert": ["GRIHA", "IGBC"]
+        },
+        "supplier": {
+            "supplier_name": "SAIL",
+            "supplier_location": "Kochi",
+            "lead_time_days": 7,
+            "reliability_rating": 9.0
+        },
+        "is_active": True,
+        "tags": ["steel", "structural", "plates", "IS2062"]
+    },
+
+    # IS 432:1982 - Mild Steel Bars for RCC
+    {
+        "name": "Mild Steel Bars Fe250 (IS 432)",
+        "category": "steel",
+        "subcategory": "Mild Steel",
+        "description": "Mild steel bars for non-structural RCC work, IS 432:1982 compliant",
+        "financial_properties": {
+            "cost_per_unit": 62,
+            "unit_type": "kg",
+            "currency": "INR",
+            "retail_price": 65,
+            "wholesale_price": 60,
+            "bulk_price": 58,
+            "gst_rate": 18,
+            "minimum_order_quantity": 500,
+            "price_volatility": "Medium",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 2.3,
+            "embodied_energy": 23.0,
+            "recycled_content": 20,
+            "recyclable": True,
+            "epd_available": False
+        },
+        "physical_properties": {
+            "density": 7850,
+            "specific_gravity": 7.85,
+            "compressive_strength": 250,
+            "thermal_conductivity": 50.0,
+            "yield_strength": 250,
+            "tensile_strength": 410,
+            "elongation": 23
+        },
+        "civil_properties": {
+            "structural_grade": "Fe250",
+            "design_strength": 250,
+            "durability_years": 50,
+            "weather_resistance": "Medium",
+            "wastage_percentage": 10,
+            "is_code": "IS 432:1982",
+            "quality_grade": "Standard"
+        },
+        "supplier": {
+            "supplier_name": "Local Steel Dealer",
+            "supplier_location": "Thrissur",
+            "lead_time_days": 3,
+            "reliability_rating": 8.0
+        },
+        "is_active": True,
+        "tags": ["steel", "mild-steel", "Fe250", "IS432"]
+    },
+
+    # IS 4926:2003 - Ready Mixed Concrete
+    {
+        "name": "Ready Mix Concrete M30 (IS 4926)",
+        "category": "concrete",
+        "subcategory": "Ready Mix Concrete",
+        "description": "Factory-produced M30 RMC with quality control, IS 4926:2003 compliant",
+        "financial_properties": {
+            "cost_per_unit": 7200,
+            "unit_type": "cum",
+            "currency": "INR",
+            "retail_price": 7500,
+            "wholesale_price": 7000,
+            "bulk_price": 6800,
+            "gst_rate": 18,
+            "minimum_order_quantity": 6,
+            "price_volatility": "Low",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 420.0,
+            "embodied_energy": 4200.0,
+            "recycled_content": 5,
+            "recyclable": True,
+            "epd_available": True
+        },
+        "physical_properties": {
+            "density": 2500,
+            "specific_gravity": 2.5,
+            "compressive_strength": 30.0,
+            "thermal_conductivity": 1.5,
+            "water_absorption": 3.0
+        },
+        "civil_properties": {
+            "structural_grade": "M30",
+            "design_strength": 30.0,
+            "durability_years": 60,
+            "weather_resistance": "High",
+            "wastage_percentage": 3,
+            "is_code": "IS 4926:2003",
+            "quality_grade": "Premium",
+            "mix_ratio": "Design Mix"
+        },
+        "supplier": {
+            "supplier_name": "ACC RMC",
+            "supplier_location": "Kochi",
+            "lead_time_days": 1,
+            "reliability_rating": 9.0
+        },
+        "is_active": True,
+        "tags": ["concrete", "RMC", "M30", "IS4926", "quality"]
+    },
+
+    # IS 3620:1979 - Laterite Stone
+    {
+        "name": "Laterite Stone Blocks (IS 3620)",
+        "category": "masonry",
+        "subcategory": "Stone Masonry",
+        "description": "Traditional laterite stone blocks for Kerala construction, IS 3620:1979 compliant",
+        "financial_properties": {
+            "cost_per_unit": 40,
+            "unit_type": "cft",
+            "currency": "INR",
+            "retail_price": 45,
+            "wholesale_price": 38,
+            "bulk_price": 35,
+            "gst_rate": 5,
+            "minimum_order_quantity": 500,
+            "price_volatility": "Low",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 0.06,
+            "embodied_energy": 0.4,
+            "recycled_content": 0,
+            "recyclable": True,
+            "epd_available": False
+        },
+        "physical_properties": {
+            "density": 2000,
+            "specific_gravity": 2.0,
+            "compressive_strength": 4.0,
+            "thermal_conductivity": 0.80,
+            "water_absorption": 10.0
+        },
+        "civil_properties": {
+            "structural_grade": "Grade 3",
+            "design_strength": 4.0,
+            "durability_years": 100,
+            "weather_resistance": "High",
+            "wastage_percentage": 15,
+            "is_code": "IS 3620:1979",
+            "quality_grade": "Standard",
+            "stone_size": "300x200x150",
+            "mortar_required": 0.03,
+            "green_building_cert": ["GRIHA", "IGBC"]
+        },
+        "supplier": {
+            "supplier_name": "Malabar Stone Works",
+            "supplier_location": "Kasaragod",
+            "lead_time_days": 2,
+            "reliability_rating": 8.0
+        },
+        "is_active": True,
+        "tags": ["masonry", "laterite", "stone", "IS3620", "traditional", "kerala"]
+    },
+
+    # IS 15658:2006 - Pre-cast Concrete Blocks
+    {
+        "name": "Pre-cast Concrete Wall Panels",
+        "category": "masonry",
+        "subcategory": "Pre-cast Concrete",
+        "description": "Pre-cast concrete wall panels for fast construction, IS 15658:2006 compliant",
+        "financial_properties": {
+            "cost_per_unit": 180,
+            "unit_type": "sqm",
+            "currency": "INR",
+            "retail_price": 200,
+            "wholesale_price": 170,
+            "bulk_price": 160,
+            "gst_rate": 18,
+            "minimum_order_quantity": 50,
+            "price_volatility": "Medium",
+            "price_trend": "Increasing"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 45.0,
+            "embodied_energy": 450.0,
+            "recycled_content": 10,
+            "recyclable": True,
+            "epd_available": True
+        },
+        "physical_properties": {
+            "density": 2200,
+            "specific_gravity": 2.2,
+            "compressive_strength": 20.0,
+            "thermal_conductivity": 1.2,
+            "water_absorption": 8.0,
+            "thickness": 100
+        },
+        "civil_properties": {
+            "structural_grade": "M20",
+            "design_strength": 20.0,
+            "durability_years": 50,
+            "weather_resistance": "High",
+            "wastage_percentage": 5,
+            "is_code": "IS 15658:2006",
+            "quality_grade": "Standard",
+            "panel_size": "2400x600x100"
+        },
+        "supplier": {
+            "supplier_name": "Kerala Pre-cast Industries",
+            "supplier_location": "Kochi",
+            "lead_time_days": 14,
+            "reliability_rating": 8.5
+        },
+        "is_active": True,
+        "tags": ["masonry", "pre-cast", "concrete", "IS15658", "fast-construction"]
+    },
+
+    # IS 1172:1993 - Water Supply Requirements
+    {
+        "name": "HDPE Water Supply Pipes (IS 4984)",
+        "category": "finish",
+        "subcategory": "Plumbing Pipes",
+        "description": "HDPE pipes for potable water supply, IS 4984:2016 compliant",
+        "financial_properties": {
+            "cost_per_unit": 85,
+            "unit_type": "m",
+            "currency": "INR",
+            "retail_price": 95,
+            "wholesale_price": 80,
+            "bulk_price": 75,
+            "gst_rate": 18,
+            "minimum_order_quantity": 100,
+            "price_volatility": "Low",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 1.8,
+            "embodied_energy": 18.0,
+            "recycled_content": 0,
+            "recyclable": True,
+            "epd_available": False
+        },
+        "physical_properties": {
+            "density": 950,
+            "specific_gravity": 0.95,
+            "compressive_strength": 0,
+            "thermal_conductivity": 0.45,
+            "pipe_diameter": 25,
+            "pressure_rating": "PN10"
+        },
+        "civil_properties": {
+            "durability_years": 50,
+            "weather_resistance": "High",
+            "wastage_percentage": 5,
+            "is_code": "IS 4984:2016",
+            "quality_grade": "Standard",
+            "application": "potable_water"
+        },
+        "supplier": {
+            "supplier_name": "Astral Pipes",
+            "supplier_location": "Kochi",
+            "lead_time_days": 3,
+            "reliability_rating": 9.0
+        },
+        "is_active": True,
+        "tags": ["plumbing", "HDPE", "water-supply", "IS4984"]
+    },
+
+    # IS 3043:2018 - Earthing/Grounding
+    {
+        "name": "Copper Earthing Electrode (IS 3043)",
+        "category": "finish",
+        "subcategory": "Electrical Safety",
+        "description": "Copper bonded earthing electrode for electrical safety, IS 3043:2018 compliant",
+        "financial_properties": {
+            "cost_per_unit": 2500,
+            "unit_type": "nos",
+            "currency": "INR",
+            "retail_price": 2800,
+            "wholesale_price": 2400,
+            "bulk_price": 2200,
+            "gst_rate": 18,
+            "minimum_order_quantity": 5,
+            "price_volatility": "Medium",
+            "price_trend": "Stable"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 3.5,
+            "embodied_energy": 35.0,
+            "recycled_content": 10,
+            "recyclable": True,
+            "epd_available": False
+        },
+        "physical_properties": {
+            "density": 8900,
+            "specific_gravity": 8.9,
+            "compressive_strength": 0,
+            "thermal_conductivity": 400.0,
+            "electrode_length": 3000,
+            "electrode_diameter": 16
+        },
+        "civil_properties": {
+            "durability_years": 30,
+            "weather_resistance": "High",
+            "wastage_percentage": 0,
+            "is_code": "IS 3043:2018",
+            "quality_grade": "Standard",
+            "application": "earthing_grounding"
+        },
+        "supplier": {
+            "supplier_name": "Havells India",
+            "supplier_location": "Kochi",
+            "lead_time_days": 3,
+            "reliability_rating": 9.0
+        },
+        "is_active": True,
+        "tags": ["electrical", "earthing", "copper", "IS3043", "safety"]
+    },
+
+    # IS 18946:2022 - Green Building Assessment
+    {
+        "name": "Bamboo Composite Boards (IS 1948)",
+        "category": "timber",
+        "subcategory": "Sustainable Material",
+        "description": "Eco-friendly bamboo composite boards for interior work, IS 1948:1961 compliant",
+        "financial_properties": {
+            "cost_per_unit": 65,
+            "unit_type": "sqft",
+            "currency": "INR",
+            "retail_price": 75,
+            "wholesale_price": 62,
+            "bulk_price": 58,
+            "gst_rate": 18,
+            "minimum_order_quantity": 50,
+            "price_volatility": "Low",
+            "price_trend": "Decreasing"
+        },
+        "environmental_properties": {
+            "embodied_carbon": 0.3,
+            "embodied_energy": 3.0,
+            "recycled_content": 0,
+            "recyclable": True,
+            "epd_available": True
+        },
+        "physical_properties": {
+            "density": 650,
+            "specific_gravity": 0.65,
+            "compressive_strength": 25.0,
+            "thermal_conductivity": 0.14,
+            "thickness": 18,
+            "size": "2440x1220"
+        },
+        "civil_properties": {
+            "durability_years": 15,
+            "weather_resistance": "Medium",
+            "wastage_percentage": 8,
+            "is_code": "IS 1948:1961",
+            "quality_grade": "Standard",
+            "green_building_cert": ["GRIHA", "IGBC", "LEED"]
+        },
+        "supplier": {
+            "supplier_name": "Kerala Bamboo Corporation",
+            "supplier_location": "Kannur",
+            "lead_time_days": 5,
+            "reliability_rating": 8.5
+        },
+        "is_active": True,
+        "tags": ["timber", "bamboo", "sustainable", "IS1948", "green-building"]
+    },
 ]
 
 def seed_database():
