@@ -931,6 +931,27 @@ function ProjectSetup() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-foreground-secondary mb-1">
+                    Structure Type
+                  </label>
+                  <select
+                    value={project.buildingParams.structureType || 'load_bearing'}
+                    onChange={(e) => updateBuildingParams({ structureType: e.target.value })}
+                    className="input"
+                  >
+                    <option value="load_bearing">Load-Bearing Masonry</option>
+                    <option value="framed">Framed Structure (Columns + Beams)</option>
+                    <option value="mixed">Mixed (Partial Framing)</option>
+                  </select>
+                  <p className="text-xs text-foreground-muted mt-1">
+                    {project.buildingParams.structureType === 'load_bearing' 
+                      ? 'Walls carry loads. No columns/beams. Common in Kerala residential.'
+                      : project.buildingParams.structureType === 'framed'
+                      ? 'Columns + beams + slab. For larger/commercial buildings.'
+                      : 'Combination of both. Some walls load-bearing, some framed.'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-foreground-secondary mb-1">
                     Slab Thickness (mm)
                   </label>
                   <select

@@ -88,6 +88,7 @@ export function ProjectProvider({ children }) {
       targetCarbon: 50,
       minRecycledContent: 10,
       // Structural Assumptions (per IS 456 / IS 875)
+      structureType: 'load_bearing', // load_bearing | framed | mixed
       slabThickness: 150, // mm - standard for residential
       beamDepth: 450, // mm - typical for spans up to 6m
       columnSize: 300, // mm - standard column dimension

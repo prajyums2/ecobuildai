@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProject } from "../context/ProjectContext";
-import { analyzeFloorplan } from "../services/floorplanAnalyzer";
+import { analyzeFloorPlanVision, fileToDataUrl, validateFloorPlanData } from "../services/floorplanVision";
 import {
   FaUpload,
   FaImage,
@@ -18,307 +18,354 @@ import {
   FaBuilding,
   FaBrain,
   FaEye,
+  FaPlus,
+  FaTrash,
+  FaEdit,
+  FaSave,
 } from "react-icons/fa";
 
 function BIMIntegration() {
   const navigate = useNavigate();
-  const { project, updateBIMData } = useProject();
-  const [file, setFile] = useState(null);
-  const [fileUrl, setFileUrl] = useState(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [error, setError] = useState(null);
-  const [activeStep, setActiveStep] = useState('upload');
+  const { project, updateBuildingParams, updateBIMData } = useProject();
+  const numFloors = project?.buildingParams?.numFloors || 2;
   
-  const [manualInputs, setManualInputs] = useState({
-    concrete: '',
-    steel: '',
-    blocks: '',
-    aggregate: '',
-    sand: '',
-    cement: '',
-    floors: project?.buildingParams?.numFloors || 2,
-    area: project?.buildingParams?.builtUpArea || 150,
-  });
+  // Floor tabs state
+  const [activeFloor, setActiveFloor] = useState(1);
+  const [floorData, setFloorData] = useState({});
+  const [floorFiles, setFloorFiles] = useState({});
+  const [floorUrls, setFloorUrls] = useState({});
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzingFloor, setAnalyzingFloor] = useState(null);
+  const [error, setError] = useState(null);
+  const [editMode, setEditMode] = useState({});
 
-  // Handle file upload and analysis
-  const handleFileUpload = async (e) => {
+  // Initialize floor data
+  useEffect(() => {
+    const initial = {};
+    for (let i = 1; i <= numFloors; i++) {
+      initial[i] = {
+        rooms: [],
+        doors: [],
+        windows: [],
+        walls: { external_thickness_mm: 230, internal_thickness_mm: 115, total_length_m: 0 },
+        structure_type: project?.buildingParams?.structureType || 'load_bearing',
+        total_built_up_sqm: 0,
+        confidence: 0,
+        notes: ''
+      };
+    }
+    setFloorData(initial);
+  }, [numFloors]);
+
+  const handleFileUpload = async (floorNum, e) => {
     const uploadedFile = e.target.files[0];
     if (!uploadedFile) return;
 
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
     if (!validTypes.includes(uploadedFile.type)) {
-      setError('Please upload a PNG, JPG, or PDF file');
+      setError('Please upload a PNG or JPG file');
       return;
     }
 
     const url = URL.createObjectURL(uploadedFile);
-    setFile(uploadedFile);
-    setFileUrl(url);
+    setFloorFiles(prev => ({ ...prev, [floorNum]: uploadedFile }));
+    setFloorUrls(prev => ({ ...prev, [floorNum]: url }));
     setError(null);
     setIsAnalyzing(true);
+    setAnalyzingFloor(floorNum);
 
     try {
-      // Call backend API for analysis
-      const result = await analyzeFloorplan(uploadedFile, manualInputs.floors);
-      setAnalysisResult(result);
-      console.log('Analysis result:', result);
+      const dataUrl = await fileToDataUrl(uploadedFile);
+      const result = await analyzeFloorPlanVision(dataUrl, floorNum);
+      const validated = validateFloorPlanData(result);
       
-      // Update inputs based on analysis
-      if (result.dimensions.totalArea) {
-        setManualInputs(prev => ({
-          ...prev,
-          area: result.dimensions.totalArea.toString(),
-        }));
-        
-        // Calculate quantities from detected area
-        const area = result.dimensions.totalArea;
-        const floors = parseInt(manualInputs.floors) || 2;
-        const totalArea = area * floors;
-        
-        setManualInputs(prev => ({
-          ...prev,
-          area: area.toString(),
-          concrete: Math.round(totalArea * 0.12).toString(),
-          steel: Math.round(totalArea * 12).toString(),
-          blocks: Math.round(totalArea * 7.5).toString(),
-          aggregate: Math.round(totalArea * 20).toString(),
-          sand: Math.round(totalArea * 15).toString(),
-          cement: Math.round(totalArea * 0.8).toString(),
-        }));
+      setFloorData(prev => ({ ...prev, [floorNum]: validated }));
+      setEditMode(prev => ({ ...prev, [floorNum]: true }));
+      
+      // Auto-detect structure type from first floor
+      if (floorNum === 1 && validated.structure_type) {
+        updateBuildingParams({ structureType: validated.structure_type });
       }
-      
-      setActiveStep('review');
     } catch (err) {
       console.error('Analysis error:', err);
-      // Still go to review step - user can enter manually
-      setActiveStep('review');
+      setError('AI analysis failed. You can enter data manually.');
     } finally {
       setIsAnalyzing(false);
+      setAnalyzingFloor(null);
     }
   };
 
-  // Calculate quantities
-  const calculateQuantities = (area, floors) => {
-    const totalArea = area * floors;
-    
-    setManualInputs(prev => ({
+  const updateFloorData = (floorNum, field, value) => {
+    setFloorData(prev => ({
       ...prev,
-      concrete: Math.round(totalArea * 0.12).toString(),
-      steel: Math.round(totalArea * 12).toString(),
-      blocks: Math.round(totalArea * 7.5).toString(),
-      aggregate: Math.round(totalArea * 20).toString(),
-      sand: Math.round(totalArea * 15).toString(),
-      cement: Math.round(totalArea * 0.8).toString(),
+      [floorNum]: { ...prev[floorNum], [field]: value }
     }));
   };
 
-  // Save and generate report
-  const handleGenerate = () => {
-    const quantities = {
-      floors: parseInt(manualInputs.floors) || 2,
-      area: parseFloat(manualInputs.area) || 150,
-      concrete: parseFloat(manualInputs.concrete) || 0,
-      steel: parseFloat(manualInputs.steel) || 0,
-      blocks: parseFloat(manualInputs.blocks) || 0,
-      aggregate: parseFloat(manualInputs.aggregate) || 0,
-      sand: parseFloat(manualInputs.sand) || 0,
-      cement: parseFloat(manualInputs.cement) || 0,
-      analysisResult: analysisResult,
-    };
-
-    updateBIMData({
-      ifcFileName: file?.name || 'Floorplan',
-      ifcFileSize: file?.size || 0,
-      quantities: quantities,
-      uploadedAt: new Date().toISOString(),
+  const updateRoom = (floorNum, index, field, value) => {
+    setFloorData(prev => {
+      const rooms = [...prev[floorNum].rooms];
+      rooms[index] = { ...rooms[index], [field]: value };
+      // Recalculate area
+      rooms[index].area_sqm = parseFloat(rooms[index].length_m || 0) * parseFloat(rooms[index].width_m || 0);
+      // Recalculate total
+      const totalArea = rooms.reduce((sum, r) => sum + r.area_sqm, 0);
+      return { ...prev, [floorNum]: { ...prev[floorNum], rooms, total_built_up_sqm: totalArea } };
     });
-
-    setActiveStep('results');
   };
 
-  if (!project || !project.isConfigured) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-center max-w-md">
-          <FaCube className="text-3xl mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Configure Project First</h2>
-          <p className="text-foreground-secondary mb-4">Set up your project to analyze floorplans.</p>
-          <button onClick={() => navigate('/setup')} className="btn btn-primary">Go to Setup</button>
-        </div>
-      </div>
-    );
-  }
+  const addRoom = (floorNum) => {
+    setFloorData(prev => ({
+      ...prev,
+      [floorNum]: {
+        ...prev[floorNum],
+        rooms: [...prev[floorNum].rooms, { name: 'New Room', length_m: 3.0, width_m: 3.0, area_sqm: 9.0 }]
+      }
+    }));
+  };
+
+  const removeRoom = (floorNum, index) => {
+    setFloorData(prev => {
+      const rooms = prev[floorNum].rooms.filter((_, i) => i !== index);
+      const totalArea = rooms.reduce((sum, r) => sum + r.area_sqm, 0);
+      return { ...prev, [floorNum]: { ...prev[floorNum], rooms, total_built_up_sqm: totalArea } };
+    });
+  };
+
+  const handleSaveAll = () => {
+    // Calculate totals across all floors
+    let totalArea = 0;
+    let totalRooms = 0;
+    let totalDoors = 0;
+    let totalWindows = 0;
+    let structureType = 'load_bearing';
+
+    Object.values(floorData).forEach(fd => {
+      totalArea += fd.total_built_up_sqm || 0;
+      totalRooms += fd.rooms?.length || 0;
+      totalDoors += fd.doors?.reduce((sum, d) => sum + (d.count || 0), 0) || 0;
+      totalWindows += fd.windows?.reduce((sum, w) => sum + (w.count || 0), 0) || 0;
+      if (fd.structure_type === 'framed') structureType = 'framed';
+    });
+
+    // Update project with floor plan data
+    updateBuildingParams({
+      builtUpArea: Math.round(totalArea / numFloors) || project?.buildingParams?.builtUpArea || 150,
+      structureType: structureType,
+    });
+
+    updateBIMData({
+      floorPlanData: floorData,
+      totalBuiltUpSqm: totalArea,
+      totalRooms,
+      totalDoors,
+      totalWindows,
+      analyzedAt: new Date().toISOString(),
+      source: 'ai_vision'
+    });
+
+    navigate('/optimizer');
+  };
+
+  const currentFloor = floorData[activeFloor] || {};
+  const isCurrentFloorAnalyzed = currentFloor.rooms?.length > 0;
 
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <FaBrain className="text-primary" />
-          AI Floorplan Analyzer
-        </h1>
-        <p className="text-foreground-secondary">Upload floorplan, AI analyzes rooms and calculates quantities</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <FaEye className="text-primary" />
+            Floor Plan Analysis
+          </h1>
+          <p className="text-foreground-secondary mt-1">
+            Upload floor plan PNGs for AI analysis • {numFloors} floor{numFloors > 1 ? 's' : ''}
+          </p>
+        </div>
+        <button onClick={handleSaveAll} className="btn btn-primary">
+          <FaSave className="mr-2" /> Save & Continue
+        </button>
       </div>
 
-      {/* Upload Step */}
-      {activeStep === 'upload' && (
-        <div className="card">
-          <div className="card-header">
-            <h3 className="font-semibold">Upload Floorplan</h3>
-          </div>
-          <div className="card-body">
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center">
-              <input type="file" accept=".png,.jpg,.jpeg,.pdf" onChange={handleFileUpload} className="hidden" id="upload" />
-              <label htmlFor="upload" className="cursor-pointer">
-                <FaEye className="text-5xl text-gray-400 mb-4 mx-auto" />
-                <p className="font-medium text-lg">Click to upload floorplan</p>
-                <p className="text-sm text-foreground-secondary">PNG, JPG, or PDF</p>
-              </label>
-            </div>
-          </div>
+      {error && (
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3">
+          <FaExclamationTriangle className="text-red-500 text-lg" />
+          <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
+          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">
+            <FaTimes />
+          </button>
         </div>
       )}
 
-      {/* Analyzing Step */}
-      {isAnalyzing && (
-        <div className="card">
-          <div className="card-body text-center py-12">
-            <FaSpinner className="animate-spin text-4xl text-primary mx-auto mb-4" />
-            <p className="font-medium">Analyzing floorplan...</p>
-            <p className="text-sm text-foreground-secondary mt-2">
-              Reading rooms and dimensions
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Floor Tabs */}
+      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 pb-2">
+        {Array.from({ length: numFloors }, (_, i) => i + 1).map(floor => (
+          <button
+            key={floor}
+            onClick={() => setActiveFloor(floor)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeFloor === floor
+                ? 'bg-primary text-white'
+                : 'bg-background-tertiary text-foreground-secondary hover:bg-background-secondary'
+            }`}
+          >
+            Floor {floor}
+            {floorData[floor]?.rooms?.length > 0 && (
+              <FaCheck className="inline ml-1 text-xs" />
+            )}
+          </button>
+        ))}
+      </div>
 
-      {/* Review Step */}
-      {activeStep === 'review' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Image Preview */}
-          <div className="card">
-            <div className="card-header">
-              <h3 className="font-semibold">Your Floorplan</h3>
-              <span className={`text-sm ${analysisResult?.dimensions.totalArea ? 'text-green-600' : 'text-yellow-600'}`}>
-                {analysisResult?.dimensions.totalArea 
-                  ? `AI Detected: ${analysisResult.dimensions.totalArea} sq.m`
-                  : 'Enter dimensions manually'}
-              </span>
-            </div>
-            <div className="card-body">
-              <img src={fileUrl} alt="Floorplan" className="max-w-full h-auto max-h-96 mx-auto rounded-lg" />
-              
-              {/* Detected Info */}
-              {analysisResult && (
-                <div className={`mt-4 p-3 rounded-lg ${analysisResult.rooms.length > 0 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-yellow-50 dark:bg-yellow-900/20'}`}>
-                  <p className="text-sm font-medium mb-2">
-                    {analysisResult.rooms.length > 0 ? 'AI Detected:' : 'No rooms detected - enter manually:'}
-                  </p>
-                  {analysisResult.rooms.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {analysisResult.rooms.map((room, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-white dark:bg-gray-700 rounded text-xs">
-                          {room.type}
-                          {room.area ? ` (${room.area.toFixed(1)} sq.m)` : ''}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-xs text-foreground-secondary">
-                      The floorplan image may not have clear text labels. Please enter dimensions below.
-                    </p>
-                  )}
+      {/* Floor Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: Upload & Preview */}
+        <div className="space-y-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+              <FaUpload className="text-primary" />
+              Floor {activeFloor} Plan
+            </h3>
+            
+            {/* Upload Area */}
+            <label className="block w-full p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-primary transition-colors text-center">
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/jpg"
+                onChange={(e) => handleFileUpload(activeFloor, e)}
+                className="hidden"
+                disabled={isAnalyzing}
+              />
+              {floorUrls[activeFloor] ? (
+                <img src={floorUrls[activeFloor]} alt={`Floor ${activeFloor}`} className="max-h-64 mx-auto rounded-lg" />
+              ) : isAnalyzing && analyzingFloor === activeFloor ? (
+                <div className="py-8">
+                  <FaSpinner className="animate-spin text-3xl text-primary mx-auto mb-3" />
+                  <p className="text-foreground-secondary">AI is analyzing floor plan...</p>
                 </div>
+              ) : (
+                <div className="py-8">
+                  <FaImage className="text-4xl text-foreground-muted mx-auto mb-3" />
+                  <p className="text-foreground-secondary">Click or drag to upload floor plan PNG/JPG</p>
+                  <p className="text-xs text-foreground-muted mt-1">AI will extract rooms, doors, windows, and structure type</p>
+                </div>
+              )}
+            </label>
+          </div>
+
+          {/* AI Results Summary */}
+          {isCurrentFloorAnalyzed && (
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <FaBrain className="text-purple-500" />
+                AI Analysis Results
+              </h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Rooms</p>
+                  <p className="text-lg font-bold">{currentFloor.rooms?.length || 0}</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Area</p>
+                  <p className="text-lg font-bold">{currentFloor.total_built_up_sqm?.toFixed(1) || 0} sqm</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Doors</p>
+                  <p className="text-lg font-bold">{currentFloor.doors?.reduce((s, d) => s + (d.count || 0), 0) || 0}</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Windows</p>
+                  <p className="text-lg font-bold">{currentFloor.windows?.reduce((s, w) => s + (w.count || 0), 0) || 0}</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Structure</p>
+                  <p className="text-lg font-bold capitalize">{currentFloor.structure_type?.replace('_', ' ') || 'N/A'}</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p className="text-foreground-muted">Confidence</p>
+                  <p className="text-lg font-bold">{(currentFloor.confidence * 100)?.toFixed(0) || 0}%</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right: Editable Data */}
+        <div className="space-y-4">
+          {/* Rooms */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <FaRuler className="text-blue-500" />
+                Rooms
+              </h3>
+              <button onClick={() => addRoom(activeFloor)} className="btn btn-outline text-xs">
+                <FaPlus className="mr-1" /> Add Room
+              </button>
+            </div>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {(currentFloor.rooms || []).map((room, idx) => (
+                <div key={idx} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <input
+                    type="text"
+                    value={room.name}
+                    onChange={(e) => updateRoom(activeFloor, idx, 'name', e.target.value)}
+                    className="input text-sm flex-1 min-w-0"
+                    placeholder="Room name"
+                  />
+                  <input
+                    type="number"
+                    value={room.length_m}
+                    onChange={(e) => updateRoom(activeFloor, idx, 'length_m', parseFloat(e.target.value))}
+                    className="input text-sm w-16"
+                    placeholder="L(m)"
+                  />
+                  <span className="text-foreground-muted">×</span>
+                  <input
+                    type="number"
+                    value={room.width_m}
+                    onChange={(e) => updateRoom(activeFloor, idx, 'width_m', parseFloat(e.target.value))}
+                    className="input text-sm w-16"
+                    placeholder="W(m)"
+                  />
+                  <span className="text-foreground-muted text-xs w-12 text-right">{room.area_sqm?.toFixed(1)}m²</span>
+                  <button onClick={() => removeRoom(activeFloor, idx)} className="text-red-500 hover:text-red-700 p-1">
+                    <FaTrash className="text-xs" />
+                  </button>
+                </div>
+              ))}
+              {(!currentFloor.rooms || currentFloor.rooms.length === 0) && (
+                <p className="text-center text-foreground-secondary py-4 text-sm">No rooms detected. Add manually or upload a floor plan.</p>
               )}
             </div>
           </div>
 
-          {/* Quantities Input */}
-          <div className="card">
-            <div className="card-header">
-              <h3 className="font-semibold">Enter Quantities</h3>
-              <p className="text-sm text-foreground-secondary">Based on your floorplan</p>
-            </div>
-            <div className="card-body space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm text-foreground-secondary">Area (sq.m)</label>
-                  <input type="number" value={manualInputs.area}
-                    onChange={(e) => {
-                      setManualInputs({...manualInputs, area: e.target.value});
-                      if (e.target.value && manualInputs.floors) {
-                        calculateQuantities(parseFloat(e.target.value), manualInputs.floors);
-                      }
-                    }}
-                    placeholder="e.g., 150"
-                    className="input w-full" />
-                </div>
-                <div>
-                  <label className="text-sm text-foreground-secondary">Floors</label>
-                  <input type="number" min="1" max="15" value={manualInputs.floors}
-                    onChange={(e) => {
-                      setManualInputs({...manualInputs, floors: e.target.value});
-                      if (manualInputs.area && e.target.value) {
-                        calculateQuantities(manualInputs.area, parseInt(e.target.value));
-                      }
-                    }}
-                    className="input w-full" />
-                </div>
-              </div>
-
-              {[
-                { key: 'concrete', label: 'Concrete (cum)', unit: 'cum' },
-                { key: 'steel', label: 'Steel (kg)', unit: 'kg' },
-                { key: 'cement', label: 'Cement (bags)', unit: 'bags' },
-                { key: 'sand', label: 'Sand (cft)', unit: 'cft' },
-                { key: 'blocks', label: 'Blocks (nos)', unit: 'nos' },
-                { key: 'aggregate', label: 'Aggregate (cft)', unit: 'cft' },
-              ].map(({ key, label }) => (
-                <div key={key}>
-                  <label className="text-sm text-foreground-secondary">{label}</label>
-                  <input type="number" value={manualInputs[key]}
-                    onChange={(e) => setManualInputs({...manualInputs, [key]: e.target.value})}
-                    placeholder="Enter quantity"
-                    className="input w-full" />
-                </div>
-              ))}
-
-              <button onClick={handleGenerate} className="btn btn-primary w-full py-3">
-                <FaCalculator className="mr-2" />
-                Generate Report
-              </button>
-            </div>
+          {/* Structure Type */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+              <FaBuilding className="text-green-500" />
+              Structure Type
+            </h3>
+            <select
+              value={currentFloor.structure_type || 'load_bearing'}
+              onChange={(e) => updateFloorData(activeFloor, 'structure_type', e.target.value)}
+              className="input"
+            >
+              <option value="load_bearing">Load-Bearing Masonry (Walls carry load)</option>
+              <option value="framed">Framed Structure (Columns + Beams)</option>
+              <option value="mixed">Mixed (Partial Framing)</option>
+            </select>
+            <p className="text-xs text-foreground-muted mt-2">
+              {currentFloor.structure_type === 'load_bearing' 
+                ? 'Typical for Kerala residential ≤2 floors. No columns/beams.'
+                : currentFloor.structure_type === 'framed'
+                ? 'Columns + beams + slab system. For larger buildings.'
+                : 'Combination of both types.'}
+            </p>
           </div>
         </div>
-      )}
-
-      {/* Results Step */}
-      {activeStep === 'results' && (
-        <div className="card">
-          <div className="card-header">
-            <h3 className="font-semibold">Material Summary</h3>
-          </div>
-          <div className="card-body">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(manualInputs).filter(([k]) => !['floors', 'area'].includes(k)).map(([key, value]) => (
-                <div key={key} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
-                  <FaIndustry className="text-2xl text-gray-500 mx-auto mb-2" />
-                  <p className="text-xs text-foreground-secondary capitalize">{key}</p>
-                  <p className="text-xl font-bold">{value}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex gap-4 mt-4">
-              <button onClick={() => setActiveStep('review')} className="btn btn-secondary flex-1">Edit</button>
-              <button onClick={() => navigate('/reports')} className="btn btn-primary flex-1">
-                <FaArrowRight className="mr-2" />View Reports
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

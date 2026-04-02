@@ -136,6 +136,13 @@ function BillOfQuantities({ onBoQUpdate, boq: parentBoq }) {
     }));
   };
   
+  // Check if category is from the 5 optimized categories
+  const isOptimizedCategory = (categoryName) => {
+    const optimized = ['concrete work', 'reinforcement steel', 'masonry work'];
+    const name = categoryName?.toLowerCase() || '';
+    return optimized.some(opt => name.includes(opt));
+  };
+  
   // Expand all categories
   const expandAll = () => {
     const allExpanded = {};
@@ -194,15 +201,28 @@ function BillOfQuantities({ onBoQUpdate, boq: parentBoq }) {
     return (
       <div key={category.name} className="boq-category mb-6">
         <div 
-          className="boq-category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200 border-l-4 border-blue-500"
+          className={`boq-category-header flex items-center justify-between p-4 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200 border-l-4 ${
+            isOptimizedCategory(category.name)
+              ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-500'
+              : 'bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border-amber-500'
+          }`}
           onClick={() => toggleCategory(category.name)}
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500 text-white rounded-lg">
+            <div className={`p-2 text-white rounded-lg ${
+              isOptimizedCategory(category.name) ? 'bg-blue-500' : 'bg-amber-500'
+            }`}>
               <FaBuilding className="text-lg" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground">{category.name}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-bold text-foreground">{category.name}</h3>
+                {!isOptimizedCategory(category.name) && (
+                  <span className="text-xs px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full border border-amber-200 dark:border-amber-700">
+                    Estimate
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-foreground-secondary">
                 {category.items.length} items
               </p>

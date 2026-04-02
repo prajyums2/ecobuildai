@@ -721,7 +721,14 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const floorHeight = buildingParams?.height || 3.2;
   const buildingHeight = buildingParams?.height || (floorHeight * numFloors);
   
-  console.log('[BoQ] Generating with:', { builtUpArea, numFloors, totalArea });
+  // Structure type: auto-detect if not set
+  let structureType = buildingParams?.structureType;
+  if (!structureType) {
+    const buildingType = buildingClassification?.mainUse || 'residential';
+    structureType = (buildingType === 'residential' && numFloors <= 2) ? 'load_bearing' : 'framed';
+  }
+  
+  console.log('[BoQ] Generating with:', { builtUpArea, numFloors, totalArea, structureType });
   
   // Per floor footprint (assuming square building for estimation)
   const footprintArea = builtUpArea;
@@ -753,25 +760,38 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                        11.1;
   
   // Foundation volume — calibrated from real Kerala residential buildings
-  // Small house (100-150 sqm): ~8 columns, 1.0m×1.0m×1.2m footings = ~10 cum
-  // Medium house (150-250 sqm): ~12 columns, 1.2m×1.2m×1.5m footings = ~26 cum
-  // Large house (250+ sqm): ~16 columns, 1.5m×1.5m×1.5m footings = ~54 cum
-  const numColumns = footprintArea <= 150 ? 8 : footprintArea <= 250 ? 12 : 16;
-  const footingSize = footprintArea <= 150 ? 1.0 : footprintArea <= 250 ? 1.2 : 1.5;
-  const footingDepth = numFloors <= 2 ? 1.2 : numFloors <= 3 ? 1.5 : 1.8;
-  const footingVolume = numColumns * footingSize * footingSize * footingDepth;
-  const gradeBeamVolume = buildingPerimeter * 0.3 * 0.4; // 300mm×400mm grade beam
-  const foundationVolume = footingVolume + gradeBeamVolume;
+  // Load-bearing: strip foundation under walls
+  // Framed: isolated footings with grade beams
+  let foundationVolume, numColumns, footingSize;
+  if (structureType === 'load_bearing') {
+    // Strip foundation under load-bearing walls
+    const foundationWidth = 0.8; // 800mm wide strip
+    foundationVolume = buildingPerimeter * foundationWidth * foundationDepth;
+    numColumns = 0;
+    footingSize = 0;
+  } else {
+    // Isolated footings for framed structure
+    numColumns = footprintArea <= 150 ? 8 : footprintArea <= 250 ? 12 : 16;
+    footingSize = footprintArea <= 150 ? 1.0 : footprintArea <= 250 ? 1.2 : 1.5;
+    const footingDepth = numFloors <= 2 ? 1.2 : numFloors <= 3 ? 1.5 : 1.8;
+    const footingVolume = numColumns * footingSize * footingSize * foundationDepth;
+    const gradeBeamVolume = buildingPerimeter * 0.3 * 0.4; // 300mm×400mm grade beam
+    foundationVolume = footingVolume + gradeBeamVolume;
+  }
   
-  // Column concrete — calibrated from benchmarks
-  // Small (100 sqm): 0.01 cum/sqm, Medium (200 sqm): 0.013 cum/sqm, Large (400 sqm): 0.015 cum/sqm
-  const columnRatio = footprintArea <= 150 ? 0.01 : footprintArea <= 250 ? 0.013 : 0.015;
-  const columnVolume = totalArea * columnRatio;
-  
-  // Beam concrete — calibrated from benchmarks
-  // Small (100 sqm): 0.02 cum/sqm, Medium (200 sqm): 0.025 cum/sqm, Large (400 sqm): 0.028 cum/sqm
-  const beamRatio = footprintArea <= 150 ? 0.02 : footprintArea <= 250 ? 0.025 : 0.028;
-  const beamVolume = totalArea * beamRatio;
+  // Column & beam concrete — depends on structure type
+  let columnVolume, beamVolume;
+  if (structureType === 'load_bearing') {
+    // Load-bearing: NO columns or beams (only lintel beams above openings)
+    columnVolume = 0;
+    beamVolume = 0;
+  } else {
+    // Framed: columns and beams
+    const columnRatio = footprintArea <= 150 ? 0.01 : footprintArea <= 250 ? 0.013 : 0.015;
+    columnVolume = totalArea * columnRatio;
+    const beamRatio = footprintArea <= 150 ? 0.02 : footprintArea <= 250 ? 0.025 : 0.028;
+    beamVolume = totalArea * beamRatio;
+  }
   
   // Slab concrete: 100-150mm thick
   const slabThickness = (buildingParams?.slabThickness || 125) / 1000; // Convert mm to m
@@ -1096,59 +1116,72 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const cementRate = resolvedCementRate;
   const cementWastage = rates?.cement?.opc_53?.wastage || 0.02;
   
+  let totalSteel = 0;
+  let steelSno = 1;
+  
+  // Foundation steel (always present)
   const footingSteel = calculateSteelQuantity(foundationVolume, 'footing');
   addBoQItem(steelWork, {
-    sno: 1,
+    sno: steelSno++,
     description: 'Providing and fixing Fe500 TMT steel bars for foundation including cutting, bending, binding with binding wire',
     quantity: applyWastage(footingSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
     rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${footingSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
+  totalSteel += footingSteel.kg;
   
-  const columnSteel = calculateSteelQuantity(columnVolume, 'column');
-  addBoQItem(steelWork, {
-    sno: 2,
-    description: 'Providing and fixing Fe500 TMT steel bars for columns including cutting, bending, binding',
-    quantity: applyWastage(columnSteel.kg, steelWastage).toFixed(2),
-    unit: 'kg',
-    rate: Math.round(steelRate * 1.25),
-    remarks: `Raw: ${columnSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
-  });
+  // Column steel (only for framed structure)
+  if (structureType !== 'load_bearing' && columnVolume > 0) {
+    const columnSteel = calculateSteelQuantity(columnVolume, 'column');
+    addBoQItem(steelWork, {
+      sno: steelSno++,
+      description: 'Providing and fixing Fe500 TMT steel bars for columns including cutting, bending, binding',
+      quantity: applyWastage(columnSteel.kg, steelWastage).toFixed(2),
+      unit: 'kg',
+      rate: Math.round(steelRate * 1.25),
+      remarks: `Raw: ${columnSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
+    });
+    totalSteel += columnSteel.kg;
+  }
   
-  const beamSteel = calculateSteelQuantity(beamVolume, 'beam');
-  addBoQItem(steelWork, {
-    sno: 3,
-    description: 'Providing and fixing Fe500 TMT steel bars for beams including cutting, bending, binding',
-    quantity: applyWastage(beamSteel.kg, steelWastage).toFixed(2),
-    unit: 'kg',
-    rate: Math.round(steelRate * 1.25),
-    remarks: `Raw: ${beamSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
-  });
+  // Beam steel (only for framed structure)
+  if (structureType !== 'load_bearing' && beamVolume > 0) {
+    const beamSteel = calculateSteelQuantity(beamVolume, 'beam');
+    addBoQItem(steelWork, {
+      sno: steelSno++,
+      description: 'Providing and fixing Fe500 TMT steel bars for beams including cutting, bending, binding',
+      quantity: applyWastage(beamSteel.kg, steelWastage).toFixed(2),
+      unit: 'kg',
+      rate: Math.round(steelRate * 1.25),
+      remarks: `Raw: ${beamSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
+    });
+    totalSteel += beamSteel.kg;
+  }
   
+  // Slab steel (always present)
   const slabSteel = calculateSteelQuantity(slabVolume, 'slab');
   addBoQItem(steelWork, {
-    sno: 4,
+    sno: steelSno++,
     description: 'Providing and fixing Fe500 TMT steel bars for slab including cutting, bending, binding',
     quantity: applyWastage(slabSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
     rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${slabSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
+  totalSteel += slabSteel.kg;
   
+  // Lintel steel (always present - lintel beams above openings)
   const lintelSteel = calculateSteelQuantity(totalLintelVolume, 'lintel');
   addBoQItem(steelWork, {
-    sno: 5,
+    sno: steelSno++,
     description: 'Providing and fixing Fe500 TMT steel bars for lintels including cutting, bending, binding',
     quantity: applyWastage(lintelSteel.kg, steelWastage).toFixed(2),
     unit: 'kg',
     rate: Math.round(steelRate * 1.25),
     remarks: `Raw: ${lintelSteel.kg.toFixed(2)} kg + ${(steelWastage * 100).toFixed(0)}% wastage`,
   });
-  
-  // Binding wire (2% of steel weight)
-  const totalSteel = footingSteel.kg + columnSteel.kg + beamSteel.kg + 
-                     slabSteel.kg + lintelSteel.kg;
+  totalSteel += lintelSteel.kg;
   const bindingWire = totalSteel * 0.02;
   addBoQItem(steelWork, {
     sno: 6,
