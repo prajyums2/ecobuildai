@@ -62,33 +62,36 @@ import {
 function calculateGRIHAScore(project, boqCarbon) {
   let score = 0;
 
-  // Site & Planning (max 15 points)
+  // Site & Planning (max 20 points)
   const hasRWH = project.buildingParams?.hasRainwaterHarvesting;
   const plotArea = project.buildingParams?.plotArea || 200;
   const builtUpArea = project.buildingParams?.builtUpArea || 150;
   const far = builtUpArea / plotArea;
 
-  if (hasRWH) score += 5;
+  if (hasRWH) score += 7;
   if (far <= 1.5) score += 5;
-  if (project.location?.district) score += 5;
+  if (far <= 1.0) score += 3;
 
-  // Water Efficiency (max 10 points)
+  // Water Efficiency (max 15 points)
   if (hasRWH) score += 5;
   if (project.buildingParams?.hasSTP) score += 5;
+  if (project.buildingParams?.hasRainwaterHarvesting) score += 5;
 
-  // Energy Performance (max 20 points)
-  if (project.buildingParams?.hasSolarWaterHeater) score += 10;
-  score += 10; // Assume energy efficient design
+  // Energy Performance (max 25 points)
+  if (project.buildingParams?.hasSolarWaterHeater) score += 12;
+  if (project.buildingParams?.sustainabilityPriority === "high") score += 8;
+  else if (project.buildingParams?.sustainabilityPriority === "medium") score += 5;
 
-  // Materials & Resources (max 15 points)
+  // Materials & Resources (max 25 points)
   const sustainabilityPriority = project.buildingParams?.sustainabilityPriority;
-  if (sustainabilityPriority === "high") score += 8;
-  else if (sustainabilityPriority === "medium") score += 5;
-  else score += 2;
+  if (sustainabilityPriority === "high") score += 12;
+  else if (sustainabilityPriority === "medium") score += 7;
+  else score += 3;
 
-  // Low embodied carbon bonus
-  if (boqCarbon > 0 && boqCarbon < 50000) score += 7;
-  else if (boqCarbon > 0 && boqCarbon < 100000) score += 4;
+  // Low embodied carbon bonus (max 15 points)
+  if (boqCarbon > 0 && boqCarbon < 50000) score += 15;
+  else if (boqCarbon > 0 && boqCarbon < 100000) score += 10;
+  else if (boqCarbon > 0) score += 5;
 
   return Math.min(100, score);
 }
@@ -97,60 +100,34 @@ function calculateGRIHAScore(project, boqCarbon) {
 function calculateIGBCScore(project, boqCarbon) {
   let score = 0;
 
-  // Sustainable Sites
-  if (project.buildingParams?.hasRainwaterHarvesting) score += 5;
-  score += 8; // Site selection
+  const plotArea = project.buildingParams?.plotArea || 200;
+  const builtUpArea = project.buildingParams?.builtUpArea || 150;
+  const far = builtUpArea / plotArea;
 
-  // Water Efficiency
-  if (project.buildingParams?.hasRainwaterHarvesting) score += 5;
-  if (project.buildingParams?.hasSTP) score += 5;
+  // Sustainable Sites (max 15 points)
+  if (project.buildingParams?.hasRainwaterHarvesting) score += 8;
+  if (project.location?.district) score += 7;
 
-  // Energy & Atmosphere
-  if (project.buildingParams?.hasSolarWaterHeater) score += 8;
-  score += 7; // Energy optimization
+  // Water Efficiency (max 20 points)
+  if (project.buildingParams?.hasRainwaterHarvesting) score += 8;
+  if (project.buildingParams?.hasSTP) score += 12;
 
-  // Materials & Resources
+  // Energy & Atmosphere (max 25 points)
+  if (project.buildingParams?.hasSolarWaterHeater) score += 12;
   const sustainabilityPriority = project.buildingParams?.sustainabilityPriority;
-  if (sustainabilityPriority === "high") score += 6;
-  else if (sustainabilityPriority === "medium") score += 4;
+  if (sustainabilityPriority === "high") score += 8;
+  else if (sustainabilityPriority === "medium") score += 5;
 
-  // Indoor Environment Quality
-  score += 6; // Ventilation consideration
+  // Materials & Resources (max 25 points)
+  if (sustainabilityPriority === "high") score += 12;
+  else if (sustainabilityPriority === "medium") score += 7;
+  else score += 3;
+
+  // Indoor Environment Quality (max 15 points)
+  score += 8; // Natural ventilation assumed for Kerala climate
+  if (far <= 1.5) score += 7; // Open space
 
   return Math.min(100, score);
-}
-
-// Calculate LEED score based on project parameters
-function calculateLEEDScore(project, boqCarbon) {
-  let score = 0;
-
-  // Integrative Process
-  score += 2;
-
-  // Location and Transportation
-  score += 8; // Urban location
-
-  // Sustainable Sites
-  if (project.buildingParams?.hasRainwaterHarvesting) score += 2;
-  score += 3; // Site development
-
-  // Water Efficiency
-  if (project.buildingParams?.hasRainwaterHarvesting) score += 3;
-  if (project.buildingParams?.hasSTP) score += 2;
-
-  // Energy and Atmosphere
-  if (project.buildingParams?.hasSolarWaterHeater) score += 10;
-  score += 8; // Energy performance
-
-  // Materials and Resources
-  const sustainabilityPriority = project.buildingParams?.sustainabilityPriority;
-  if (sustainabilityPriority === "high") score += 5;
-  else if (sustainabilityPriority === "medium") score += 3;
-
-  // Indoor Environmental Quality
-  score += 4;
-
-  return Math.min(110, score);
 }
 
 // Get rating label for GRIHA
@@ -164,15 +141,6 @@ function getGRIHARating(score) {
 
 // Get rating label for IGBC
 function getIGBCRating(score) {
-  if (score >= 80) return "Platinum";
-  if (score >= 60) return "Gold";
-  if (score >= 40) return "Silver";
-  if (score >= 20) return "Certified";
-  return "Not Certified";
-}
-
-// Get rating label for LEED
-function getLEEDRating(score) {
   if (score >= 80) return "Platinum";
   if (score >= 60) return "Gold";
   if (score >= 40) return "Silver";
@@ -801,15 +769,6 @@ function MaterialSummaryTab({ boq, project }) {
       .replace(/Â/g, "");
   };
 
-  if (!boq || !boq.categories) {
-    return (
-      <div className="p-8 text-center text-foreground-secondary">
-        <FaSpinner className="animate-spin text-2xl mx-auto mb-4" />
-        <p>Loading material quantities...</p>
-      </div>
-    );
-  }
-
   // Helper to get material selections with fallback
   const getMaterialSelections = () => {
     if (project && project.materialSelections && Object.keys(project.materialSelections).length > 0) {
@@ -832,14 +791,28 @@ function MaterialSummaryTab({ boq, project }) {
 
   // Extract material quantities from BoQ - only essential categories from optimizer
   const extractMaterials = () => {
+    if (!boq || !boq.categories) return {};
+
     const selectedMats = getMaterialSelections();
+    
+    // Helper to resolve rate: optimizer selection > BoQ item rate > fallback
+    const resolveRate = (category, fallback, boqCatName) => {
+      if (selectedMats[category]?.rate) return selectedMats[category].rate;
+      if (boq && boq.categories) {
+        const cat = boq.categories.find(c => c.name === boqCatName);
+        if (cat?.items?.length > 0) {
+          return Math.round(cat.items[0].rate);
+        }
+      }
+      return fallback;
+    };
     
     const materials = {
       cement: {
         name: selectedMats.cement?.name || "Cement",
         unit: selectedMats.cement?.unit || "bags",
         qty: 0,
-        rate: selectedMats.cement?.rate || 370,
+        rate: resolveRate('cement', 370, 'Concrete Work'),
         supplier: findSupplier(["cement", "ppc", "opc", "ultratech", "acc"]),
         category: "Cement",
       },
@@ -847,7 +820,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.steel?.name || "TMT Steel Bars",
         unit: selectedMats.steel?.unit || "kg",
         qty: 0,
-        rate: selectedMats.steel?.rate || 72,
+        rate: resolveRate('steel', 72, 'Reinforcement Steel'),
         supplier: findSupplier(["steel", "tmt", "tata", "jsw"]),
         category: "Steel",
       },
@@ -855,7 +828,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.concrete?.name || "Ready Mix Concrete",
         unit: selectedMats.concrete?.unit || "cum",
         qty: 0,
-        rate: selectedMats.concrete?.rate || 5500,
+        rate: resolveRate('concrete', 5500, 'Concrete Work'),
         supplier: findSupplier(["concrete", "rmc", "ready mix"]),
         category: "Concrete",
       },
@@ -863,7 +836,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.masonry?.name || "Blocks/Bricks",
         unit: selectedMats.masonry?.unit || "nos",
         qty: 0,
-        rate: selectedMats.masonry?.rate || 52,
+        rate: resolveRate('masonry', 52, 'Masonry Work'),
         supplier: findSupplier(["block", "brick", "aac", "fly ash"]),
         category: "Masonry",
       },
@@ -871,7 +844,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.aggregates?.name || "Aggregates",
         unit: selectedMats.aggregates?.unit || "cft",
         qty: 0,
-        rate: selectedMats.aggregates?.rate || 42,
+        rate: resolveRate('aggregates', 42, 'Concrete Work'),
         supplier: findSupplier(["aggregate", "sand", "m-sand"]),
         category: "Aggregates",
       },
@@ -931,8 +904,133 @@ function MaterialSummaryTab({ boq, project }) {
     return materials;
   };
 
-  const materials = extractMaterials();
+  const materials = useMemo(() => extractMaterials(), [boq, project?.materialSelections]);
   const materialList = Object.values(materials).filter((m) => m.qty > 0);
+  const totalMaterialCost = materialList.reduce((sum, m) => sum + (m.qty * m.rate), 0);
+
+  if (!boq || !boq.categories) {
+    return (
+      <div className="p-8 text-center text-foreground-secondary">
+        <FaSpinner className="animate-spin text-2xl mx-auto mb-4" />
+        <p>Loading material quantities...</p>
+      </div>
+    );
+  }
+
+  const categoryColors = {
+    cement: { bg: 'from-amber-500 to-amber-600', icon: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600', border: 'border-amber-200 dark:border-amber-800' },
+    steel: { bg: 'from-slate-500 to-slate-600', icon: 'bg-slate-100 dark:bg-slate-900/30 text-slate-600', border: 'border-slate-200 dark:border-slate-800' },
+    concrete: { bg: 'from-blue-500 to-blue-600', icon: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600', border: 'border-blue-200 dark:border-blue-800' },
+    masonry: { bg: 'from-orange-500 to-orange-600', icon: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600', border: 'border-orange-200 dark:border-orange-800' },
+    aggregates: { bg: 'from-teal-500 to-teal-600', icon: 'bg-teal-100 dark:bg-teal-900/30 text-teal-600', border: 'border-teal-200 dark:border-teal-800' },
+  };
+
+  const getCategoryIcon = (category) => {
+    const icons = { cement: FaIndustry, steel: FaHardHat, concrete: FaBuilding, masonry: FaTruck, aggregates: FaTruck };
+    return icons[category] || FaIndustry;
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-white/20 rounded-lg"><FaIndustry className="text-xl" /></div>
+            <span className="text-sm text-blue-100">Total Materials</span>
+          </div>
+          <p className="text-2xl font-bold">{materialList.length}</p>
+          <p className="text-xs text-blue-100 mt-1">From optimizer selections</p>
+        </div>
+        <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-white/20 rounded-lg"><FaMoneyBillWave className="text-xl" /></div>
+            <span className="text-sm text-green-100">Material Cost</span>
+          </div>
+          <p className="text-2xl font-bold">₹{totalMaterialCost.toLocaleString()}</p>
+          <p className="text-xs text-green-100 mt-1">{((totalMaterialCost / (boq?.summary?.grandTotal || 1)) * 100).toFixed(1)}% of total</p>
+        </div>
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-white/20 rounded-lg"><FaChartBar className="text-xl" /></div>
+            <span className="text-sm text-purple-100">Cost per sqm</span>
+          </div>
+          <p className="text-2xl font-bold">₹{materialList.length > 0 ? Math.round(totalMaterialCost / ((boq?.projectInfo?.totalArea || 1))) : 0}</p>
+          <p className="text-xs text-purple-100 mt-1">Based on total area</p>
+        </div>
+      </div>
+
+      {/* Material Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {materialList.map((mat, idx) => {
+          const catKey = mat.category?.toLowerCase() || 'other';
+          const colors = categoryColors[catKey] || categoryColors.cement;
+          const Icon = getCategoryIcon(catKey);
+          const amount = mat.qty * mat.rate;
+          const pctOfTotal = ((amount / totalMaterialCost) * 100).toFixed(1);
+
+          return (
+            <div key={idx} className={`bg-white dark:bg-gray-800 rounded-xl shadow-md border ${colors.border} overflow-hidden hover:shadow-lg transition-shadow`}>
+              <div className={`bg-gradient-to-r ${colors.bg} p-4`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white/20 rounded-lg text-white"><Icon className="text-lg" /></div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-bold text-white text-sm truncate">{mat.name}</h4>
+                    <p className="text-xs text-white/80">{mat.category}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+                    <p className="text-xs text-foreground-muted">Quantity</p>
+                    <p className="text-lg font-bold font-mono text-foreground">{mat.qty.toLocaleString()}</p>
+                    <p className="text-xs text-foreground-secondary">{mat.unit}</p>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+                    <p className="text-xs text-foreground-muted">Rate</p>
+                    <p className="text-lg font-bold font-mono text-foreground">₹{mat.rate}</p>
+                    <p className="text-xs text-foreground-secondary">per {mat.unit}</p>
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-green-700 dark:text-green-300 font-medium">Amount</span>
+                    <span className="text-lg font-bold font-mono text-green-700 dark:text-green-300">₹{amount.toLocaleString()}</span>
+                  </div>
+                  <div className="mt-2">
+                    <div className="flex items-center justify-between text-xs text-green-600 dark:text-green-400 mb-1">
+                      <span>{pctOfTotal}% of material cost</span>
+                      <span>{pctOfTotal}%</span>
+                    </div>
+                    <div className="w-full bg-green-200 dark:bg-green-800 rounded-full h-1.5">
+                      <div className={`bg-gradient-to-r ${colors.bg} h-1.5 rounded-full`} style={{ width: `${pctOfTotal}%` }} />
+                    </div>
+                  </div>
+                </div>
+                {mat.supplier && (
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                    <p className="text-xs text-foreground-muted mb-1">Best Supplier</p>
+                    <p className="text-sm font-medium text-foreground">{mat.supplier["Supplier Name"]}</p>
+                    <p className="text-xs text-foreground-secondary">{cleanRate(mat.supplier["Indicative Rate Range (Academic)"])} • {mat.supplier.distance || 0} km</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {materialList.length === 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-8 text-center">
+          <FaIndustry className="text-4xl text-foreground-muted mx-auto mb-4" />
+          <p className="text-lg font-medium text-foreground">No materials found</p>
+          <p className="text-sm text-foreground-secondary mt-1">Generate BoQ first to see material quantities</p>
+        </div>
+      )}
+    </div>
+  );
+  }
 
   return (
     <div className="space-y-6">
@@ -1077,7 +1175,7 @@ function MaterialSummaryTab({ boq, project }) {
 function SuppliersTab({ boq, project }) {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDistrict, setSelectedDistrict] = useState("Thrissur");
+  const [selectedDistrict, setSelectedDistrict] = useState(project?.location?.district || "Thrissur");
 
   const API_URL = "https://ecobuildai-production-1f9d.up.railway.app";
 
@@ -1242,6 +1340,15 @@ function SuppliersTab({ boq, project }) {
     "Palakkad",
     "Kozhikode",
     "Thiruvananthapuram",
+    "Kollam",
+    "Kottayam",
+    "Kannur",
+    "Alappuzha",
+    "Pathanamthitta",
+    "Idukki",
+    "Malappuram",
+    "Wayanad",
+    "Kasaragod",
   ];
 
   if (loading) {
@@ -1447,7 +1554,7 @@ function Reports() {
     [boq, project],
   );
 
-  // Calculate GRIHA/IGBC/LEED scores
+  // Calculate GRIHA/IGBC scores
   const grihaScore = useMemo(
     () => calculateGRIHAScore(project, embodiedCarbon.total),
     [project, embodiedCarbon.total],
@@ -1456,56 +1563,105 @@ function Reports() {
     () => calculateIGBCScore(project, embodiedCarbon.total),
     [project, embodiedCarbon.total],
   );
-  const leedScore = useMemo(
-    () => calculateLEEDScore(project, embodiedCarbon.total),
-    [project, embodiedCarbon.total],
-  );
 
   const grihaRating = getGRIHARating(grihaScore);
   const igbcRating = getIGBCRating(igbcScore);
-  const leedRating = getLEEDRating(leedScore);
 
-  // Calculate carbon reduction based on conventional vs optimized
-  // Conventional concrete: ~450 kg CO2/m³, Optimized: ~350 kg CO2/m³
+  // Calculate conventional design baseline (standard construction without optimization)
+  const totalArea = (project.buildingParams?.builtUpArea || 0) * (project.buildingParams?.numFloors || 1);
+  const conventionalConcreteVolume = materialQuantities.concreteVolume * 1.25; // 25% more concrete in conventional design
+  const conventionalSteelKg = materialQuantities.steelKg * 1.30; // 30% more steel in conventional design
+  const conventionalBlockMultiplier = 1.15; // 15% more blocks in conventional (thicker walls)
   const conventionalCarbon =
-    materialQuantities.concreteVolume * 450 + materialQuantities.steelKg * 3.0;
+    conventionalConcreteVolume * 420 + // ~420 kg CO2/m³ for conventional OPC concrete
+    conventionalSteelKg * 2.5 + // Same steel coefficient for fair comparison
+    (materialQuantities.blocksNos * conventionalBlockMultiplier) * 0.35 + // AAC blocks
+    (materialQuantities.bricksNos * 1.20) * 0.22; // 20% more bricks (less efficient)
   const optimizedCarbon = embodiedCarbon.total || 0;
   const carbonReductionPercent =
     conventionalCarbon > 0
       ? ((conventionalCarbon - optimizedCarbon) / conventionalCarbon) * 100
       : 0;
 
-  // Sustainability score based on carbon reduction and project parameters
-  const sustainabilityScore = Math.min(
-    100,
-    Math.round(
-      (carbonReductionPercent > 20 ? 30 : carbonReductionPercent) +
-        (project.buildingParams?.sustainabilityPriority === "high"
-          ? 25
-          : project.buildingParams?.sustainabilityPriority === "medium"
-            ? 15
-            : 5) +
-        (project.buildingParams?.hasSolarWaterHeater ? 15 : 0) +
-        (project.buildingParams?.hasRainwaterHarvesting ? 15 : 0) +
-        (project.buildingParams?.hasSTP ? 10 : 0),
-    ),
-  );
+  // Conventional cost baseline (standard market rates without optimization)
+  const conventionalCostMultiplier = 1.18; // ~18% higher for conventional (no bulk discounts, standard materials)
+  const conventionalMaterialCost = (boq?.summary?.subTotal || 0) * conventionalCostMultiplier;
+  const optimizedMaterialCost = boq?.summary?.subTotal || 0;
+  const costSavings = conventionalMaterialCost - optimizedMaterialCost;
+  const costSavingsPercent = conventionalMaterialCost > 0
+    ? (costSavings / conventionalMaterialCost) * 100
+    : 0;
 
-  // Calculate development control scores
-  const siteScore =
-    (project.buildingParams?.hasRainwaterHarvesting ? 5 : 0) + 5;
-  const waterScore =
-    (project.buildingParams?.hasRainwaterHarvesting ? 5 : 0) +
-    (project.buildingParams?.hasSTP ? 5 : 0);
-  const energyScore =
-    (project.buildingParams?.hasSolarWaterHeater ? 10 : 0) + 10;
-  const materialsScore =
-    project.buildingParams?.sustainabilityPriority === "high"
-      ? 8
-      : project.buildingParams?.sustainabilityPriority === "medium"
-        ? 5
-        : 2;
-  const iqScore = 5; // Indoor quality assumed good
+  // Calculate recycled content from actual material selections
+  const calculateRecycledContent = () => {
+    const selections = project.materialSelections || {};
+    let recycledPercent = 0;
+    let totalMaterials = 0;
+
+    // PPC cement contains 15-35% fly ash (recycled)
+    if (selections.cement) {
+      const cementName = (selections.cement.name || '').toLowerCase();
+      if (cementName.includes('ppc') || cementName.includes('fly ash')) {
+        recycledPercent += 25; // Average fly ash content in PPC
+      } else if (cementName.includes('psc') || cementName.includes('slag')) {
+        recycledPercent += 35; // Slag content in PSC
+      } else {
+        recycledPercent += 0; // OPC has no recycled content
+      }
+      totalMaterials++;
+    }
+
+    // Recycled aggregates
+    if (selections.aggregates) {
+      const aggName = (selections.aggregates.name || '').toLowerCase();
+      if (aggName.includes('recycled') || aggName.includes('rca')) {
+        recycledPercent += 30;
+      } else if (aggName.includes('m-sand')) {
+        recycledPercent += 10; // M-sand is manufactured, partially recycled
+      }
+      totalMaterials++;
+    }
+
+    // Steel recycling content
+    if (selections.steel) {
+      recycledPercent += 15; // TMT steel typically contains 15-20% recycled scrap
+      totalMaterials++;
+    }
+
+    // AAC blocks contain fly ash
+    if (selections.masonry) {
+      const masonryName = (selections.masonry.name || '').toLowerCase();
+      if (masonryName.includes('aac') || masonryName.includes('fly ash')) {
+        recycledPercent += 20;
+      } else if (masonryName.includes('solid') || masonryName.includes('concrete block')) {
+        recycledPercent += 10;
+      }
+      totalMaterials++;
+    }
+
+    return totalMaterials > 0 ? Math.round(recycledPercent / totalMaterials) : 5;
+  };
+
+  const recycledContentPercent = calculateRecycledContent();
+  const conventionalRecycledContent = 5; // Conventional design uses minimal recycled materials
+
+  // Unified sustainability score (based on GRIHA scoring)
+  const sustainabilityScore = grihaScore;
+
+  // Development control scores (derived from GRIHA category breakdown)
+  const hasRWH = project.buildingParams?.hasRainwaterHarvesting;
+  const hasSTP = project.buildingParams?.hasSTP;
+  const hasSWH = project.buildingParams?.hasSolarWaterHeater;
+  const sustPriority = project.buildingParams?.sustainabilityPriority;
+  const plotArea = project.buildingParams?.plotArea || 200;
+  const builtUpArea = project.buildingParams?.builtUpArea || 150;
+  const far = builtUpArea / plotArea;
+
+  const siteScore = (hasRWH ? 5 : 0) + (far <= 1.5 ? 5 : 0) + (project.location?.district ? 2 : 0);
+  const waterScore = (hasRWH ? 5 : 0) + (hasSTP ? 5 : 0);
+  const energyScore = (hasSWH ? 10 : 0) + (sustPriority === "high" ? 5 : sustPriority === "medium" ? 3 : 0);
+  const materialsScore = sustPriority === "high" ? 10 : sustPriority === "medium" ? 6 : 2;
+  const iqScore = 5; // Natural ventilation for Kerala climate
 
   // Validation state
   const [validationResults, setValidationResults] = useState({
@@ -1514,7 +1670,6 @@ function Reports() {
     placeholders: { hasPlaceholders: false, issues: [], isDraft: false },
   });
 
-  // Calculate carbon reduction correctly
   // Carbon calculations - use embodied carbon from materials
   const boqCarbonData = boq?.categories
     ? calculateBoQCarbon(boq.categories, {})
@@ -1798,16 +1953,17 @@ function Reports() {
       doc.text('AMOUNT', 170, yPos);
       yPos += 7;
       
-      // Material data - use actual rates from BoQ items
-      const cementRate = boq.categories.find(c => c.name === 'Concrete Work')?.items?.[0]?.remarks?.match(/cement/i) ? 
-        Math.round((boq.categories.find(c => c.name === 'Concrete Work')?.items?.[0]?.amount || 0) / (parseFloat(boq.categories.find(c => c.name === 'Concrete Work')?.items?.[0]?.remarks?.match(/cement:\s*([\d,.]+)\s*bags/i)?.[1] || 1))) : 370;
-      const steelRate = boq.categories.find(c => c.name === 'Reinforcement Steel')?.items?.[0]?.rate || 72;
+      // Material data - use actual rates from material selections
+      const cementRate = materialSelections?.cement?.rate || 370;
+      const steelRate = materialSelections?.steel?.rate || 72;
+      const sandRate = materialSelections?.aggregates?.rate || 58;
+      const aggRate = materialSelections?.aggregates?.rate || 42;
       
       const materials = [
         ['Cement', materialQuantities.cementBags?.toFixed(0) || '0', 'bags', String(cementRate), ((materialQuantities.cementBags || 0) * cementRate).toLocaleString()],
         ['Steel', materialQuantities.steelKg?.toFixed(0) || '0', 'kg', String(steelRate), ((materialQuantities.steelKg || 0) * steelRate).toLocaleString()],
-        ['Sand', materialQuantities.sandCft?.toFixed(0) || '0', 'cft', '58', ((materialQuantities.sandCft || 0) * 58).toLocaleString()],
-        ['Aggregate', materialQuantities.aggregateCft?.toFixed(0) || '0', 'cft', '42', ((materialQuantities.aggregateCft || 0) * 42).toLocaleString()],
+        ['Sand', materialQuantities.sandCft?.toFixed(0) || '0', 'cft', String(sandRate), ((materialQuantities.sandCft || 0) * sandRate).toLocaleString()],
+        ['Aggregate', materialQuantities.aggregateCft?.toFixed(0) || '0', 'cft', String(aggRate), ((materialQuantities.aggregateCft || 0) * aggRate).toLocaleString()],
       ];
       
       doc.setFont('helvetica', 'normal');
@@ -1835,8 +1991,6 @@ function Reports() {
       doc.text('GRIHA Score: ' + grihaScore + '/100 (' + grihaRating + ')', 15, yPos);
       yPos += 7;
       doc.text('IGBC Score: ' + igbcScore + '/100 (' + igbcRating + ')', 15, yPos);
-      yPos += 7;
-      doc.text('LEED Score: ' + leedScore + '/110 (' + leedRating + ')', 15, yPos);
       yPos += 7;
       doc.text('Sustainability Score: ' + sustainabilityScore + '/100', 15, yPos);
       yPos += 10;
@@ -2168,7 +2322,7 @@ function Reports() {
           style={{ display: activeTab === "boq" ? "block" : "none" }}
           className="print:hidden"
         >
-          <BillOfQuantities />
+          <BillOfQuantities boq={boq} onBoQUpdate={setBoq} />
         </div>
 
         <div
@@ -2268,7 +2422,37 @@ function Reports() {
               boq={boq}
               project={project}
               materialSelections={materialSelections}
-              onApplyChanges={(suggestion) => console.log('[AI] Applied:', suggestion)}
+              onApplyChanges={(suggestion) => {
+                if (!boq || !suggestion) return;
+                const updatedBoq = { ...boq };
+                const catIndex = updatedBoq.categories.findIndex(
+                  (c) => c.name === suggestion.category
+                );
+                if (catIndex >= 0) {
+                  const cat = { ...updatedBoq.categories[catIndex] };
+                  if (suggestion.type === 'rate_change') {
+                    cat.items = cat.items.map((item) => {
+                      if (item.description?.toLowerCase().includes((suggestion.item || '').toLowerCase())) {
+                        return { ...item, rate: parseFloat(suggestion.suggested) };
+                      }
+                      return item;
+                    });
+                  } else if (suggestion.type === 'quantity_change') {
+                    cat.items = cat.items.map((item) => {
+                      if (item.description?.toLowerCase().includes((suggestion.item || '').toLowerCase())) {
+                        return { ...item, quantity: parseFloat(suggestion.suggested) };
+                      }
+                      return item;
+                    });
+                  }
+                  cat.subTotal = cat.items.reduce((sum, item) => sum + (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0), 0);
+                  updatedBoq.categories[catIndex] = cat;
+                }
+                updatedBoq.summary.subTotal = updatedBoq.categories.reduce((sum, c) => sum + (c.subTotal || 0), 0);
+                updatedBoq.summary.gstAmount = (updatedBoq.summary.subTotal * updatedBoq.summary.gstRate) / 100;
+                updatedBoq.summary.grandTotal = updatedBoq.summary.subTotal + updatedBoq.summary.gstAmount;
+                setBoq(updatedBoq);
+              }}
             />
           </div>
         </div>
@@ -2631,41 +2815,25 @@ function Reports() {
                       MATERIAL COST (Rs LAKHS)
                     </td>
                     <td className="border border-black p-2 text-right">
-                      {(
-                        ((boq?.summary?.grandTotal || 0) * 1.15) /
-                        100000
-                      ).toFixed(1)}
+                      {(conventionalMaterialCost / 100000).toFixed(1)}
                     </td>
                     <td className="border border-black p-2 text-right">
-                      {((boq?.summary?.grandTotal || 0) / 100000).toFixed(1)}
+                      {(optimizedMaterialCost / 100000).toFixed(1)}
                     </td>
                     <td className="border border-black p-2 text-right">
-                      {(
-                        ((boq?.summary?.grandTotal || 0) * 0.15) /
-                        100000
-                      ).toFixed(1)}
+                      {(costSavings / 100000).toFixed(1)}
                     </td>
                   </tr>
                   <tr>
                     <td className="border border-black p-2">
                       RECYCLED CONTENT (%)
                     </td>
-                    <td className="border border-black p-2 text-right">5%</td>
+                    <td className="border border-black p-2 text-right">{conventionalRecycledContent}%</td>
                     <td className="border border-black p-2 text-right">
-                      {project.buildingParams?.sustainabilityPriority === "high"
-                        ? "35%"
-                        : project.buildingParams?.sustainabilityPriority ===
-                            "medium"
-                          ? "20%"
-                          : "10%"}
+                      {recycledContentPercent}%
                     </td>
                     <td className="border border-black p-2 text-right">
-                      {project.buildingParams?.sustainabilityPriority === "high"
-                        ? "30%"
-                        : project.buildingParams?.sustainabilityPriority ===
-                            "medium"
-                          ? "15%"
-                          : "5%"}
+                      {recycledContentPercent - conventionalRecycledContent}%
                     </td>
                   </tr>
                 </tbody>
@@ -2695,7 +2863,7 @@ function Reports() {
                 SUSTAINABILITY ASSESSMENT REPORT
               </h1>
               <h2 className="text-lg text-center">
-                GRIHA / IGBC / LEED Rating Analysis
+                GRIHA / IGBC Rating Analysis
               </h2>
             </div>
 
@@ -2734,16 +2902,6 @@ function Reports() {
                     <td className="border border-black p-2">{igbcRating}</td>
                     <td className="border border-black p-2 text-center">
                       {igbcScore >= 40 ? "✓" : "○"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-black p-2">
-                      LEED (International)
-                    </td>
-                    <td className="border border-black p-2">{leedScore}</td>
-                    <td className="border border-black p-2">{leedRating}</td>
-                    <td className="border border-black p-2 text-center">
-                      {leedScore >= 40 ? "✓" : "○"}
                     </td>
                   </tr>
                 </tbody>
@@ -3008,7 +3166,7 @@ function Reports() {
             {/* Eco-Friendly Recommendations */}
             <div className="mb-8">
               <h3 className="font-bold text-lg border-b-2 border-black mb-4">
-                3. ECO-FRIENDLY CONSTRUCTION RECOMMENDATIONS
+                5. ECO-FRIENDLY CONSTRUCTION RECOMMENDATIONS
               </h3>
 
               <div className="space-y-4">
@@ -3133,7 +3291,7 @@ function Reports() {
             {/* Supplier & Logistics Information */}
             <div className="mb-8">
               <h3 className="font-bold text-lg border-b-2 border-black mb-4">
-                4. SUPPLIER & LOGISTICS
+                6. SUPPLIER & LOGISTICS
               </h3>
 
               <table className="w-full border-collapse border border-black mb-4">
@@ -3224,7 +3382,7 @@ function Reports() {
             {/* AI Recommendations */}
             <div className="mb-8">
               <h3 className="font-bold text-lg border-b-2 border-black mb-4">
-                5. AI RECOMMENDATIONS
+                7. AI RECOMMENDATIONS
               </h3>
 
               <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary">
@@ -3268,12 +3426,13 @@ function Reports() {
 
             <div className="border-t-2 border-black pt-4 text-center text-xs">
               <p>*** END OF SUSTAINABILITY ASSESSMENT ***</p>
-              <p className="mt-2">GRIHA / IGBC / LEED Rating Analysis</p>
+              <p className="mt-2">GRIHA / IGBC Rating Analysis</p>
               <p>GENERATED: {new Date().toLocaleString()}</p>
             </div>
           </div>
         </div>
 
+        {/* Sustainability Explanation */}
         <div
           data-tab-content="sustainability-explanation"
           style={{ display: activeTab === "sustainability" ? "block" : "none" }}
@@ -3285,11 +3444,125 @@ function Reports() {
                 <FaLeaf className="text-green-500" />
                 How Sustainability Score is Calculated
               </h3>
-              <div className="space-y-4 text-sm text-foreground-secondary">
-                <p>The sustainability score is calculated based on GRIHA, IGBC, and LEED rating systems.</p>
-                <p><strong>GRIHA (Green Rating for Integrated Habitat Assessment):</strong> India's national rating system developed by TERI and MNRE. Points are awarded for site planning, water efficiency, energy performance, materials, and waste management.</p>
-                <p><strong>IGBC (Indian Green Building Council):</strong> Rating system by CII. Focuses on sustainable site planning, water conservation, energy efficiency, materials selection, and indoor environmental quality.</p>
-                <p><strong>LEED (Leadership in Energy and Environmental Design):</strong> International rating system by USGBC. Evaluates sustainable sites, water efficiency, energy and atmosphere, materials and resources, and indoor environmental quality.</p>
+              
+              <div className="space-y-4 text-foreground-secondary">
+                <p>
+                  The sustainability score is calculated based on GRIHA v3.1 guidelines 
+                  (Green Rating for Integrated Habitat Assessment) developed by TERI and MNRE,
+                  along with IGBC (Indian Green Building Council) criteria.
+                </p>
+                
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">GRIHA Score Components (max 100 points):</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Site & Planning (FAR, location)</span>
+                      <span className="font-mono text-primary">up to 15 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Rainwater Harvesting</span>
+                      <span className="font-mono text-primary">+7 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Water Efficiency (RWH + STP)</span>
+                      <span className="font-mono text-primary">up to 15 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Solar Water Heater</span>
+                      <span className="font-mono text-primary">+12 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>High Sustainability Priority</span>
+                      <span className="font-mono text-primary">+20 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Medium Sustainability Priority</span>
+                      <span className="font-mono text-primary">+10 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Low Embodied Carbon (&lt;50 tons)</span>
+                      <span className="font-mono text-primary">+15 pts</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Medium Embodied Carbon (50-100 tons)</span>
+                      <span className="font-mono text-primary">+10 pts</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">GRIHA Rating Thresholds:</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>5-Star (Excellent)</span>
+                      <span className="font-mono">80-100 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>4-Star (Very Good)</span>
+                      <span className="font-mono">65-79 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>3-Star (Good)</span>
+                      <span className="font-mono">50-64 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>2-Star (Average)</span>
+                      <span className="font-mono">35-49 points</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>1-Star (Below Average)</span>
+                      <span className="font-mono">0-34 points</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-semibold text-foreground mb-2">Your Project Score: {sustainabilityScore || 0}/100</h4>
+                  <p className="text-sm">
+                    {sustainabilityScore >= 80 ? 'Excellent! Your project qualifies for GRIHA 5-Star.' :
+                     sustainabilityScore >= 65 ? 'Very Good! Your project qualifies for GRIHA 4-Star.' :
+                     sustainabilityScore >= 50 ? 'Good! Your project qualifies for GRIHA 3-Star.' :
+                     sustainabilityScore >= 35 ? 'Your project qualifies for GRIHA 2-Star. Add more sustainability features to improve.' :
+                     'Your project needs more sustainability features to qualify for GRIHA certification.'}
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-foreground mb-3">Embodied Carbon Calculation:</h4>
+                  <p className="text-sm mb-2">
+                    Based on material quantities from BOQ:
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span>Cement (OPC): 0.93 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.breakdown?.cement ? formatNumber(Math.round(embodiedCarbon.breakdown.cement)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Steel: 2.50 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.breakdown?.steel ? formatNumber(Math.round(embodiedCarbon.breakdown.steel)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Sand: ~0.04 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.breakdown?.sand ? formatNumber(Math.round(embodiedCarbon.breakdown.sand)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Aggregate: ~0.04 kg CO2/kg</span>
+                      <span>{embodiedCarbon?.breakdown?.aggregate ? formatNumber(Math.round(embodiedCarbon.breakdown.aggregate)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>AAC Blocks: 0.35 kg CO2/unit</span>
+                      <span>{embodiedCarbon?.breakdown?.blocks ? formatNumber(Math.round(embodiedCarbon.breakdown.blocks)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Bricks: 0.22 kg CO2/unit</span>
+                      <span>{embodiedCarbon?.breakdown?.bricks ? formatNumber(Math.round(embodiedCarbon.breakdown.bricks)) : 0} kg</span>
+                    </div>
+                    <div className="flex justify-between font-semibold border-t pt-1 mt-1">
+                      <span>Total Embodied Carbon</span>
+                      <span>{embodiedCarbon?.total ? formatNumber(Math.round(embodiedCarbon.total)) : 0} kg CO2</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -3302,7 +3575,7 @@ function Reports() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
                     <span className="text-foreground-secondary flex items-center gap-2">
-                      <FaIndustry className="text-gray-400" /> Cement (OPC 53)
+                      <FaIndustry className="text-gray-400" /> Cement
                     </span>
                     <span className="text-foreground font-semibold">
                       {formatNumber(Math.round(materialQuantities.cementBags))}{" "}
@@ -3436,7 +3709,7 @@ function Reports() {
                 Important Notes:
               </h4>
               <ul className="list-disc list-inside space-y-1 text-sm text-foreground-secondary">
-                <li>All rates are based on Thrissur market rates as of 2024</li>
+                <li>All rates are based on Kerala market rates as of 2026</li>
                 <li>
                   Wastage factors included as per standard engineering practices
                   (2-8%)
@@ -3451,124 +3724,6 @@ function Reports() {
                 </li>
                 <li>Contingency of 3-5% recommended for unforeseen expenses</li>
               </ul>
-            </div>
-          </div>
-        </div>
-
-        <div
-          data-tab-content="sustainability-explanation"
-          style={{ display: activeTab === "sustainability" ? "block" : "none" }}
-          className="print:hidden"
-        >
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <FaLeaf className="text-green-500" />
-                How Sustainability Score is Calculated
-              </h3>
-              
-              <div className="space-y-4 text-foreground-secondary">
-                <p>
-                  The sustainability score is calculated based on GRIHA v3.1 guidelines 
-                  (Green Rating for Integrated Habitat Assessment) developed by TERI.
-                </p>
-                
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-foreground mb-3">Score Components:</h4>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span>Rainwater Harvesting</span>
-                      <span className="font-mono text-primary">+10 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Solar Water Heater</span>
-                      <span className="font-mono text-primary">+10 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Sewage Treatment Plant</span>
-                      <span className="font-mono text-primary">+8 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>High Sustainability Priority</span>
-                      <span className="font-mono text-primary">+8 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Medium Sustainability Priority</span>
-                      <span className="font-mono text-primary">+5 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Low Embodied Carbon (&lt;50 tons)</span>
-                      <span className="font-mono text-primary">+7 points</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Medium Embodied Carbon (50-100 tons)</span>
-                      <span className="font-mono text-primary">+4 points</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-foreground mb-3">Rating Thresholds:</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>5-Star (Excellent)</span>
-                      <span className="font-mono">75-100 points</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>4-Star (Very Good)</span>
-                      <span className="font-mono">65-74 points</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>3-Star (Good)</span>
-                      <span className="font-mono">55-64 points</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>2-Star</span>
-                      <span className="font-mono">46-54 points</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>1-Star</span>
-                      <span className="font-mono">36-45 points</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <h4 className="font-semibold text-foreground mb-2">Your Project Score: {sustainabilityScore || 0}/100</h4>
-                  <p className="text-sm">
-                    {sustainabilityScore >= 65 ? 'Excellent! Your project qualifies for GRIHA 4-Star or higher.' :
-                     sustainabilityScore >= 55 ? 'Good! Your project qualifies for GRIHA 3-Star.' :
-                     sustainabilityScore >= 46 ? 'Your project qualifies for GRIHA 2-Star. Add more sustainability features to improve.' :
-                     sustainabilityScore >= 36 ? 'Your project qualifies for GRIHA 1-Star. Consider adding rainwater harvesting and solar heater.' :
-                     'Your project needs more sustainability features to qualify for GRIHA certification.'}
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-foreground mb-3">Embodied Carbon Calculation:</h4>
-                  <p className="text-sm mb-2">
-                    Based on material quantities from BOQ:
-                  </p>
-                  <div className="space-y-1 text-sm">
-                    <div className="flex justify-between">
-                      <span>Cement (OPC): 0.93 kg CO2/kg</span>
-                      <span>{embodiedCarbon?.cement || 0} kg</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Steel: 2.50 kg CO2/kg</span>
-                      <span>{embodiedCarbon?.steel || 0} kg</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>AAC Blocks: 0.55 kg CO2/unit</span>
-                      <span>{embodiedCarbon?.blocks || 0} kg</span>
-                    </div>
-                    <div className="flex justify-between font-semibold border-t pt-1 mt-1">
-                      <span>Total Embodied Carbon</span>
-                      <span>{embodiedCarbon?.total || 0} kg CO2</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

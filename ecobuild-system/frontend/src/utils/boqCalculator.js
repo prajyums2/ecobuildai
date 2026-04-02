@@ -198,6 +198,38 @@ const FALLBACK_RATES = {
     spacer_bars: { rate: 60, unit: 'kg', wastage: 0.05 },     // ₹60/kg
   },
   
+  // Earthwork - Source: Kerala Contractors 2026
+  earthwork: {
+    excavation: { rate: 450, unit: 'cum', wastage: 0.00 },
+    backfilling: { rate: 320, unit: 'cum', wastage: 0.00 },
+    soling: { rate: 650, unit: 'sqm', wastage: 0.00 },
+    disposal: { rate: 350, unit: 'cum', wastage: 0.00 },
+    anti_termite: { rate: 25, unit: 'sqm', wastage: 0.00 },
+    pcc_bed: { rate: 180, unit: 'sqm', wastage: 0.00 },
+  },
+  
+  // Formwork - Source: CPWD Specification 2019, Kerala rates 2026
+  formwork: {
+    footing: { rate: 450, unit: 'sqm', wastage: 0.05 },
+    column: { rate: 650, unit: 'sqm', wastage: 0.05 },
+    beam: { rate: 620, unit: 'sqm', wastage: 0.05 },
+    slab: { rate: 580, unit: 'sqm', wastage: 0.05 },
+    lintel: { rate: 550, unit: 'sqm', wastage: 0.05 },
+  },
+  
+  // Plastering - Source: IS 1661:1972, Kerala rates 2026
+  plastering: {
+    internal_15mm: { rate: 185, unit: 'sqm', wastage: 0.02 },
+    external_20mm: { rate: 225, unit: 'sqm', wastage: 0.02 },
+  },
+  
+  // Sustainability features - Kerala rates 2026
+  sustainability: {
+    rainwater_harvesting: { rate: 45000, unit: 'set', wastage: 0.00 },
+    solar_water_heater: { rate: 35000, unit: 'set', wastage: 0.00 },
+    waterproofing: { rate: 385, unit: 'sqm', wastage: 0.05 },
+  },
+  
   // Plumbing - Source: Plumbing Contractors Kerala 2026
   plumbing: {
     cpvc_pipes_1in: { rate: 110, unit: 'm', wastage: 0.10 },    // ₹110/m
@@ -701,23 +733,23 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const foundationDepth = project.geotechnical?.foundationDepth || 1.5;
   const sbc = project.geotechnical?.safeBearingCapacity || 150; // kN/sq.m
   
-  // Size-dependent ratios calibrated from benchmarks
+  // Size-dependent ratios for validation benchmarks (not used in calculation)
   // Small (<=300 sqm): 0.112 cum/sqm, Medium (300-800): 0.250 cum/sqm, Large (>800): 0.374 cum/sqm
-  const concreteRatio = totalArea <= 300 ? 0.112 :
-                        totalArea <= 800 ? 0.250 :
-                        0.374;
+  const _concreteRatioBenchmark = totalArea <= 300 ? 0.112 :
+                         totalArea <= 800 ? 0.250 :
+                         0.374;
   
-  // Steel ratios calibrated from benchmarks
+  // Steel ratios for validation benchmarks
   // Small (<=300 sqm): 10.3 kg/sqm, Medium (300-800): 22.6 kg/sqm, Large (>800): 36.2 kg/sqm
-  const steelRatio = totalArea <= 300 ? 10.3 :
-                     totalArea <= 800 ? 22.6 :
-                     36.2;
+  const _steelRatioBenchmark = totalArea <= 300 ? 10.3 :
+                      totalArea <= 800 ? 22.6 :
+                      36.2;
   
-  // Blocks ratios calibrated from benchmarks
+  // Blocks ratios for validation benchmarks
   // Small (<=300 sqm): 7.0 nos/sqm, Medium (300-800): 12.6 nos/sqm, Large (>800): 11.1 nos/sqm
-  const blocksRatio = totalArea <= 300 ? 7.0 :
-                      totalArea <= 800 ? 12.6 :
-                      11.1;
+  const _blocksRatioBenchmark = totalArea <= 300 ? 7.0 :
+                       totalArea <= 800 ? 12.6 :
+                       11.1;
   
   // Foundation volume — realistic isolated footing calculation
   // For 2-floor: ~6-8 columns with 1.5m×1.5m×1.5m footings + grade beam
@@ -899,7 +931,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Excavation for foundation in all types of soil including leveling and dressing',
     quantity: excavationVolume.toFixed(2),
     unit: 'cum',
-    rate: 450,
+    rate: rates?.earthwork?.excavation?.rate || 450,
   });
   
   // Backfilling with compaction
@@ -909,7 +941,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Backfilling with approved excavated earth in layers including watering and compaction',
     quantity: backfillVolume.toFixed(2),
     unit: 'cum',
-    rate: 320,
+    rate: rates?.earthwork?.backfilling?.rate || 320,
   });
   
   // Soling (40mm stone under footing)
@@ -919,7 +951,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and laying 150mm thick soling with 40mm hard granite stone under footing',
     quantity: solingArea.toFixed(2),
     unit: 'sqm',
-    rate: 650,
+    rate: rates?.earthwork?.soling?.rate || 650,
   });
   
   // Disposal of surplus earth
@@ -929,7 +961,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Disposal of surplus earth within 5km lead including loading and unloading',
     quantity: surplusEarth.toFixed(2),
     unit: 'cum',
-    rate: 350,
+    rate: rates?.earthwork?.disposal?.rate || 350,
   });
   
   // Anti-termite treatment
@@ -939,7 +971,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and applying anti-termite treatment (ATT) to plinth area and foundation trenches',
     quantity: plinthArea.toFixed(2),
     unit: 'sqm',
-    rate: 25,
+    rate: rates?.earthwork?.anti_termite?.rate || 25,
   });
   
   // PCC bed below foundation
@@ -949,7 +981,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and laying 75mm thick PCC (1:4:8) bed below foundation',
     quantity: pccBedArea.toFixed(2),
     unit: 'sqm',
-    rate: 180,
+    rate: rates?.earthwork?.pcc_bed?.rate || 180,
   });
   
   boq.categories.push(earthwork);
@@ -1146,7 +1178,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and erecting formwork for foundation using plywood/wooden planks including scaffolding',
     quantity: footingFormwork.toFixed(2),
     unit: 'sqm',
-    rate: 450,
+    rate: rates?.formwork?.footing?.rate || 450,
   });
   
   const columnFormwork = calculateFormworkArea(columnVolume, 'column');
@@ -1155,7 +1187,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and erecting formwork for columns using plywood/steel including scaffolding',
     quantity: columnFormwork.toFixed(2),
     unit: 'sqm',
-    rate: 650,
+    rate: rates?.formwork?.column?.rate || 650,
   });
   
   const beamFormwork = calculateFormworkArea(beamVolume, 'beam');
@@ -1164,7 +1196,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and erecting formwork for beams using plywood/steel including scaffolding',
     quantity: beamFormwork.toFixed(2),
     unit: 'sqm',
-    rate: 620,
+    rate: rates?.formwork?.beam?.rate || 620,
   });
   
   const slabFormwork = calculateFormworkArea(slabVolume, 'slab');
@@ -1173,7 +1205,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and erecting formwork for slabs using plywood/steel including props and scaffolding',
     quantity: slabFormwork.toFixed(2),
     unit: 'sqm',
-    rate: 580,
+    rate: rates?.formwork?.slab?.rate || 580,
   });
   
   boq.categories.push(formwork);
@@ -1226,7 +1258,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and applying 15mm thick internal plaster in CM 1:4 including curing',
     quantity: internalPlasterArea.toFixed(2),
     unit: 'sqm',
-    rate: 185,
+    rate: rates?.plastering?.internal_15mm?.rate || 185,
     remarks: `Cement: ${internalPlaster.cement_bags} bags, Sand: ${internalPlaster.sand_cft.toFixed(2)} cft`,
   });
   
@@ -1237,7 +1269,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and applying 20mm thick external plaster in CM 1:4 including curing and finishing',
     quantity: externalPlasterArea.toFixed(2),
     unit: 'sqm',
-    rate: 225,
+    rate: rates?.plastering?.external_20mm?.rate || 225,
     remarks: `Cement: ${externalPlaster.cement_bags} bags, Sand: ${externalPlaster.sand_cft.toFixed(2)} cft`,
   });
   
@@ -1370,7 +1402,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: `Providing and fixing flush door (${openingSizes.internalDoor.width*1000}x${openingSizes.internalDoor.height*1000}mm) with hardwood frame, including fixtures`,
     quantity: totalOpenings.internalDoors,
     unit: 'nos',
-    rate: rates.doors_windows.flush_door.rate + 2000,
+    rate: rates?.doors_windows?.flush_door?.rate || 7500,
   });
   
   // Bathroom doors
@@ -1390,7 +1422,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: `Providing and fixing UPVC sliding windows (${openingSizes.window.width*1000}x${openingSizes.window.height*1000}mm) with glass and mosquito mesh`,
     quantity: totalWindowAreaSqft.toFixed(2),
     unit: 'sqft',
-    rate: rates.doors_windows.upvc_window.rate + 100,
+    rate: rates?.doors_windows?.upvc_window?.rate || 650,
   });
   
   // MS Grill
@@ -1400,7 +1432,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing 12mm square MS grill with 4 inch spacing for windows',
     quantity: (grillArea * 5).toFixed(2),
     unit: 'kg',
-    rate: rates.doors_windows.ms_grill.rate + 45,
+    rate: rates?.doors_windows?.ms_grill?.rate || 265,
   });
   
   boq.categories.push(doorsWindows);
@@ -1419,7 +1451,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing CPVC pipes for water supply including fittings (1", 3/4", 1/2")',
     quantity: cpvcLength.toFixed(2),
     unit: 'm',
-    rate: 110 + 25,
+    rate: rates?.plumbing?.cpvc_pipes_1in?.rate || 135,
   });
   
   // UPVC drainage pipes
@@ -1429,7 +1461,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing UPVC SWR pipes for drainage including fittings (4", 6")',
     quantity: upvcLength.toFixed(2),
     unit: 'm',
-    rate: 155 + 35,
+    rate: rates?.plumbing?.upvc_pipes_4in?.rate || 190,
   });
   
   // Sanitary fixtures
@@ -1439,7 +1471,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing sanitary fixtures (WC, washbasin, shower) of approved make including installation',
     quantity: sanitarySets,
     unit: 'set',
-    rate: 6500 + 1500,
+    rate: rates?.plumbing?.sanitary_fittings_set?.rate || 8000,
   });
   
   // Overhead tank
@@ -1476,7 +1508,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and laying copper conductor PVC insulated wires in concealed conduit (2.5, 4, 6 sqmm)',
     quantity: wireLength.toFixed(2),
     unit: 'm',
-    rate: 55 + 15,
+    rate: rates?.electrical?.copper_wire_2_5sqmm?.rate || 70,
   });
   
   // Conduit pipes
@@ -1485,7 +1517,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and laying PVC conduit pipes for concealed wiring including junction boxes',
     quantity: (wireLength * 0.3).toFixed(2),
     unit: 'm',
-    rate: 45 + 15,
+    rate: rates?.electrical?.conduit_pvc_1in?.rate || 60,
   });
   
   // Switches and sockets
@@ -1495,7 +1527,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing modular switches and sockets of approved make',
     quantity: switchCount,
     unit: 'nos',
-    rate: 120 + 35,
+    rate: rates?.electrical?.switches_sockets?.rate || 155,
   });
   
   // Distribution board
@@ -1505,7 +1537,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing TPN distribution board with MCBs of approved make',
     quantity: dbCount,
     unit: 'nos',
-    rate: 5500 + 2500,
+    rate: rates?.electrical?.distribution_board?.rate || 8000,
   });
   
   boq.categories.push(electrical);
@@ -1524,7 +1556,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Waterproofing treatment for bathrooms, terrace using crystalline waterproofing compound',
     quantity: waterproofingArea.toFixed(2),
     unit: 'sqm',
-    rate: 385,
+    rate: rates?.sustainability?.waterproofing?.rate || 385,
   });
   
   // Rainwater harvesting (if required)
@@ -1534,7 +1566,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
       description: 'Providing and installing rainwater harvesting system including recharge pit and filter',
       quantity: 1,
       unit: 'set',
-      rate: 45000,
+      rate: rates?.sustainability?.rainwater_harvesting?.rate || 45000,
     });
   }
   
@@ -1545,7 +1577,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
       description: 'Providing and installing solar water heater system (200 LPD) of approved make',
       quantity: 1,
       unit: 'set',
-      rate: 35000,
+      rate: rates?.sustainability?.solar_water_heater?.rate || 35000,
     });
   }
   

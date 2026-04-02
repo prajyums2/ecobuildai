@@ -35,7 +35,6 @@ Grand Total: Rs ${(boq?.summary?.grandTotal || 0).toLocaleString()}
 SUSTAINABILITY SCORES:
 - GRIHA: ${sustainabilityScore?.griha || 'N/A'}/100
 - IGBC: ${sustainabilityScore?.igbc || 'N/A'}/100
-- LEED: ${sustainabilityScore?.leed || 'N/A'}/100
 
 EMBODIED CARBON: ${embodiedCarbon?.total?.toLocaleString() || 'N/A'} kg CO2
 

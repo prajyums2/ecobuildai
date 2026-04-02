@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaRobot, FaCheck, FaTimes, FaSpinner, FaLightbulb, FaArrowUp, FaArrowDown, FaExclamationTriangle } from 'react-icons/fa';
+import { FaRobot, FaCheck, FaTimes, FaSpinner, FaLightbulb, FaArrowUp, FaArrowDown, FaExclamationTriangle, FaSyncAlt } from 'react-icons/fa';
 import { puter } from '@heyputer/puter.js';
 
 function AIReportReview({ boq, project, materialSelections, onApplyChanges }) {
@@ -7,6 +7,7 @@ function AIReportReview({ boq, project, materialSelections, onApplyChanges }) {
   const [loading, setLoading] = useState(true);
   const [appliedIds, setAppliedIds] = useState(new Set());
   const [rejectedIds, setRejectedIds] = useState(new Set());
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!boq) return;
@@ -77,12 +78,15 @@ Include at least 5-10 suggestions across different categories.`;
       const parsed = parseJSON(text);
       if (Array.isArray(parsed)) {
         setSuggestions(parsed);
+        setError(null);
       } else {
         setSuggestions([]);
+        setError('AI response could not be parsed');
       }
     } catch (error) {
       console.error('AI analysis failed:', error);
       setSuggestions([]);
+      setError('AI service unavailable. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -135,7 +139,16 @@ Include at least 5-10 suggestions across different categories.`;
         <div className="text-center">
           <FaRobot className="text-4xl text-foreground-muted mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">No suggestions available</h3>
-          <p className="text-foreground-secondary">AI analysis could not generate suggestions. Try regenerating the BoQ first.</p>
+          {error ? (
+            <div>
+              <p className="text-foreground-secondary mb-4">{error}</p>
+              <button onClick={analyzeReport} className="btn btn-primary">
+                <FaSyncAlt className="mr-2" /> Retry Analysis
+              </button>
+            </div>
+          ) : (
+            <p className="text-foreground-secondary">AI analysis could not generate suggestions. Try regenerating the BoQ first.</p>
+          )}
         </div>
       </div>
     );
