@@ -41,6 +41,10 @@ import {
   calculateBoQCarbon,
 } from "../utils/boqCalculator";
 import {
+  validateBoQQuantities,
+  optimizeBoQ as aiOptimizeBoQ,
+} from "../services/aiBoQService";
+import {
   validateBuildingDimensions,
   validateSteelRatio,
   calculateCarbonReduction,
@@ -1349,6 +1353,8 @@ function Reports() {
   const [exporting, setExporting] = useState(false);
   const [boq, setBoq] = useState(null);
   const [boqLoading, setBoqLoading] = useState(true);
+  const [aiValidation, setAiValidation] = useState(null);
+  const [aiOptimization, setAiOptimization] = useState(null);
   const [citations, setCitations] = useState(null);
   
   // Fallback: Try to get material selections from localStorage directly
@@ -1522,6 +1528,8 @@ function Reports() {
       // Only regenerate if key changed or first time
         if (hasValidParams && currentKey !== lastGeneratedKey) {
         setBoqLoading(true);
+        setAiValidation(null);
+        setAiOptimization(null);
         try {
           console.log("[Reports] Generating BoQ for:", project.name);
           const boqData = await generateBoQAsync(project);
@@ -1531,8 +1539,17 @@ function Reports() {
           setBoq(boqData);
           setBoqGenerated(true);
           setLastGeneratedKey(currentKey);
-          // Update workflow to mark BOQ as generated
           completeBOQGeneration();
+
+          // Run AI validation in background (non-blocking)
+          validateBoQQuantities(project, boqData).then(validation => {
+            setAiValidation(validation);
+          }).catch(() => {});
+
+          // Run AI optimization in background (non-blocking)
+          aiOptimizeBoQ(project, boqData, materialSelections).then(optimization => {
+            setAiOptimization(optimization);
+          }).catch(() => {});
         } catch (error) {
           console.error("[Reports] Failed to generate BoQ:", error);
           setBoq({
@@ -2026,6 +2043,17 @@ function Reports() {
           Material Summary
         </button>
         <button
+          onClick={() => setActiveTab("aivalidation")}
+          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === "aivalidation"
+              ? "border-purple-500 text-purple-600 dark:text-purple-400"
+              : "border-transparent text-foreground-secondary hover:text-foreground"
+          }`}
+        >
+          <FaRobot />
+          AI Analysis
+        </button>
+        <button
           onClick={() => setActiveTab("suppliers")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === "suppliers"
@@ -2103,6 +2131,126 @@ function Reports() {
           className="print:hidden"
         >
           <MaterialSummaryTab boq={boq} project={project} />
+        </div>
+
+        {/* AI BoQ Validation */}
+        <div
+          data-tab-content="aivalidation"
+          style={{
+            display: activeTab === "aivalidation" ? "block" : "none",
+          }}
+          className="print:hidden"
+        >
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <FaRobot className="text-primary" />
+                AI BoQ Validation
+              </h3>
+              {aiValidation ? (
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <p className="text-sm text-foreground">{aiValidation.overallAssessment}</p>
+                  </div>
+                  {aiValidation.validations?.map((v, i) => (
+                    <div key={i} className={`p-3 rounded-lg border ${
+                      v.status === 'ok' ? 'bg-green-50 dark:bg-green-900/20 border-green-200' :
+                      v.status === 'warning' ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200' :
+                      'bg-red-50 dark:bg-red-900/20 border-red-200'
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${
+                          v.status === 'ok' ? 'bg-green-500' : v.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                        }`} />
+                        <span className="font-medium text-sm">{v.category}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded ${
+                          v.status === 'ok' ? 'bg-green-100 text-green-700' :
+                          v.status === 'warning' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-red-100 text-red-700'
+                        }`}>{v.status}</span>
+                      </div>
+                      <p className="text-sm text-foreground-secondary mt-1">{v.message}</p>
+                    </div>
+                  ))}
+                  {aiValidation.steelRatio && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p className="text-xs text-foreground-secondary">Steel Ratio</p>
+                        <p className="text-lg font-bold">{aiValidation.steelRatio} kg/sqm</p>
+                        <p className="text-xs text-foreground-muted">{aiValidation.steelAssessment}</p>
+                      </div>
+                      <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p className="text-xs text-foreground-secondary">Concrete Ratio</p>
+                        <p className="text-lg font-bold">{aiValidation.concreteRatio} cum/sqm</p>
+                        <p className="text-xs text-foreground-muted">{aiValidation.concreteAssessment}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-foreground-secondary">
+                  <FaSpinner className="animate-spin text-2xl mx-auto mb-3" />
+                  <p>AI is analyzing your BoQ quantities...</p>
+                </div>
+              )}
+            </div>
+
+            {/* AI Optimization */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <FaChartBar className="text-green-500" />
+                AI Cost Optimization
+              </h3>
+              {aiOptimization ? (
+                <div className="space-y-4">
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-lg">
+                    <p className="text-sm text-foreground">{aiOptimization.summary}</p>
+                    {aiOptimization.totalPotentialSavings > 0 && (
+                      <p className="text-lg font-bold text-green-600 mt-2">
+                        Potential Savings: Rs {aiOptimization.totalPotentialSavings.toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                  {aiOptimization.optimizations?.map((opt, i) => (
+                    <div key={i} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-foreground">{opt.title}</h4>
+                        <span className={`text-xs px-2 py-0.5 rounded ${
+                          opt.priority === 'high' ? 'bg-red-100 text-red-700' :
+                          opt.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-green-100 text-green-700'
+                        }`}>{opt.priority}</span>
+                      </div>
+                      <p className="text-sm text-foreground-secondary">{opt.description}</p>
+                      <div className="flex items-center gap-4 mt-2 text-sm">
+                        <span className="text-foreground-muted">Category: {opt.category}</span>
+                        {opt.potentialSavings > 0 && (
+                          <span className="text-green-600 font-medium">
+                            Save: Rs {opt.potentialSavings.toLocaleString()} ({opt.savingsPercent}%)
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {aiOptimization.sustainabilityTips?.length > 0 && (
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 rounded-lg">
+                      <h4 className="font-semibold text-foreground mb-2">Sustainability Tips</h4>
+                      <ul className="list-disc list-inside space-y-1">
+                        {aiOptimization.sustainabilityTips.map((tip, i) => (
+                          <li key={i} className="text-sm text-foreground-secondary">{tip}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-foreground-secondary">
+                  <FaSpinner className="animate-spin text-2xl mx-auto mb-3" />
+                  <p>AI is analyzing optimization opportunities...</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div
