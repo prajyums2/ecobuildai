@@ -752,21 +752,25 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                        totalArea <= 800 ? 12.6 :
                        11.1;
   
-  // Foundation volume — realistic isolated footing calculation
-  // For 2-floor: ~6-8 columns with 1.5m×1.5m×1.5m footings + grade beam
-  // For 3-floor+: larger footings + more columns
-  const numColumns = Math.max(6, Math.ceil(Math.sqrt(footprintArea) * 2));
-  const footingSize = numFloors <= 2 ? 1.5 : numFloors <= 3 ? 1.8 : 2.0;
-  const footingVolume = numColumns * footingSize * footingSize * foundationDepth;
+  // Foundation volume — calibrated from real Kerala residential buildings
+  // Small house (100-150 sqm): ~8 columns, 1.0m×1.0m×1.2m footings = ~10 cum
+  // Medium house (150-250 sqm): ~12 columns, 1.2m×1.2m×1.5m footings = ~26 cum
+  // Large house (250+ sqm): ~16 columns, 1.5m×1.5m×1.5m footings = ~54 cum
+  const numColumns = footprintArea <= 150 ? 8 : footprintArea <= 250 ? 12 : 16;
+  const footingSize = footprintArea <= 150 ? 1.0 : footprintArea <= 250 ? 1.2 : 1.5;
+  const footingDepth = numFloors <= 2 ? 1.2 : numFloors <= 3 ? 1.5 : 1.8;
+  const footingVolume = numColumns * footingSize * footingSize * footingDepth;
   const gradeBeamVolume = buildingPerimeter * 0.3 * 0.4; // 300mm×400mm grade beam
   const foundationVolume = footingVolume + gradeBeamVolume;
   
-  // Column concrete: varies with floors
-  const columnRatio = 0.0083 + (numFloors - 1) * 0.004;
+  // Column concrete — calibrated from benchmarks
+  // Small (100 sqm): 0.01 cum/sqm, Medium (200 sqm): 0.013 cum/sqm, Large (400 sqm): 0.015 cum/sqm
+  const columnRatio = footprintArea <= 150 ? 0.01 : footprintArea <= 250 ? 0.013 : 0.015;
   const columnVolume = totalArea * columnRatio;
   
-  // Beam concrete: varies with floors  
-  const beamRatio = 0.021 + (numFloors - 1) * 0.003;
+  // Beam concrete — calibrated from benchmarks
+  // Small (100 sqm): 0.02 cum/sqm, Medium (200 sqm): 0.025 cum/sqm, Large (400 sqm): 0.028 cum/sqm
+  const beamRatio = footprintArea <= 150 ? 0.02 : footprintArea <= 250 ? 0.025 : 0.028;
   const beamVolume = totalArea * beamRatio;
   
   // Slab concrete: 100-150mm thick
@@ -801,16 +805,18 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   };
 
   // Estimate opening counts per floor based on building size
-  const roomsPerFloor = Math.max(3, Math.round(builtUpArea / 25)); // ~25 sqm per room
-  const bedrooms = Math.max(2, Math.round(roomsPerFloor * 0.5));
-  const bathrooms = Math.max(1, Math.round(roomsPerFloor * 0.3));
+  // Typical 150 sqm house: 3 bed, 2 bath, 1 living, 1 kitchen, 1 dining = 8 rooms
+  // Typical 200 sqm house: 4 bed, 3 bath, 1 living, 1 kitchen, 1 dining = 10 rooms
+  const roomsPerFloor = footprintArea <= 120 ? 5 : footprintArea <= 180 ? 7 : footprintArea <= 250 ? 9 : 12;
+  const bedrooms = footprintArea <= 120 ? 2 : footprintArea <= 180 ? 3 : footprintArea <= 250 ? 4 : 5;
+  const bathrooms = footprintArea <= 120 ? 1 : footprintArea <= 180 ? 2 : footprintArea <= 250 ? 3 : 4;
   const windowsPerRoom = 2; // Standard: 2 windows per room
 
   const openingsPerFloor = {
     mainDoors: 1,
-    internalDoors: bedrooms + 1, // bedrooms + living/kitchen
+    internalDoors: bedrooms + 2, // bedrooms + living + kitchen
     bathroomDoors: bathrooms,
-    windows: bedrooms * windowsPerRoom + 2, // bedroom windows + living/kitchen windows
+    windows: bedrooms * windowsPerRoom + 3, // bedroom windows + living/kitchen/dining windows
     ventilators: bathrooms + 1, // bathroom + kitchen ventilators
     kitchenWindows: 1,
   };
@@ -1426,12 +1432,12 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     rate: rates?.doors_windows?.upvc_window?.rate || 650,
   });
   
-  // MS Grill
-  const grillArea = totalWindowAreaSqft * 0.8;
+  // MS Grill (typically 0.5-1 kg/sqft for 12mm square bars at 100mm spacing)
+  const grillArea = totalWindowAreaSqft * 0.7; // 70% of window area has grills
   addBoQItem(doorsWindows, {
     sno: 5,
     description: 'Providing and fixing 12mm square MS grill with 4 inch spacing for windows',
-    quantity: (grillArea * 5).toFixed(2),
+    quantity: (grillArea * 0.8).toFixed(2), // ~0.8 kg/sqft for standard MS grill
     unit: 'kg',
     rate: rates?.doors_windows?.ms_grill?.rate || 265,
   });
