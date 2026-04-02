@@ -101,6 +101,15 @@ function BillOfQuantities({ onBoQUpdate, boq: parentBoq }) {
     fetchBoQ();
   }, []);
 
+  // Sync with parent BoQ changes
+  useEffect(() => {
+    if (parentBoq && parentBoq !== boq) {
+      setBoq(parentBoq);
+      setLastGeneratedState(getCurrentState());
+      setHasChanges(false);
+    }
+  }, [parentBoq]);
+
   const handleRegenerate = async () => {
     setBoqLoading(true);
     try {
