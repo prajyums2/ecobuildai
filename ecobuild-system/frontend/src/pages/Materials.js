@@ -1543,113 +1543,175 @@ function Materials() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header with Stats */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Materials Database
-        </h1>
-        <div className="flex items-center gap-6 text-sm text-foreground-secondary">
-          <span className="flex items-center gap-1">
-            <FaBox className="text-primary" />
-            {materials.length} materials
-          </span>
-          <span className="flex items-center gap-1">
-            <FaIndustry className="text-primary" />
-            {categories.length} categories
-          </span>
-          <span className="flex items-center gap-1">
-            <FaLeaf className="text-green-500" />
-            {materials.filter(m => m.environmental_properties?.embodied_carbon > 0).length} with carbon data
-          </span>
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <FaBox className="text-blue-200" />
+              Materials Database
+            </h1>
+            <p className="text-blue-100 text-sm mt-1">
+              Search, filter, and compare construction materials
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setEditingMaterial(null);
+              resetForm();
+              setShowCreateModal(true);
+              setActiveTab("basic");
+            }}
+            className="px-4 py-2 bg-white text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
+          >
+            <FaPlus /> Add Material
+          </button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white/10 rounded-lg p-3">
+            <p className="text-2xl font-bold">{materials.length}</p>
+            <p className="text-xs text-blue-100">Total Materials</p>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3">
+            <p className="text-2xl font-bold">{categories.length}</p>
+            <p className="text-xs text-blue-100">Categories</p>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3">
+            <p className="text-2xl font-bold">{materials.filter(m => m.environmental_properties?.embodied_carbon > 0).length}</p>
+            <p className="text-xs text-blue-100">With Carbon Data</p>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3">
+            <p className="text-2xl font-bold">{materials.filter(m => m.civil_properties?.is_code).length}</p>
+            <p className="text-xs text-blue-100">IS Code Certified</p>
+          </div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex gap-4 mb-6">
-        {/* Search */}
-        <div className="flex-1 relative">
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-            <FaSearch className="text-foreground-secondary" />
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Search */}
+          <div className="flex-1 relative">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <FaSearch />
+            </div>
+            <input
+              type="text"
+              placeholder="Search materials by name, category, IS code..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="w-full pl-10 pr-10 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <FaTimes />
+              </button>
+            )}
           </div>
-          <input
-            type="text"
-            placeholder="Search materials by name, category, or description..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="input w-full pl-12 pr-12 py-3"
-          />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm("")}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-foreground-secondary hover:text-foreground"
+
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Category Filter */}
+            <select
+              value={selectedCategory}
+              onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
+              className="px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
             >
-              <FaTimes />
+              <option value="">All Categories</option>
+              {MATERIAL_CATEGORIES.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+
+            {/* Sort */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="name">Name</option>
+              <option value="price">Price ↑</option>
+              <option value="carbon">Carbon ↑</option>
+              <option value="recycled">Recycled ↓</option>
+              <option value="durability">Durability ↓</option>
+            </select>
+
+            {/* Advanced Filters Toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                showFilters 
+                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
+                  : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600'
+              }`}
+            >
+              <FaFilter /> Filters
             </button>
-          )}
+          </div>
         </div>
 
-        {/* Category Filter */}
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="input py-3 min-w-[180px]"
-        >
-          <option value="">All Categories</option>
-          {MATERIAL_CATEGORIES.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.label} ({categoryCounts[cat.id] || 0})
-            </option>
-          ))}
-        </select>
-
-        {/* Sort */}
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="input py-3 min-w-[140px]"
-        >
-          <option value="name">Sort: Name</option>
-          <option value="price">Sort: Price</option>
-          <option value="carbon">Sort: Carbon</option>
-        </select>
-
-        {/* Add Button */}
-        <button
-          onClick={() => {
-            setEditingMaterial(null);
-            resetForm();
-            setShowCreateModal(true);
-            setActiveTab("basic");
-          }}
-          className="btn btn-primary flex items-center"
-        >
-          <FaPlus className="mr-2" />
-          Add Material
-        </button>
-      </div>
-
-      {/* Category Summary */}
-      <div className="grid grid-cols-6 gap-4 mb-6">
-        {categories.map((cat) => (
-          <div
-            key={cat.category}
-            onClick={() => {
-              setSelectedCategory(cat.category);
-              fetchMaterials();
-            }}
-            className={`card cursor-pointer hover:shadow-lg transition-shadow ${
-              selectedCategory === cat.category ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{cat.count}</div>
-              <div className="text-sm text-foreground-secondary capitalize">
-                {cat.category}
+        {/* Advanced Filters */}
+        {showFilters && (
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Price Range (₹)</label>
+              <div className="flex gap-2">
+                <input type="number" placeholder="Min" value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm" />
+                <input type="number" placeholder="Max" value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm" />
               </div>
             </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Carbon (kg CO2)</label>
+              <div className="flex gap-2">
+                <input type="number" placeholder="Min" value={carbonRange.min} onChange={(e) => setCarbonRange(prev => ({ ...prev, min: e.target.value }))} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm" />
+                <input type="number" placeholder="Max" value={carbonRange.max} onChange={(e) => setCarbonRange(prev => ({ ...prev, max: e.target.value }))} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Min Recycled (%)</label>
+              <input type="number" placeholder="0" value={recycledMin} onChange={(e) => setRecycledMin(e.target.value)} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Quality Grade</label>
+              <select value={selectedQuality} onChange={(e) => setSelectedQuality(e.target.value)} className="w-full px-2 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm">
+                <option value="">All Grades</option>
+                {QUALITY_GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+              </select>
+            </div>
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={greenCertified} onChange={(e) => setGreenCertified(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                <span className="text-sm text-gray-600 dark:text-gray-400">Green Certified Only</span>
+              </label>
+            </div>
           </div>
-        ))}
+        )}
+      </div>
+
+      {/* Category Summary Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        {categories.map((cat) => {
+          const isSelected = selectedCategory === cat.category;
+          return (
+            <button
+              key={cat.category}
+              onClick={() => { setSelectedCategory(isSelected ? '' : cat.category); setCurrentPage(1); }}
+              className={`p-4 rounded-xl border-2 transition-all text-center ${
+                isSelected 
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md' 
+                  : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 bg-white dark:bg-gray-800'
+              }`}
+            >
+              <p className={`text-2xl font-bold ${isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-foreground'}`}>{cat.count}</p>
+              <p className="text-xs text-foreground-secondary capitalize mt-1">{cat.category}</p>
+            </button>
+          );
+        })}
       </div>
 
       {/* Materials List */}
