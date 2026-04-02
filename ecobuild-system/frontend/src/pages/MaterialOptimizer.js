@@ -184,12 +184,13 @@ function MaterialOptimizer() {
       saveMaterialSelection('batch', autoSelected);
 
       // ALSO save directly to localStorage as reliable fallback
+      // REPLACE entire selections (not merge) so deselected categories are removed
       try {
         const projects = JSON.parse(localStorage.getItem('ecobuild-projects') || '[]');
         const currentId = localStorage.getItem('ecobuild-current-project-id');
         const idx = projects.findIndex(p => p.id === currentId);
         if (idx >= 0) {
-          projects[idx].materialSelections = { ...projects[idx].materialSelections, ...autoSelected };
+          projects[idx].materialSelections = { ...autoSelected };
           projects[idx].lastModified = new Date().toISOString();
           localStorage.setItem('ecobuild-projects', JSON.stringify(projects));
           console.log('[Optimizer] Saved to localStorage:', Object.keys(autoSelected));

@@ -259,7 +259,7 @@ export function ProjectProvider({ children }) {
       if (p.id === currentProjectId) {
         let newSelections;
         if (category === 'batch' && typeof material === 'object') {
-          newSelections = { ...p.materialSelections, ...material };
+          newSelections = { ...material };
         } else {
           newSelections = { ...p.materialSelections, [category]: material };
         }
