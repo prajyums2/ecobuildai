@@ -232,12 +232,13 @@ const FALLBACK_RATES = {
   
   // Plumbing - Source: Plumbing Contractors Kerala 2026
   plumbing: {
-    cpvc_pipes_1in: { rate: 110, unit: 'm', wastage: 0.10 },    // ₹110/m
-    cpvc_pipes_3_4in: { rate: 85, unit: 'm', wastage: 0.10 },   // ₹85/m
-    cpvc_pipes_1_2in: { rate: 55, unit: 'm', wastage: 0.10 },   // ₹55/m
-    upvc_pipes_4in: { rate: 155, unit: 'm', wastage: 0.10 },    // ₹155/m
-    upvc_pipes_6in: { rate: 230, unit: 'm', wastage: 0.10 },    // ₹230/m
-    sanitary_fittings_set: { rate: 6500, unit: 'set', wastage: 0.00 }, // ₹6500/set
+    cpvc_pipes_1in: { rate: 135, unit: 'm', wastage: 0.05 },
+    cpvc_pipes_3_4in: { rate: 110, unit: 'm', wastage: 0.05 },
+    upvc_pipes_4in: { rate: 190, unit: 'm', wastage: 0.05 },
+    upvc_pipes_6in: { rate: 250, unit: 'm', wastage: 0.05 },
+    sanitary_fittings_set: { rate: 8000, unit: 'set', wastage: 0.00 },
+    overhead_tank_1000l: { rate: 12500, unit: 'nos', wastage: 0.00 },
+    underground_tank_5000l: { rate: 65000, unit: 'nos', wastage: 0.00 },
   },
   
   // Electrical - Source: Electrical Contractors Kerala 2026
@@ -1393,7 +1394,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: `Providing and fixing teak wood paneled door (${openingSizes.mainDoor.width*1000}x${openingSizes.mainDoor.height*1000}mm) with teak wood frame, including fixtures and fittings`,
     quantity: totalOpenings.mainDoors,
     unit: 'nos',
-    rate: 25000,
+    rate: rates?.doors_windows?.panel_door?.rate || 25000,
   });
   
   // Internal doors (bedrooms + living)
@@ -1411,7 +1412,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: `Providing and fixing PVC door (${openingSizes.bathroomDoor.width*1000}x${openingSizes.bathroomDoor.height*1000}mm) for bathrooms, including fixtures`,
     quantity: totalOpenings.bathroomDoors,
     unit: 'nos',
-    rate: 4500,
+    rate: rates?.doors_windows?.pvc_door?.rate || 4500,
   });
   
   // Windows (UPVC)
@@ -1480,7 +1481,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Providing and fixing 1000 litres Sintex overhead water tank including stand and fittings',
     quantity: 1,
     unit: 'nos',
-    rate: 12500,
+    rate: rates?.plumbing?.overhead_tank_1000l?.rate || 12500,
   });
   
   // Underground tank
@@ -1489,7 +1490,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     description: 'Constructing 5000 litres RCC underground water tank including waterproofing',
     quantity: 1,
     unit: 'nos',
-    rate: 65000,
+    rate: rates?.plumbing?.underground_tank_5000l?.rate || 65000,
   });
   
   boq.categories.push(plumbing);
@@ -2062,5 +2063,5 @@ export default {
   validateSteelConcreteRatio,
   reconcileMaterialsWithCost,
   calculateMaterialQuantitiesFromCost,
-  THRISSUR_RATES_2024: FALLBACK_RATES,
+  THRISSUR_RATES_2026: FALLBACK_RATES,
 };
