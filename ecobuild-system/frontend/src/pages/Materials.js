@@ -458,37 +458,67 @@ function Materials() {
       // Transform database materials to include required fields
       const transformedDbMaterials = dbMaterials.map((mat) => {
         const verified = verifiedData[mat._id] || {};
-        const gstRate = mat.Category === 'Cement' ? 28 : 
-                       (mat.Category === 'Steel' || mat.Category === 'steel') ? 18 : 
-                       (mat.Category === 'Concrete') ? 18 : 5;
+        
+        // Support both old schema (MaterialName, Category) and new schema (name, category)
+        const name = mat.name || mat.MaterialName || 'Unnamed Material';
+        const category = mat.category || mat.Category || 'other';
+        const description = mat.description || mat.Description || mat.Applications || '';
+        const isCode = mat.civil_properties?.is_code || mat['BIS Code'] || '';
+        const grade = mat.civil_properties?.structural_grade || mat.GradeOrModel || '';
+        const unit = mat.financial_properties?.unit_type || mat.Unit || verified.unit || 'kg';
+        const costPerUnit = mat.financial_properties?.cost_per_unit || verified.rate || 0;
+        const carbon = mat.environmental_properties?.embodied_carbon || verified.carbon || 0;
+        const recycled = mat.environmental_properties?.recycled_content || 0;
+        const durability = mat.civil_properties?.durability_years || 0;
+        const compressiveStrength = mat.physical_properties?.compressive_strength || 0;
+        const thermalConductivity = mat.physical_properties?.thermal_conductivity || 0;
+        const qualityGrade = mat.civil_properties?.quality_grade || '';
+        const gstRate = mat.financial_properties?.gst_rate || (
+          category === 'cement' ? 28 : 
+          category === 'steel' ? 18 : 
+          category === 'concrete' ? 18 : 5
+        );
         
         return {
           _id: mat._id,
-          materialCode: mat.MaterialCode,
-          name: mat.MaterialName || 'Unnamed Material',
-          category: mat.Category || 'other',
-          description: mat.Description || mat.Applications || '',
-          brand: mat['BIS Code'] || mat.GradeOrModel || '',
-          manufacturer: '',
-          unit: verified.unit || mat.Unit || 'kg',
+          materialCode: mat.material_code || mat.MaterialCode || '',
+          name: name,
+          category: category.toLowerCase(),
+          description: description,
+          brand: isCode || grade || '',
+          manufacturer: mat.supplier?.supplier_name || '',
+          unit: unit,
           status: 'active',
           isDatabase: true,
           
           financial_properties: {
-            cost_per_unit: verified.rate || 0,
+            cost_per_unit: costPerUnit,
             currency: 'INR',
-            unit_type: verified.unit || mat.Unit || 'kg',
+            unit_type: unit,
             gst_rate: gstRate,
+            retail_price: mat.financial_properties?.retail_price || 0,
+            wholesale_price: mat.financial_properties?.wholesale_price || 0,
+            bulk_price: mat.financial_properties?.bulk_price || 0,
           },
           environmental_properties: {
-            embodied_carbon: verified.carbon || 0,
-            recycled_content: mat.Category === 'Blocks/Bricks' ? 20 : 0,
+            embodied_carbon: carbon,
+            recycled_content: recycled,
+            recyclable: mat.environmental_properties?.recyclable || true,
           },
-          physical_properties: {},
+          physical_properties: {
+            compressive_strength: compressiveStrength,
+            thermal_conductivity: thermalConductivity,
+            density: mat.physical_properties?.density || 0,
+            water_absorption: mat.physical_properties?.water_absorption || 0,
+          },
           civil_properties: {
-            is_code: mat['BIS Code'] || '',
-            grade: mat.GradeOrModel || '',
+            is_code: isCode,
+            structural_grade: grade,
+            quality_grade: qualityGrade,
+            durability_years: durability,
+            green_building_cert: mat.civil_properties?.green_building_cert || [],
           },
+          supplier: mat.supplier || {},
         };
       });
       
