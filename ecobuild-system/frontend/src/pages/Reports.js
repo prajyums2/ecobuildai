@@ -34,6 +34,7 @@ import {
 } from "react-icons/fa";
 import BillOfQuantities from "../components/BillOfQuantities";
 import AIReportReview from "../components/AIReportReview";
+import AISustainabilitySuggestions from "../components/AISustainabilitySuggestions";
 import {
   generateBoQAsync,
   exportBoQToCSV,
@@ -461,8 +462,22 @@ function AIRecommendationsTab({
                           <span className={`text-xs px-2 py-0.5 rounded-full border ${getPriorityColor(rec.priority)}`}>
                             {rec.priority} Priority
                           </span>
-                        </div>
-                      </div>
+            {/* Section 4: AI Sustainability Suggestions */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <FaLeaf className="text-green-500" />
+                Sustainability Suggestions
+              </h3>
+              <AISustainabilitySuggestions
+                project={project}
+                boq={boq}
+                materialSelections={materialSelections}
+                embodiedCarbon={embodiedCarbon}
+                sustainabilityScore={sustainabilityScore}
+              />
+            </div>
+          </div>
+        </div>
                       <span className="text-sm text-foreground-secondary">{rec.category}</span>
                     </div>
                     <p className="text-sm text-foreground-secondary mb-3">{rec.description}</p>
