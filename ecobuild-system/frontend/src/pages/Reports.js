@@ -2065,17 +2065,6 @@ function Reports() {
       {/* Tab Navigation */}
       <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 dark:border-gray-700 print:hidden">
         <button
-          onClick={() => setActiveTab("staad")}
-          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "staad"
-              ? "border-blue-500 text-blue-600 dark:text-blue-400"
-              : "border-transparent text-foreground-secondary hover:text-foreground"
-          }`}
-        >
-          <FaChartBar />
-          Technical Report
-        </button>
-        <button
           onClick={() => setActiveTab("boq")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === "boq"
@@ -2084,7 +2073,7 @@ function Reports() {
           }`}
         >
           <FaClipboardList />
-          Bill of Quantities
+          BoQ
         </button>
         <button
           onClick={() => setActiveTab("materialsummary")}
@@ -2095,29 +2084,7 @@ function Reports() {
           }`}
         >
           <FaIndustry />
-          Material Summary
-        </button>
-        <button
-          onClick={() => setActiveTab("aivalidation")}
-          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "aivalidation"
-              ? "border-purple-500 text-purple-600 dark:text-purple-400"
-              : "border-transparent text-foreground-secondary hover:text-foreground"
-          }`}
-        >
-          <FaRobot />
-          AI Analysis
-        </button>
-        <button
-          onClick={() => setActiveTab("suppliers")}
-          className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "suppliers"
-              ? "border-blue-500 text-blue-600 dark:text-blue-400"
-              : "border-transparent text-foreground-secondary hover:text-foreground"
-          }`}
-        >
-          <FaIndustry />
-          Suppliers
+          Materials
         </button>
         <button
           onClick={() => setActiveTab("aireview")}
@@ -2128,13 +2095,13 @@ function Reports() {
           }`}
         >
           <FaRobot />
-          AI Review
+          AI Insights
         </button>
         <button
           onClick={() => setActiveTab("sustainability")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === "sustainability"
-              ? "border-blue-500 text-blue-600 dark:text-blue-400"
+              ? "border-green-500 text-green-600 dark:text-green-400"
               : "border-transparent text-foreground-secondary hover:text-foreground"
           }`}
         >
@@ -2142,26 +2109,26 @@ function Reports() {
           Sustainability
         </button>
         <button
-          onClick={() => setActiveTab("cost")}
+          onClick={() => setActiveTab("staad")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "cost"
+            activeTab === "staad"
               ? "border-blue-500 text-blue-600 dark:text-blue-400"
               : "border-transparent text-foreground-secondary hover:text-foreground"
           }`}
         >
-          <FaMoneyBillWave />
-          Cost Summary
+          <FaChartBar />
+          Technical
         </button>
         <button
-          onClick={() => setActiveTab("ai")}
+          onClick={() => setActiveTab("suppliers")}
           className={`px-4 py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
-            activeTab === "ai"
+            activeTab === "suppliers"
               ? "border-blue-500 text-blue-600 dark:text-blue-400"
               : "border-transparent text-foreground-secondary hover:text-foreground"
           }`}
         >
-          <FaLeaf />
-          AI Recommendations
+          <FaTruck />
+          Suppliers
         </button>
       </div>
 
@@ -2199,25 +2166,22 @@ function Reports() {
           <MaterialSummaryTab boq={boq} project={project} />
         </div>
 
-        {/* AI BoQ Validation */}
+        {/* AI Insights (Merged: Validation + Optimization + Review) */}
         <div
-          data-tab-content="aivalidation"
-          style={{
-            display: activeTab === "aivalidation" ? "block" : "none",
-          }}
+          data-tab-content="aireview"
+          style={{ display: activeTab === "aireview" ? "block" : "none" }}
           className="print:hidden"
         >
           <div className="space-y-6">
+            {/* Section 1: Quantity Validation */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                 <FaRobot className="text-primary" />
-                AI BoQ Validation
+                BoQ Validation
               </h3>
               {aiValidation ? (
-                <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <p className="text-sm text-foreground">{aiValidation.overallAssessment}</p>
-                  </div>
+                <div className="space-y-3">
+                  <p className="text-sm text-foreground">{aiValidation.overallAssessment}</p>
                   {aiValidation.validations?.map((v, i) => (
                     <div key={i} className={`p-3 rounded-lg border ${
                       v.status === 'ok' ? 'bg-green-50 dark:bg-green-900/20 border-green-200' :
@@ -2225,15 +2189,9 @@ function Reports() {
                       'bg-red-50 dark:bg-red-900/20 border-red-200'
                     }`}>
                       <div className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${
-                          v.status === 'ok' ? 'bg-green-500' : v.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
-                        }`} />
+                        <span className={`w-2 h-2 rounded-full ${v.status === 'ok' ? 'bg-green-500' : v.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`} />
                         <span className="font-medium text-sm">{v.category}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                          v.status === 'ok' ? 'bg-green-100 text-green-700' :
-                          v.status === 'warning' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-red-100 text-red-700'
-                        }`}>{v.status}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded ${v.status === 'ok' ? 'bg-green-100 text-green-700' : v.status === 'warning' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>{v.status}</span>
                       </div>
                       <p className="text-sm text-foreground-secondary mt-1">{v.message}</p>
                     </div>
@@ -2254,68 +2212,49 @@ function Reports() {
                   )}
                 </div>
               ) : (
-                <div className="text-center py-8 text-foreground-secondary">
-                  <FaSpinner className="animate-spin text-2xl mx-auto mb-3" />
-                  <p>AI is analyzing your BoQ quantities...</p>
+                <div className="text-center py-4 text-foreground-secondary">
+                  <FaSpinner className="animate-spin text-xl mx-auto mb-2" />
+                  <p className="text-sm">Analyzing quantities...</p>
                 </div>
               )}
             </div>
 
-            {/* AI Optimization */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <FaChartBar className="text-green-500" />
-                AI Cost Optimization
-              </h3>
-              {aiOptimization ? (
-                <div className="space-y-4">
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-lg">
-                    <p className="text-sm text-foreground">{aiOptimization.summary}</p>
-                    {aiOptimization.totalPotentialSavings > 0 && (
-                      <p className="text-lg font-bold text-green-600 mt-2">
-                        Potential Savings: Rs {aiOptimization.totalPotentialSavings.toLocaleString()}
-                      </p>
-                    )}
-                  </div>
-                  {aiOptimization.optimizations?.map((opt, i) => (
-                    <div key={i} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{opt.title}</h4>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                          opt.priority === 'high' ? 'bg-red-100 text-red-700' :
-                          opt.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-green-100 text-green-700'
-                        }`}>{opt.priority}</span>
-                      </div>
-                      <p className="text-sm text-foreground-secondary">{opt.description}</p>
-                      <div className="flex items-center gap-4 mt-2 text-sm">
-                        <span className="text-foreground-muted">Category: {opt.category}</span>
-                        {opt.potentialSavings > 0 && (
-                          <span className="text-green-600 font-medium">
-                            Save: Rs {opt.potentialSavings.toLocaleString()} ({opt.savingsPercent}%)
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {aiOptimization.sustainabilityTips?.length > 0 && (
-                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 rounded-lg">
-                      <h4 className="font-semibold text-foreground mb-2">Sustainability Tips</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        {aiOptimization.sustainabilityTips.map((tip, i) => (
-                          <li key={i} className="text-sm text-foreground-secondary">{tip}</li>
-                        ))}
-                      </ul>
+            {/* Section 2: Cost Optimization */}
+            {aiOptimization && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                  <FaChartBar className="text-green-500" />
+                  Cost Optimization
+                </h3>
+                <div className="space-y-3">
+                  {aiOptimization.totalPotentialSavings > 0 && (
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-lg">
+                      <p className="text-lg font-bold text-green-600">Potential Savings: ₹{aiOptimization.totalPotentialSavings.toLocaleString()}</p>
                     </div>
                   )}
+                  {aiOptimization.optimizations?.slice(0, 5).map((opt, i) => (
+                    <div key={i} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-medium text-sm text-foreground">{opt.title}</h4>
+                        <span className={`text-xs px-2 py-0.5 rounded ${opt.priority === 'high' ? 'bg-red-100 text-red-700' : opt.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{opt.priority}</span>
+                      </div>
+                      <p className="text-xs text-foreground-secondary">{opt.description}</p>
+                      {opt.potentialSavings > 0 && (
+                        <span className="text-xs text-green-600 font-medium">Save: ₹{opt.potentialSavings.toLocaleString()}</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <div className="text-center py-8 text-foreground-secondary">
-                  <FaSpinner className="animate-spin text-2xl mx-auto mb-3" />
-                  <p>AI is analyzing optimization opportunities...</p>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {/* Section 3: AI Report Review (Suggestions) */}
+            <AIReportReview
+              boq={boq}
+              project={project}
+              materialSelections={materialSelections}
+              onApplyChanges={(suggestion) => console.log('[AI] Applied:', suggestion)}
+            />
           </div>
         </div>
 
@@ -2325,21 +2264,6 @@ function Reports() {
           className="print:hidden"
         >
           <SuppliersTab boq={boq} project={project} />
-        </div>
-
-        <div
-          data-tab-content="aireview"
-          style={{ display: activeTab === "aireview" ? "block" : "none" }}
-          className="print:hidden"
-        >
-          <AIReportReview
-            boq={boq}
-            project={project}
-            materialSelections={materialSelections}
-            onApplyChanges={(suggestion) => {
-              console.log('[AI Review] Applied suggestion:', suggestion);
-            }}
-          />
         </div>
 
         <div
@@ -3336,17 +3260,16 @@ function Reports() {
         </div>
 
         <div
-          data-tab-content="cost"
-          style={{ display: activeTab === "cost" ? "block" : "none" }}
-          className="print:block"
+          data-tab-content="sustainability-explanation"
+          style={{ display: activeTab === "sustainability" ? "block" : "none" }}
+          className="print:hidden"
         >
           <div className="space-y-6">
-            {renderBoQSummary()}
-
-            {/* Cost Breakdown by Category */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <FaMoneyBillWave className="text-green-500" />
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <FaLeaf className="text-green-500" />
+                How Sustainability Score is Calculated
+              </h3>
                 Cost Breakdown by Category
               </h3>
 
@@ -3566,19 +3489,6 @@ function Reports() {
               </ul>
             </div>
           </div>
-        </div>
-
-        <div
-          data-tab-content="ai"
-          style={{ display: activeTab === "ai" ? "block" : "none" }}
-          className="print:hidden"
-        >
-          <AIRecommendationsTab
-            project={project}
-            boq={boq}
-            embodiedCarbon={embodiedCarbon}
-            sustainabilityScore={sustainabilityScore}
-          />
         </div>
 
         <div
