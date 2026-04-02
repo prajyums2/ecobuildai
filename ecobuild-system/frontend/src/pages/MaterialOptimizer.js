@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProject } from '../context/ProjectContext';
 import { ecoBuildAPI } from '../services/api';
-import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar } from 'react-icons/fa';
+import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar, FaRecycle, FaBolt, FaShieldAlt, FaFire, FaTint, FaThermometerHalf, FaBuilding, FaIndustry, FaHammer } from 'react-icons/fa';
 
 const OPTIMIZATION_MODES = [
   { id: 'sustainability', label: 'Sustainability', description: '70% eco-weight', icon: FaLeaf },
@@ -18,6 +18,14 @@ const AHP_WEIGHT_PROFILES = {
 
 const ESSENTIAL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates'];
 
+const CATEGORY_CONFIG = {
+  cement: { icon: FaBuilding, color: 'amber', label: 'Cement' },
+  steel: { icon: FaHammer, color: 'slate', label: 'Steel' },
+  concrete: { icon: FaBuilding, color: 'blue', label: 'Concrete' },
+  masonry: { icon: FaIndustry, color: 'orange', label: 'Masonry' },
+  aggregates: { icon: FaTint, color: 'teal', label: 'Aggregates' },
+};
+
 function MaterialOptimizer() {
   const navigate = useNavigate();
   const { project, saveMaterialSelection, completeMaterialsSelection } = useProject();
@@ -31,6 +39,8 @@ function MaterialOptimizer() {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [ahpMode, setAhpMode] = useState('simple');
+  const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'table'
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   useEffect(() => {
     fetchMaterialsFromDB();
@@ -144,14 +154,6 @@ function MaterialOptimizer() {
     setError(null);
 
     try {
-      console.log('[Optimizer] Selected categories:', selectedCategories);
-      console.log('[Optimizer] dbMaterials keys:', Object.keys(dbMaterials));
-      Object.entries(dbMaterials).forEach(([cat, mats]) => {
-        const withRates = mats.filter(m => m.rate > 0);
-        console.log(`  ${cat}: ${mats.length} total, ${withRates.length} with rates`);
-        withRates.slice(0, 2).forEach(m => console.log(`    - ${m.name}: Rs${m.rate}/${m.unit}`));
-      });
-
       const optimizationResults = {};
       selectedCategories.forEach(cat => {
         const mats = dbMaterials[cat] || [];
@@ -161,7 +163,6 @@ function MaterialOptimizer() {
           .sort((a, b) => b.score - a.score)
           .map((mat, idx) => ({ ...mat, rank: idx + 1 }));
         optimizationResults[cat] = scored;
-        console.log(`  ${cat}: ${scored.length} scored`);
       });
 
       setResults(optimizationResults);
@@ -173,18 +174,9 @@ function MaterialOptimizer() {
         }
       });
 
-      console.log('[Optimizer] autoSelected keys:', Object.keys(autoSelected));
-      Object.entries(autoSelected).forEach(([k, v]) => {
-        console.log(`  ${k}: ${v.name} @ Rs${v.rate}/${v.unit}`);
-      });
-
       setSelectedMaterials(autoSelected);
-
-      // Save to context
       saveMaterialSelection('batch', autoSelected);
 
-      // ALSO save directly to localStorage as reliable fallback
-      // REPLACE entire selections (not merge) so deselected categories are removed
       try {
         const projects = JSON.parse(localStorage.getItem('ecobuild-projects') || '[]');
         const currentId = localStorage.getItem('ecobuild-current-project-id');
@@ -193,7 +185,6 @@ function MaterialOptimizer() {
           projects[idx].materialSelections = { ...autoSelected };
           projects[idx].lastModified = new Date().toISOString();
           localStorage.setItem('ecobuild-projects', JSON.stringify(projects));
-          console.log('[Optimizer] Saved to localStorage:', Object.keys(autoSelected));
         }
       } catch (e) {
         console.error('[Optimizer] localStorage save failed:', e);
@@ -208,14 +199,33 @@ function MaterialOptimizer() {
     }
   };
 
+  const getCarbonColor = (carbon) => {
+    if (carbon < 1) return 'bg-green-500';
+    if (carbon < 5) return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
+  const getCarbonWidth = (carbon) => {
+    return Math.min(100, carbon * 5);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Material Optimizer</h1>
           <p className="text-foreground-secondary mt-1">
-            AHP-Based Material Selection | {selectedCategories.length} categories
+            AHP-Based Material Selection | {selectedCategories.length} categories | {viewMode === 'cards' ? 'Card View' : 'Table View'}
           </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setViewMode(viewMode === 'cards' ? 'table' : 'cards')}
+            className="btn btn-outline text-sm"
+          >
+            {viewMode === 'cards' ? 'Table View' : 'Card View'}
+          </button>
         </div>
       </div>
 
@@ -268,19 +278,24 @@ function MaterialOptimizer() {
         </div>
         <div className="card-body">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {categories.map((cat) => {
-              const isSelected = selectedCategories.includes(cat);
-              const matCount = dbMaterials[cat]?.length || 0;
+            {categories.map((catId) => {
+              const catConfig = CATEGORY_CONFIG[catId] || { icon: FaBuilding, color: 'gray', label: catId };
+              const Icon = catConfig.icon;
+              const isSelected = selectedCategories.includes(catId);
+              const matCount = dbMaterials[catId]?.length || 0;
               return (
                 <button
-                  key={cat}
+                  key={catId}
                   onClick={() => setSelectedCategories(prev =>
-                    prev.includes(cat) ? prev.filter(id => id !== cat) : [...prev, cat]
+                    prev.includes(catId) ? prev.filter(id => id !== catId) : [...prev, catId]
                   )}
                   className={`p-3 rounded-lg border-2 transition-all text-left ${isSelected ? 'border-primary bg-primary-bg' : 'border-border hover:border-primary/50'}`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium text-foreground text-sm capitalize">{cat}</span>
+                    <div className="flex items-center gap-2">
+                      <Icon className="text-primary" />
+                      <span className="font-medium text-foreground text-sm capitalize">{catConfig.label}</span>
+                    </div>
                     {isSelected && <FaCheck className="text-primary text-xs" />}
                   </div>
                   <p className="text-xs text-foreground-secondary">{matCount} materials</p>
@@ -291,8 +306,153 @@ function MaterialOptimizer() {
         </div>
       </div>
 
-      {/* Material Recommendations Per Category */}
-      {selectedCategories.map(catId => {
+      {/* Material Cards View */}
+      {viewMode === 'cards' && selectedCategories.map(catId => {
+        const catConfig = CATEGORY_CONFIG[catId] || { icon: FaBuilding, color: 'gray', label: catId };
+        const Icon = catConfig.icon;
+        const mats = dbMaterials[catId] || [];
+        const scored = mats
+          .filter(m => m.rate > 0)
+          .map(mat => ({ ...mat, score: calculateScore(mat, mode) }))
+          .sort((a, b) => b.score - a.score);
+        const isExpanded = expandedCategory === catId;
+
+        return (
+          <div key={catId} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div 
+              className="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between"
+              onClick={() => setExpandedCategory(isExpanded ? null : catId)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                  <Icon className="text-lg" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground capitalize">{catConfig.label}</h3>
+                  <p className="text-xs text-foreground-secondary">{scored.length} materials available</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                {selectedMaterials[catId] && (
+                  <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full flex items-center gap-1">
+                    <FaCheck className="text-[10px]" /> Selected
+                  </span>
+                )}
+                <span className="text-foreground-secondary">{isExpanded ? '▲' : '▼'}</span>
+              </div>
+            </div>
+
+            {isExpanded && (
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {scored.map((mat, idx) => {
+                    const isSelected = selectedMaterials[catId]?.id === mat.id;
+                    const rank = idx + 1;
+                    return (
+                      <div
+                        key={mat.id}
+                        className={`rounded-xl border-2 p-4 transition-all cursor-pointer ${
+                          isSelected 
+                            ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                            : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
+                        }`}
+                        onClick={() => {
+                          setSelectedMaterials(prev => ({ ...prev, [catId]: mat }));
+                          saveMaterialSelection(catId, mat);
+                        }}
+                      >
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+                                rank === 1 ? 'bg-yellow-500' : rank === 2 ? 'bg-gray-400' : rank === 3 ? 'bg-orange-300' : 'bg-gray-300'
+                              }`}>
+                                {rank}
+                              </span>
+                              <h4 className="font-semibold text-sm text-foreground truncate">{mat.name}</h4>
+                            </div>
+                            {mat.bisCode && (
+                              <span className="text-xs text-foreground-muted bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+                                {mat.bisCode}
+                              </span>
+                            )}
+                          </div>
+                          {isSelected && (
+                            <FaCheck className="text-green-500 text-lg" />
+                          )}
+                        </div>
+
+                        {/* Properties */}
+                        <div className="space-y-2 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="text-foreground-muted">Rate</span>
+                            <span className="font-mono font-bold text-foreground">₹{mat.rate}/{mat.unit}</span>
+                          </div>
+                          
+                          {/* Carbon Bar */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-foreground-muted flex items-center gap-1">
+                                <FaRecycle className="text-[10px]" /> Carbon
+                              </span>
+                              <span className="font-mono">{mat.carbon}</span>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                              <div className={`h-1.5 rounded-full ${getCarbonColor(mat.carbon)}`} style={{ width: `${getCarbonWidth(mat.carbon)}%` }} />
+                            </div>
+                          </div>
+
+                          {/* Recycled Content */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-foreground-muted flex items-center gap-1">
+                                <FaRecycle className="text-[10px]" /> Recycled
+                              </span>
+                              <span className="font-mono">{mat.recycled}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                              <div className="h-1.5 rounded-full bg-blue-500" style={{ width: `${mat.recycled}%` }} />
+                            </div>
+                          </div>
+
+                          {/* Durability */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-foreground-muted flex items-center gap-1">
+                              <FaShieldAlt className="text-[10px]" /> Durability
+                            </span>
+                            <span className="font-mono">{mat.durability} yrs</span>
+                          </div>
+
+                          {mat.grade && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-foreground-muted flex items-center gap-1">
+                                <FaBolt className="text-[10px]" /> Grade
+                              </span>
+                              <span className="font-mono">{mat.grade}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Score */}
+                        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                          <span className="text-xs text-foreground-muted">Score</span>
+                          <span className={`font-bold text-sm ${mat.score >= 70 ? 'text-green-600' : mat.score >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                            {Math.round(mat.score)}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Table View */}
+      {viewMode === 'table' && selectedCategories.map(catId => {
         const mats = dbMaterials[catId] || [];
         const scored = mats
           .filter(m => m.rate > 0)
