@@ -27,6 +27,19 @@ import {
   FaSort,
   FaSortAmountDown,
   FaSortAmountUp,
+  FaRecycle,
+  FaShieldAlt,
+  FaBolt,
+  FaFire,
+  FaTint,
+  FaThermometerHalf as FaTemp,
+  FaExchangeAlt,
+  FaTable,
+  FaThLarge,
+  FaAngleLeft,
+  FaAngleRight,
+  FaAnglesLeft,
+  FaAnglesRight,
 } from "react-icons/fa";
 
 const MATERIAL_CATEGORIES = [
@@ -77,6 +90,15 @@ function Materials() {
   const [activeTab, setActiveTab] = useState("basic");
   const [expandedMaterial, setExpandedMaterial] = useState(null);
   const [categories, setCategories] = useState([]);
+  
+  // View mode and pagination
+  const [viewMode, setViewMode] = useState('cards'); // 'cards' | 'table'
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12);
+  
+  // Comparison feature
+  const [compareSelections, setCompareSelections] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
   
   // Advanced filters
   const [showFilters, setShowFilters] = useState(false);
@@ -1648,194 +1670,590 @@ function Materials() {
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredMaterials.map((material) => (
-            <div
-              key={material._id}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all p-5"
-            >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-foreground">{material.name}</h3>
-                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary capitalize">
-                      {material.category}
-                    </span>
-                    {material.financial_properties?.cost_per_unit > 0 && (
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                        ₹{material.financial_properties.cost_per_unit}/{material.financial_properties.unit_type}
-                      </span>
-                    )}
-                    {material.civil_properties?.is_code && (
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
-                        {material.civil_properties.is_code}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-foreground-secondary text-sm mb-3">
-                    {material.description || material.applications || 'No description available'}
-                  </p>
+          {/* View Toggle & Compare Bar */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { setViewMode('cards'); setCurrentPage(1); }}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                  viewMode === 'cards' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-background-tertiary text-foreground-secondary hover:bg-background-secondary'
+                }`}
+              >
+                <FaThLarge /> Cards
+              </button>
+              <button
+                onClick={() => { setViewMode('table'); setCurrentPage(1); }}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                  viewMode === 'table' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-background-tertiary text-foreground-secondary hover:bg-background-secondary'
+                }`}
+              >
+                <FaTable /> Table
+              </button>
+            </div>
+            <div className="flex items-center gap-3">
+              {compareSelections.length > 0 && (
+                <button
+                  onClick={() => setShowComparison(true)}
+                  className="btn btn-primary text-sm flex items-center gap-2"
+                >
+                  <FaExchangeAlt /> Compare ({compareSelections.length})
+                </button>
+              )}
+              <span className="text-sm text-foreground-secondary">
+                {filteredMaterials.length} materials found
+              </span>
+            </div>
+          </div>
 
-                  <div className="flex gap-6 text-sm">
-                    {material.environmental_properties?.embodied_carbon > 0 && (
-                      <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                        <FaLeaf />
-                        {material.environmental_properties.embodied_carbon} kg CO2/unit
-                      </span>
-                    )}
-                    {material.financial_properties?.gst_rate && (
-                      <span className="text-foreground-secondary">
-                        GST: {material.financial_properties.gst_rate}%
-                      </span>
-                    )}
-                    {material.GradeOrModel && (
-                      <span className="text-foreground-secondary">
-                        Grade: {material.GradeOrModel}
-                      </span>
-                    )}
-                  </div>
-                </div>
+          {/* Card View */}
+          {viewMode === 'cards' && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredMaterials
+                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                  .map((material) => {
+                    const isComparing = compareSelections.some(m => m._id === material._id);
+                    const isExpanded = expandedMaterial === material._id;
+                    const carbon = material.environmental_properties?.embodied_carbon || 0;
+                    const recycled = material.environmental_properties?.recycled_content || 0;
+                    const durability = material.civil_properties?.durability_years || 0;
+                    const rate = material.financial_properties?.cost_per_unit || 0;
+                    const unit = material.financial_properties?.unit_type || '';
+                    const isCode = material.civil_properties?.is_code || '';
+                    const quality = material.civil_properties?.quality_grade || '';
+                    
+                    const carbonColor = carbon < 1 ? 'bg-green-500' : carbon < 5 ? 'bg-yellow-500' : 'bg-red-500';
+                    const carbonWidth = Math.min(100, carbon * 5);
 
-                <div className="flex gap-2">
+                    return (
+                      <div
+                        key={material._id}
+                        className={`bg-white dark:bg-gray-800 rounded-xl border-2 p-4 transition-all ${
+                          isComparing 
+                            ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+                            : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
+                        }`}
+                      >
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-sm text-foreground truncate">{material.name}</h4>
+                            <div className="flex items-center gap-1 mt-1 flex-wrap">
+                              {isCode && (
+                                <span className="text-xs text-foreground-muted bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
+                                  {isCode}
+                                </span>
+                              )}
+                              {quality && (
+                                <span className={`text-xs px-1.5 py-0.5 rounded ${
+                                  quality === 'Premium' ? 'bg-yellow-100 text-yellow-700' :
+                                  quality === 'Standard' ? 'bg-blue-100 text-blue-700' :
+                                  'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {quality}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <label className="flex items-center gap-1 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={isComparing}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setCompareSelections(prev => [...prev, material]);
+                                } else {
+                                  setCompareSelections(prev => prev.filter(m => m._id !== material._id));
+                                }
+                              }}
+                              className="w-4 h-4 rounded border-border text-purple-600 focus:ring-purple-500"
+                            />
+                            <span className="text-xs text-foreground-muted">Compare</span>
+                          </label>
+                        </div>
+
+                        {/* Properties */}
+                        <div className="space-y-2 text-xs mb-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-foreground-muted">Rate</span>
+                            <span className="font-mono font-bold text-foreground">₹{rate}/{unit}</span>
+                          </div>
+                          
+                          {/* Carbon Bar */}
+                          {carbon > 0 && (
+                            <div>
+                              <div className="flex items-center justify-between mb-0.5">
+                                <span className="text-foreground-muted flex items-center gap-1">
+                                  <FaRecycle className="text-[10px]" /> Carbon
+                                </span>
+                                <span className="font-mono">{carbon}</span>
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                <div className={`h-1.5 rounded-full ${carbonColor}`} style={{ width: `${carbonWidth}%` }} />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Recycled Content */}
+                          {recycled > 0 && (
+                            <div>
+                              <div className="flex items-center justify-between mb-0.5">
+                                <span className="text-foreground-muted flex items-center gap-1">
+                                  <FaRecycle className="text-[10px]" /> Recycled
+                                </span>
+                                <span className="font-mono">{recycled}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                <div className="h-1.5 rounded-full bg-blue-500" style={{ width: `${recycled}%` }} />
+                              </div>
+                            </div>
+                          )}
+
+                          {durability > 0 && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-foreground-muted flex items-center gap-1">
+                                <FaShieldAlt className="text-[10px]" /> Durability
+                              </span>
+                              <span className="font-mono">{durability} yrs</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-700">
+                          <button
+                            onClick={() => setExpandedMaterial(isExpanded ? null : material._id)}
+                            className="text-xs text-primary hover:text-primary/80 flex items-center gap-1"
+                          >
+                            {isExpanded ? 'Hide Details' : 'View Details'}
+                            {isExpanded ? <FaChevronUp className="text-[10px]" /> : <FaChevronDown className="text-[10px]" />}
+                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => handleEditMaterial(material)}
+                              className="p-1.5 text-foreground-secondary hover:text-primary rounded"
+                            >
+                              <FaEdit className="text-xs" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMaterial(material._id)}
+                              className="p-1.5 text-foreground-secondary hover:text-red-500 rounded"
+                            >
+                              <FaTrash className="text-xs" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Expanded Details */}
+                        {isExpanded && (
+                          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-3 text-xs">
+                            {/* Physical */}
+                            <div>
+                              <h5 className="font-semibold text-foreground mb-1 flex items-center gap-1">
+                                <FaRuler className="text-[10px] text-primary" /> Physical
+                              </h5>
+                              <div className="grid grid-cols-2 gap-1 text-foreground-secondary">
+                                {material.physical_properties?.density && <li className="list-none">Density: {material.physical_properties.density} kg/m³</li>}
+                                {material.physical_properties?.compressive_strength && <li className="list-none">Strength: {material.physical_properties.compressive_strength} MPa</li>}
+                                {material.physical_properties?.thermal_conductivity && <li className="list-none">Thermal: {material.physical_properties.thermal_conductivity} W/m·K</li>}
+                                {material.physical_properties?.water_absorption && <li className="list-none">Water Abs: {material.physical_properties.water_absorption}%</li>}
+                              </div>
+                            </div>
+                            {/* Civil */}
+                            <div>
+                              <h5 className="font-semibold text-foreground mb-1 flex items-center gap-1">
+                                <FaBuilding className="text-[10px] text-primary" /> Engineering
+                              </h5>
+                              <div className="grid grid-cols-2 gap-1 text-foreground-secondary">
+                                {material.civil_properties?.structural_grade && <li className="list-none">Grade: {material.civil_properties.structural_grade}</li>}
+                                {material.civil_properties?.design_strength && <li className="list-none">Design: {material.civil_properties.design_strength} MPa</li>}
+                                {material.civil_properties?.wastage_percentage && <li className="list-none">Wastage: {material.civil_properties.wastage_percentage}%</li>}
+                                {material.civil_properties?.green_building_cert?.length > 0 && <li className="list-none">Green: {material.civil_properties.green_building_cert.join(', ')}</li>}
+                              </div>
+                            </div>
+                            {/* Environmental */}
+                            <div>
+                              <h5 className="font-semibold text-foreground mb-1 flex items-center gap-1">
+                                <FaLeaf className="text-[10px] text-green-500" /> Environmental
+                              </h5>
+                              <div className="grid grid-cols-2 gap-1 text-foreground-secondary">
+                                {carbon > 0 && <li className="list-none">Carbon: {carbon} kg CO2</li>}
+                                {recycled > 0 && <li className="list-none">Recycled: {recycled}%</li>}
+                                <li className="list-none">Recyclable: {material.environmental_properties?.recyclable ? 'Yes' : 'No'}</li>
+                                <li className="list-none">Renewable: {material.environmental_properties?.renewable ? 'Yes' : 'No'}</li>
+                              </div>
+                            </div>
+                            {/* Financial */}
+                            <div>
+                              <h5 className="font-semibold text-foreground mb-1 flex items-center gap-1">
+                                <FaMoneyBillWave className="text-[10px] text-green-500" /> Financial
+                              </h5>
+                              <div className="grid grid-cols-2 gap-1 text-foreground-secondary">
+                                {rate > 0 && <li className="list-none">Cost: ₹{rate}/{unit}</li>}
+                                {material.financial_properties?.retail_price && <li className="list-none">Retail: ₹{material.financial_properties.retail_price}</li>}
+                                {material.financial_properties?.wholesale_price && <li className="list-none">Wholesale: ₹{material.financial_properties.wholesale_price}</li>}
+                                {material.financial_properties?.gst_rate && <li className="list-none">GST: {material.financial_properties.gst_rate}%</li>}
+                              </div>
+                            </div>
+                            {/* Supplier */}
+                            {material.supplier?.supplier_name && (
+                              <div>
+                                <h5 className="font-semibold text-foreground mb-1 flex items-center gap-1">
+                                  <FaTruck className="text-[10px] text-primary" /> Supplier
+                                </h5>
+                                <div className="grid grid-cols-2 gap-1 text-foreground-secondary">
+                                  <li className="list-none">{material.supplier.supplier_name}</li>
+                                  {material.supplier.supplier_location && <li className="list-none">{material.supplier.supplier_location}</li>}
+                                  {material.supplier.lead_time_days && <li className="list-none">Lead: {material.supplier.lead_time_days} days</li>}
+                                  {material.supplier.reliability_rating && <li className="list-none">Rating: {material.supplier.reliability_rating}/10</li>}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {/* Pagination */}
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-sm text-foreground-secondary">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredMaterials.length)} of {filteredMaterials.length}
+                </span>
+                <div className="flex items-center gap-2">
                   <button
-                    onClick={() =>
-                      setExpandedMaterial(
-                        expandedMaterial === material._id ? null : material._id,
-                      )
+                    onClick={() => setCurrentPage(1)}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <FaAnglesLeft className="text-xs" />
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <FaAngleLeft className="text-xs" />
+                  </button>
+                  {Array.from({ length: Math.min(5, Math.ceil(filteredMaterials.length / itemsPerPage)) }, (_, i) => {
+                    let page;
+                    const totalPages = Math.ceil(filteredMaterials.length / itemsPerPage);
+                    if (totalPages <= 5) {
+                      page = i + 1;
+                    } else if (currentPage <= 3) {
+                      page = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      page = totalPages - 4 + i;
+                    } else {
+                      page = currentPage - 2 + i;
                     }
-                    className="btn btn-secondary btn-sm"
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 rounded-lg text-sm font-medium ${
+                          currentPage === page
+                            ? 'bg-primary text-white'
+                            : 'border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredMaterials.length / itemsPerPage), p + 1))}
+                    disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)}
+                    className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    {expandedMaterial === material._id ? (
-                      <FaChevronUp />
-                    ) : (
-                      <FaChevronDown />
-                    )}
+                    <FaAngleRight className="text-xs" />
                   </button>
                   <button
-                    onClick={() => handleEditMaterial(material)}
-                    className="btn btn-primary btn-sm"
+                    onClick={() => setCurrentPage(Math.ceil(filteredMaterials.length / itemsPerPage))}
+                    disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)}
+                    className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteMaterial(material._id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    <FaTrash />
+                    <FaAnglesRight className="text-xs" />
                   </button>
                 </div>
               </div>
+            </>
+          )}
 
-              {/* Expanded Details */}
-              {expandedMaterial === material._id && (
-                <div className="mt-4 pt-4 border-t border-border">
-                  <div className="grid grid-cols-4 gap-4 text-sm">
-                    {/* Physical Properties */}
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <FaRuler className="mr-1 text-primary" /> Physical
-                      </h4>
-                      <ul className="space-y-1 text-foreground-secondary">
-                        {material.physical_properties?.density && (
-                          <li>
-                            Density: {material.physical_properties.density}{" "}
-                            kg/m³
-                          </li>
-                        )}
-                        {material.physical_properties?.compressive_strength && (
-                          <li>
-                            Comp. Strength:{" "}
-                            {material.physical_properties.compressive_strength}{" "}
-                            MPa
-                          </li>
-                        )}
-                        {material.physical_properties?.thermal_conductivity && (
-                          <li>
-                            Thermal Cond.:{" "}
-                            {material.physical_properties.thermal_conductivity}{" "}
-                            W/m·K
-                          </li>
-                        )}
-                      </ul>
-                    </div>
+          {/* Table View */}
+          {viewMode === 'table' && (
+            <>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                      <tr>
+                        <th className="p-3 text-left font-medium text-foreground-secondary">
+                          <input
+                            type="checkbox"
+                            checked={compareSelections.length === filteredMaterials.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).length && filteredMaterials.length > 0}
+                            onChange={(e) => {
+                              const pageItems = filteredMaterials.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                              if (e.target.checked) {
+                                setCompareSelections(prev => {
+                                  const existingIds = new Set(prev.map(m => m._id));
+                                  const newItems = pageItems.filter(m => !existingIds.has(m._id));
+                                  return [...prev, ...newItems];
+                                });
+                              } else {
+                                const pageIds = new Set(pageItems.map(m => m._id));
+                                setCompareSelections(prev => prev.filter(m => !pageIds.has(m._id)));
+                              }
+                            }}
+                            className="w-4 h-4 rounded border-border"
+                          />
+                        </th>
+                        <th className="p-3 text-left font-medium text-foreground-secondary">Material</th>
+                        <th className="p-3 text-left font-medium text-foreground-secondary">Category</th>
+                        <th className="p-3 text-right font-medium text-foreground-secondary">Rate</th>
+                        <th className="p-3 text-right font-medium text-foreground-secondary">Carbon</th>
+                        <th className="p-3 text-right font-medium text-foreground-secondary">Recycled</th>
+                        <th className="p-3 text-right font-medium text-foreground-secondary">Durability</th>
+                        <th className="p-3 text-left font-medium text-foreground-secondary">IS Code</th>
+                        <th className="p-3 text-center font-medium text-foreground-secondary">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredMaterials
+                        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                        .map((material) => {
+                          const isComparing = compareSelections.some(m => m._id === material._id);
+                          const carbon = material.environmental_properties?.embodied_carbon || 0;
+                          const recycled = material.environmental_properties?.recycled_content || 0;
+                          const durability = material.civil_properties?.durability_years || 0;
+                          const rate = material.financial_properties?.cost_per_unit || 0;
+                          const unit = material.financial_properties?.unit_type || '';
+                          const isCode = material.civil_properties?.is_code || '';
+                          const carbonColor = carbon < 1 ? 'text-green-600' : carbon < 5 ? 'text-yellow-600' : 'text-red-600';
 
-                    {/* Civil Properties */}
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <FaBuilding className="mr-1 text-primary" /> Engineering
-                      </h4>
-                      <ul className="space-y-1 text-foreground-secondary">
-                        {material.civil_properties?.structural_grade && (
-                          <li>
-                            Grade: {material.civil_properties.structural_grade}
-                          </li>
-                        )}
-                        {material.civil_properties?.is_code && (
-                          <li>IS Code: {material.civil_properties.is_code}</li>
-                        )}
-                        {material.civil_properties?.wastage_percentage && (
-                          <li>
-                            Wastage:{" "}
-                            {material.civil_properties.wastage_percentage}%
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-
-                    {/* Environmental */}
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <FaLeaf className="mr-1 text-green-600" /> Environmental
-                      </h4>
-                      <ul className="space-y-1 text-foreground-secondary">
-                        {material.environmental_properties?.recycled_content !==
-                          undefined && (
-                          <li>
-                            Recycled:{" "}
-                            {material.environmental_properties.recycled_content}
-                            %
-                          </li>
-                        )}
-                        <li>
-                          Recyclable:{" "}
-                          {material.environmental_properties?.recyclable
-                            ? "Yes"
-                            : "No"}
-                        </li>
-                        <li>
-                          Renewable:{" "}
-                          {material.environmental_properties?.renewable
-                            ? "Yes"
-                            : "No"}
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* Supplier */}
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <FaTruck className="mr-1 text-primary" /> Supplier
-                      </h4>
-                      <ul className="space-y-1 text-foreground-secondary">
-                        {material.supplier?.supplier_name && (
-                          <li>{material.supplier.supplier_name}</li>
-                        )}
-                        {material.supplier?.supplier_location && (
-                          <li>
-                            Location: {material.supplier.supplier_location}
-                          </li>
-                        )}
-                        {material.supplier?.lead_time_days && (
-                          <li>
-                            Lead time: {material.supplier.lead_time_days} days
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
+                          return (
+                            <tr key={material._id} className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50 ${isComparing ? 'bg-purple-50 dark:bg-purple-900/20' : ''}`}>
+                              <td className="p-3">
+                                <input
+                                  type="checkbox"
+                                  checked={isComparing}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setCompareSelections(prev => [...prev, material]);
+                                    } else {
+                                      setCompareSelections(prev => prev.filter(m => m._id !== material._id));
+                                    }
+                                  }}
+                                  className="w-4 h-4 rounded border-border text-purple-600"
+                                />
+                              </td>
+                              <td className="p-3">
+                                <div>
+                                  <span className="font-medium text-foreground">{material.name}</span>
+                                  {material.description && (
+                                    <p className="text-xs text-foreground-secondary mt-0.5 truncate max-w-xs">{material.description}</p>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-3 text-foreground-secondary capitalize">{material.category}</td>
+                              <td className="p-3 text-right font-mono">₹{rate}/{unit}</td>
+                              <td className={`p-3 text-right font-mono ${carbonColor}`}>{carbon > 0 ? carbon : '-'}</td>
+                              <td className="p-3 text-right font-mono text-blue-600">{recycled > 0 ? `${recycled}%` : '-'}</td>
+                              <td className="p-3 text-right font-mono">{durability > 0 ? `${durability} yrs` : '-'}</td>
+                              <td className="p-3 text-foreground-secondary text-xs">{isCode || '-'}</td>
+                              <td className="p-3">
+                                <div className="flex items-center justify-center gap-1">
+                                  <button onClick={() => handleEditMaterial(material)} className="p-1.5 text-foreground-secondary hover:text-primary rounded">
+                                    <FaEdit className="text-xs" />
+                                  </button>
+                                  <button onClick={() => handleDeleteMaterial(material._id)} className="p-1.5 text-foreground-secondary hover:text-red-500 rounded">
+                                    <FaTrash className="text-xs" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
                 </div>
-              )}
+              </div>
+
+              {/* Pagination */}
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-sm text-foreground-secondary">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredMaterials.length)} of {filteredMaterials.length}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <FaAnglesLeft className="text-xs" />
+                  </button>
+                  <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <FaAngleLeft className="text-xs" />
+                  </button>
+                  {Array.from({ length: Math.min(5, Math.ceil(filteredMaterials.length / itemsPerPage)) }, (_, i) => {
+                    let page;
+                    const totalPages = Math.ceil(filteredMaterials.length / itemsPerPage);
+                    if (totalPages <= 5) page = i + 1;
+                    else if (currentPage <= 3) page = i + 1;
+                    else if (currentPage >= totalPages - 2) page = totalPages - 4 + i;
+                    else page = currentPage - 2 + i;
+                    return (
+                      <button key={page} onClick={() => setCurrentPage(page)} className={`w-8 h-8 rounded-lg text-sm font-medium ${currentPage === page ? 'bg-primary text-white' : 'border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
+                        {page}
+                      </button>
+                    );
+                  })}
+                  <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredMaterials.length / itemsPerPage), p + 1))} disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <FaAngleRight className="text-xs" />
+                  </button>
+                  <button onClick={() => setCurrentPage(Math.ceil(filteredMaterials.length / itemsPerPage))} disabled={currentPage >= Math.ceil(filteredMaterials.length / itemsPerPage)} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <FaAnglesRight className="text-xs" />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Comparison Modal */}
+      {showComparison && compareSelections.length >= 2 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <FaExchangeAlt className="text-primary" />
+                Material Comparison ({compareSelections.length} materials)
+              </h2>
+              <button onClick={() => setShowComparison(false)} className="text-foreground-secondary hover:text-foreground">
+                <FaTimes className="text-xl" />
+              </button>
             </div>
-          ))}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <th className="p-3 text-left font-medium text-foreground-secondary w-40">Property</th>
+                      {compareSelections.map(mat => (
+                        <th key={mat._id} className="p-3 text-left font-medium text-foreground">
+                          <div className="font-bold">{mat.name}</div>
+                          <div className="text-xs text-foreground-secondary font-normal">{mat.category}</div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: 'Rate', key: 'rate', format: (m) => `₹${m.financial_properties?.cost_per_unit || 0}/${m.financial_properties?.unit_type || ''}`, lowerBetter: true },
+                      { label: 'Embodied Carbon', key: 'carbon', format: (m) => `${m.environmental_properties?.embodied_carbon || 0} kg CO2`, lowerBetter: true },
+                      { label: 'Recycled Content', key: 'recycled', format: (m) => `${m.environmental_properties?.recycled_content || 0}%`, lowerBetter: false },
+                      { label: 'Durability', key: 'durability', format: (m) => `${m.civil_properties?.durability_years || 0} years`, lowerBetter: false },
+                      { label: 'Compressive Strength', key: 'strength', format: (m) => `${m.physical_properties?.compressive_strength || 0} MPa`, lowerBetter: false },
+                      { label: 'Thermal Conductivity', key: 'thermal', format: (m) => `${m.physical_properties?.thermal_conductivity || 0} W/m·K`, lowerBetter: true },
+                      { label: 'IS Code', key: 'isCode', format: (m) => m.civil_properties?.is_code || '-', lowerBetter: null },
+                      { label: 'Quality Grade', key: 'quality', format: (m) => m.civil_properties?.quality_grade || '-', lowerBetter: null },
+                      { label: 'Water Absorption', key: 'waterAbs', format: (m) => `${m.physical_properties?.water_absorption || 0}%`, lowerBetter: true },
+                      { label: 'Supplier', key: 'supplier', format: (m) => m.supplier?.supplier_name || '-', lowerBetter: null },
+                      { label: 'Lead Time', key: 'leadTime', format: (m) => `${m.supplier?.lead_time_days || 0} days`, lowerBetter: true },
+                    ].map(row => {
+                      const values = compareSelections.map(m => {
+                        const val = row.format(m);
+                        const numMatch = val.match(/[\d.]+/);
+                        return numMatch ? parseFloat(numMatch[0]) : null;
+                      });
+                      
+                      let bestIdx = null;
+                      if (row.lowerBetter !== null && values.some(v => v !== null)) {
+                        const validValues = values.map((v, i) => v !== null ? { val: v, idx: i } : null).filter(Boolean);
+                        if (validValues.length > 0) {
+                          bestIdx = row.lowerBetter 
+                            ? validValues.reduce((a, b) => a.val < b.val ? a : b).idx
+                            : validValues.reduce((a, b) => a.val > b.val ? a : b).idx;
+                        }
+                      }
+
+                      return (
+                        <tr key={row.key} className="border-b border-gray-100 dark:border-gray-800">
+                          <td className="p-3 font-medium text-foreground-secondary">{row.label}</td>
+                          {compareSelections.map((mat, idx) => (
+                            <td key={mat._id} className={`p-3 ${idx === bestIdx ? 'text-green-600 dark:text-green-400 font-bold' : 'text-foreground'}`}>
+                              {row.format(mat)}
+                              {idx === bestIdx && <FaCheck className="inline ml-1 text-xs" />}
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Recommendation Section */}
+              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <h3 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                  <FaInfoCircle className="text-blue-500" />
+                  AI Recommendation
+                </h3>
+                <div className="space-y-2 text-sm text-foreground-secondary">
+                  {(() => {
+                    const mats = compareSelections;
+                    const recommendations = [];
+                    
+                    // Find best for each criterion
+                    const bestCarbon = mats.reduce((a, b) => (a.environmental_properties?.embodied_carbon || 999) < (b.environmental_properties?.embodied_carbon || 999) ? a : b);
+                    const bestCost = mats.reduce((a, b) => (a.financial_properties?.cost_per_unit || 999999) < (b.financial_properties?.cost_per_unit || 999999) ? a : b);
+                    const bestStrength = mats.reduce((a, b) => (a.physical_properties?.compressive_strength || 0) > (b.physical_properties?.compressive_strength || 0) ? a : b);
+                    const bestDurability = mats.reduce((a, b) => (a.civil_properties?.durability_years || 0) > (b.civil_properties?.durability_years || 0) ? a : b);
+                    const bestRecycled = mats.reduce((a, b) => (a.environmental_properties?.recycled_content || 0) > (b.environmental_properties?.recycled_content || 0) ? a : b);
+                    
+                    if (bestCarbon._id !== bestCost._id) {
+                      recommendations.push(`🌿 For sustainability: ${bestCarbon.name} has the lowest carbon footprint (${bestCarbon.environmental_properties?.embodied_carbon || 0} kg CO2)`);
+                    }
+                    if (bestCost._id !== bestStrength._id) {
+                      recommendations.push(`💰 For cost savings: ${bestCost.name} is the most economical (₹${bestCost.financial_properties?.cost_per_unit || 0}/${bestCost.financial_properties?.unit_type || ''})`);
+                    }
+                    if (bestStrength._id !== bestCost._id) {
+                      recommendations.push(`💪 For strength: ${bestStrength.name} has the highest compressive strength (${bestStrength.physical_properties?.compressive_strength || 0} MPa)`);
+                    }
+                    if (bestDurability._id !== bestCost._id) {
+                      recommendations.push(`🛡️ For longevity: ${bestDurability.name} offers the best durability (${bestDurability.civil_properties?.durability_years || 0} years)`);
+                    }
+                    if (bestRecycled.environmental_properties?.recycled_content > 0) {
+                      recommendations.push(`♻️ For eco-friendliness: ${bestRecycled.name} has the highest recycled content (${bestRecycled.environmental_properties?.recycled_content}%)`);
+                    }
+                    
+                    // Overall recommendation
+                    const scores = mats.map(m => {
+                      const carbonScore = m.environmental_properties?.embodied_carbon > 0 ? Math.max(0, 100 - m.environmental_properties.embodied_carbon * 5) : 50;
+                      const costScore = m.financial_properties?.cost_per_unit > 0 ? Math.max(0, 100 - m.financial_properties.cost_per_unit / 50) : 50;
+                      const strengthScore = (m.physical_properties?.compressive_strength || 0) * 2;
+                      const recycledScore = (m.environmental_properties?.recycled_content || 0) * 2;
+                      return { name: m.name, score: carbonScore * 0.3 + costScore * 0.2 + Math.min(100, strengthScore) * 0.3 + Math.min(100, recycledScore) * 0.2 };
+                    });
+                    const bestOverall = scores.reduce((a, b) => a.score > b.score ? a : b);
+                    recommendations.push(`🏆 Overall best: ${bestOverall.name} (score: ${Math.round(bestOverall.score)}/100)`);
+                    
+                    return recommendations.map((rec, i) => <p key={i}>{rec}</p>);
+                  })()}
+                </div>
+              </div>
+            </div>
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+              <button onClick={() => { setCompareSelections([]); setShowComparison(false); }} className="btn btn-outline">
+                Clear Selection
+              </button>
+              <button onClick={() => setShowComparison(false)} className="btn btn-primary">
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
