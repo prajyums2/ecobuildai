@@ -910,8 +910,8 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const resolvedSteelRate = steelSelection?.rate || rates?.steel?.tmt_fe500?.rate || 72;
   const resolvedConcreteRate = concreteSelection?.rate || rates?.concrete?.m25?.rate || 7200;
   const resolvedBlockRate = masonrySelection?.rate || rates?.blocks?.aac_200?.rate || 78;
-  const resolvedSandRate = aggregatesSelection?.rate || rates?.aggregate?.m_sand?.rate || 58;
-  const resolvedAggregateRate = aggregatesSelection?.rate || rates?.aggregate?.crushed_20mm?.rate || 42;
+  const resolvedSandRate = aggregatesSelection?.rate || rates?.aggregate?.msand?.rate || 58;
+  const resolvedAggregateRate = aggregatesSelection?.rate || rates?.aggregate?.aggregate_20mm?.rate || 42;
   
   // Total plaster area (already calculated above with opening deductions)
   const totalPlasterArea = internalPlasterArea + externalPlasterArea;

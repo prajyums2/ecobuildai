@@ -129,17 +129,20 @@ function MaterialOptimizer() {
         };
     const w = weights[mode] || weights.balanced;
 
+    // Normalize cost using log scale to handle wide price ranges (₹12 to ₹7200)
+    const costScore = material.rate > 0 ? Math.max(0, 100 - (Math.log10(material.rate) / Math.log10(10000)) * 100) : 50;
+    // Normalize carbon using log scale (0.03 to 420)
+    const carbonScore = material.carbon > 0 ? Math.max(0, 100 - (Math.log10(material.carbon) / Math.log10(500)) * 100) : 50;
+    // Normalize durability (10 to 100 years)
+    const durabilityScore = Math.min(100, (material.durability || 50) / 100 * 100);
+    // Normalize recycled (0 to 100%)
+    const recycledScore = Math.min(100, (material.recycled || 0) * 2);
+
     if (ahpMode === 'simple') {
-      const costScore = material.rate > 0 ? Math.max(0, 100 - (material.rate / 50)) : 50;
-      const strengthScore = material.durability || 50;
-      const sustainabilityScore = Math.max(0, 100 - (material.carbon * 50)) * 0.5 + ((material.recycled || 0) * 2) * 0.5;
+      const strengthScore = durabilityScore;
+      const sustainabilityScore = carbonScore * 0.5 + recycledScore * 0.5;
       return costScore * (w.cost || 0) + strengthScore * (w.strength || 0) + sustainabilityScore * (w.sustainability || 0);
     }
-
-    const costScore = material.rate > 0 ? Math.max(0, 100 - (material.rate / 50)) : 50;
-    const carbonScore = Math.max(0, 100 - (material.carbon * 50));
-    const durabilityScore = material.durability || 50;
-    const recycledScore = (material.recycled || 0) * 2;
 
     return costScore * w.cost + carbonScore * w.carbon + durabilityScore * w.durability + recycledScore * w.recycled;
   };

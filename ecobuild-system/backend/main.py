@@ -372,10 +372,7 @@ async def optimize_materials(
                 mat_cat = mat.get('category', '')
                 
                 if str(mat_cat).lower() == category.lower():
-                    env_props = mat.get('environmental_properties') or {}
-                    carbon = env_props.get('embodied_carbon', 0) or 0
-                    if carbon and float(carbon) < 30:
-                        all_materials.append(mat)
+                    all_materials.append(mat)
         
         print(f"[OPTIMIZE] Matched materials (before IS filter): {len(all_materials)}")
         
@@ -892,8 +889,6 @@ async def get_location_cost_index(district: str):
             return {"district": district, "cost_index": 100}
     except Exception as e:
         return {"district": district, "cost_index": 100}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 # ==================== ENVIRONMENTAL DATA ROUTES ====================
 
@@ -902,7 +897,7 @@ async def get_environmental_data(
     data: dict,
     current_user: User = Depends(get_current_user)
 ):
-    """Get environmental data for a location"""
+    """Get environmental data for a location using Kerala Geospatial Engine"""
     try:
         lat = data.get('lat', 10.5276)
         lon = data.get('lon', 76.2144)
@@ -911,11 +906,24 @@ async def get_environmental_data(
         
         engine = KeralaEnvironmentalEngine()
         
+        # Get district and environmental data from engine
+        district_data = engine.get_district_data(lat, lon)
+        climate = engine.get_climate_data(lat, lon)
+        seismic = engine.get_seismic_zone(lat, lon)
+        wind = engine.get_wind_speed(lat, lon)
+        rainfall = engine.get_rainfall(lat, lon)
+        soil = engine.get_soil_type(lat, lon)
+        material_recommendations = engine.get_material_recommendations(lat, lon)
+        
         return {
-            "climate": {"temperature": 32, "humidity": 75},
-            "rainfall": {"annual": 3000},
-            "seismic": {"zone": "III"},
-            "wind": {"speed": 39}
+            "district": district_data.get('district', 'Thrissur'),
+            "climate": climate,
+            "rainfall": rainfall,
+            "seismic": seismic,
+            "wind": wind,
+            "soil": soil,
+            "material_recommendations": material_recommendations,
+            "coordinates": {"lat": lat, "lon": lon}
         }
     except Exception as e:
         import traceback
@@ -928,18 +936,26 @@ async def calculate_operational_carbon(
     data: dict,
     current_user: User = Depends(get_current_user)
 ):
-    """Calculate operational carbon footprint"""
+    """Calculate operational carbon footprint using Kerala Environmental Engine"""
     try:
-        building_area = data.get('building_area', 1000)
+        building_area = data.get('building_area', 100)
         wall_u_value = data.get('wall_u_value', 0.5)
         roof_u_value = data.get('roof_u_value', 0.4)
         lat = data.get('lat', 10.5276)
         lon = data.get('lon', 76.2144)
+        num_floors = data.get('num_floors', 2)
         
-        return {
-            "annual_carbon_kg": 2500,
-            "lifetime_carbon_kg": 75000
-        }
+        engine = KeralaEnvironmentalEngine()
+        result = engine.calculate_operational_carbon(
+            building_area=building_area,
+            wall_u_value=wall_u_value,
+            roof_u_value=roof_u_value,
+            lat=lat,
+            lon=lon,
+            num_floors=num_floors
+        )
+        
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -5,6 +5,8 @@ import { puter } from '@heyputer/puter.js';
 import { ecoBuildAPI } from './api';
 import { generateBoQAsync } from '../utils/boqCalculator';
 
+const AI_MODEL = 'gpt-4.1-nano';
+
 /**
  * Tool definitions - what the AI can do
  */
@@ -342,12 +344,23 @@ async function executeCalculateCarbon(projectContext, callbacks) {
   const totalArea = (bp.builtUpArea || 0) * (bp.numFloors || 1);
   const materials = projectContext.project?.materialSelections || {};
 
+  // Estimate quantities based on building area (simplified)
+  const quantityEstimates = {
+    cement: totalArea * 0.8, // bags per sqm
+    steel: totalArea * 12, // kg per sqm
+    concrete: totalArea * 0.12, // cum per sqm
+    masonry: totalArea * 7, // nos per sqm
+    aggregates: totalArea * 15, // cft per sqm
+  };
+
   let totalCarbon = 0;
   const breakdown = [];
   Object.entries(materials).forEach(([cat, mat]) => {
-    const carbon = (mat.carbon || 0) * (mat.rate || 0) * 0.01;
+    const qty = quantityEstimates[cat] || totalArea * 0.5;
+    const carbonPerUnit = mat.carbon || 0;
+    const carbon = carbonPerUnit * qty;
     totalCarbon += carbon;
-    breakdown.push({ category: cat, material: mat.name, carbon: Math.round(carbon) });
+    breakdown.push({ category: cat, material: mat.name, quantity: Math.round(qty), carbon: Math.round(carbon) });
   });
 
   callbacks?.onStatusChange('Carbon calculation complete');
