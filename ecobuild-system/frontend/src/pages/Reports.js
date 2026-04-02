@@ -3270,62 +3270,11 @@ function Reports() {
                 <FaLeaf className="text-green-500" />
                 How Sustainability Score is Calculated
               </h3>
-                Cost Breakdown by Category
-              </h3>
-
-              <div className="space-y-4">
-                {boq?.categories?.map((category, idx) => {
-                  const percentage =
-                    (category.subTotal / (boq?.summary?.subTotal || 1)) * 100;
-                  return (
-                    <div key={category.name} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-foreground font-medium">
-                          {category.name}
-                        </span>
-                        <div className="flex items-center gap-4">
-                          <span className="text-foreground-secondary text-sm">
-                            {percentage.toFixed(1)}%
-                          </span>
-                          <span className="text-foreground font-mono font-semibold w-32 text-right">
-                            {formatCurrency(category.subTotal)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                        <div
-                          className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500"
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="mt-8 pt-6 border-t-2 border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between text-lg mb-3">
-                  <span className="text-foreground-secondary">Sub-Total</span>
-                  <span className="font-mono font-bold text-foreground">
-                    {formatCurrency(boq?.summary?.subTotal || 0)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-lg mb-3">
-                  <span className="text-foreground-secondary">
-                    GST @ {boq?.summary?.gstRate || 18}%
-                  </span>
-                  <span className="font-mono text-foreground">
-                    {formatCurrency(boq?.summary?.gstAmount || 0)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-300 dark:border-gray-600">
-                  <span className="text-2xl font-bold text-foreground">
-                    Grand Total
-                  </span>
-                  <span className="text-3xl font-bold text-green-600 dark:text-green-400 font-mono">
-                    {formatCurrency(boq?.summary?.grandTotal || 0)}
-                  </span>
-                </div>
+              <div className="space-y-4 text-sm text-foreground-secondary">
+                <p>The sustainability score is calculated based on GRIHA, IGBC, and LEED rating systems.</p>
+                <p><strong>GRIHA (Green Rating for Integrated Habitat Assessment):</strong> India's national rating system developed by TERI and MNRE. Points are awarded for site planning, water efficiency, energy performance, materials, and waste management.</p>
+                <p><strong>IGBC (Indian Green Building Council):</strong> Rating system by CII. Focuses on sustainable site planning, water conservation, energy efficiency, materials selection, and indoor environmental quality.</p>
+                <p><strong>LEED (Leadership in Energy and Environmental Design):</strong> International rating system by USGBC. Evaluates sustainable sites, water efficiency, energy and atmosphere, materials and resources, and indoor environmental quality.</p>
               </div>
             </div>
 
