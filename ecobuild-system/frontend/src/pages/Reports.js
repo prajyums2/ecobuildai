@@ -684,7 +684,7 @@ function generateRecommendationsFallback(project, boq, carbon) {
 // Shows material quantities with supplier details
 // ============================================
 
-function MaterialSummaryTab({ boq, project }) {
+function MaterialSummaryTab({ boq, project, materialSelections }) {
   const [suppliers, setSuppliers] = useState([]);
   const [loadingSuppliers, setLoadingSuppliers] = useState(true);
 
@@ -2153,7 +2153,7 @@ function Reports() {
           }}
           className="print:hidden"
         >
-          <MaterialSummaryTab boq={boq} project={project} />
+          <MaterialSummaryTab boq={boq} project={project} materialSelections={materialSelections} />
         </div>
 
         {/* AI Insights (Merged: Validation + Optimization + Review) */}
