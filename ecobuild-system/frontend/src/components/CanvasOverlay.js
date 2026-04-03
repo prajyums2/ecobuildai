@@ -49,7 +49,8 @@ function CanvasOverlay({
   }, [canvas, imageDimensions, rooms, doors, windows, walls, calibration, drawStart, drawCurrent, calibPoint1]);
 
   const getCanvasCoords = (e) => {
-    const rect = canvas.getBoundingClientRect();
+    if (!canvasRef.current) return { x: 0, y: 0 };
+    const rect = canvasRef.current.getBoundingClientRect();
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top
