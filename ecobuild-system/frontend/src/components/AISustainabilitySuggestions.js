@@ -88,7 +88,7 @@ Respond with ONLY valid JSON array:
 ]`;
 
     try {
-      const response = await puter.ai.chat(prompt, { model: 'gpt-4.1-nano' });
+      const response = await puter.ai.chat(prompt, { model: 'gemini-2.0-flash' });
       const text = typeof response === 'string' ? response : response.message?.content || response;
       const parsed = parseJSON(text);
       if (Array.isArray(parsed)) {

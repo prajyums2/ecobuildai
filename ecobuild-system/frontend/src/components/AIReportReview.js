@@ -56,7 +56,7 @@ Rules: Within ±25% of current values. Never remove safety items. Focus on rate 
       );
       
       const response = await Promise.race([
-        puter.ai.chat(prompt, { model: 'gpt-4.1-nano' }),
+        puter.ai.chat(prompt, { model: 'gemini-2.0-flash' }),
         timeout
       ]);
       

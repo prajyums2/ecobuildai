@@ -28,6 +28,7 @@ function CanvasOverlay({
   const [drawStart, setDrawStart] = useState(null);
   const [drawCurrent, setDrawCurrent] = useState(null);
   const [calibPoint1, setCalibPoint1] = useState(null);
+  const [calibPoint2, setCalibPoint2] = useState(null);
   const [selectedElement, setSelectedElement] = useState(null);
   const [showCalibDialog, setShowCalibDialog] = useState(false);
   const [calibDistance, setCalibDistance] = useState('');
@@ -86,7 +87,36 @@ function CanvasOverlay({
         
         ctx.fillStyle = '#3B82F6';
         ctx.font = '12px sans-serif';
-        ctx.fillText('Point 1 - Click second point', calibPoint1.x + 10, calibPoint1.y - 10);
+        ctx.fillText('Point 1', calibPoint1.x + 10, calibPoint1.y - 10);
+      }
+      if (calibPoint2) {
+        ctx.beginPath();
+        ctx.arc(calibPoint2.x, calibPoint2.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#EF4444';
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#EF4444';
+        ctx.font = '12px sans-serif';
+        ctx.fillText('Point 2', calibPoint2.x + 10, calibPoint2.y - 10);
+        
+        // Draw line between points
+        ctx.beginPath();
+        ctx.moveTo(calibPoint1.x, calibPoint1.y);
+        ctx.lineTo(calibPoint2.x, calibPoint2.y);
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        const dist = pixelsToMeters(distance(calibPoint1, calibPoint2));
+        ctx.fillStyle = '#F59E0B';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${dist.toFixed(2)}m`, (calibPoint1.x + calibPoint2.x) / 2, (calibPoint1.y + calibPoint2.y) / 2 - 10);
       }
     }
 
@@ -236,9 +266,11 @@ function CanvasOverlay({
     if (mode === 'calibrate') {
       if (!calibPoint1) {
         setCalibPoint1(coords);
+        setCalibPoint2(null);
         setDrawStart(coords);
         setIsDrawing(true);
-      } else {
+      } else if (!calibPoint2) {
+        setCalibPoint2(coords);
         setDrawCurrent(coords);
         setIsDrawing(false);
         setShowCalibDialog(true);
@@ -314,8 +346,11 @@ function CanvasOverlay({
     }
     
     setIsDrawing(false);
-    setDrawStart(null);
-    setDrawCurrent(null);
+    // Don't reset drawStart/drawCurrent for calibration mode
+    if (mode !== 'calibrate') {
+      setDrawStart(null);
+      setDrawCurrent(null);
+    }
   };
 
   const handleDoubleClick = (e) => {
@@ -327,17 +362,20 @@ function CanvasOverlay({
 
   const confirmCalibration = () => {
     const dist = parseFloat(calibDistance);
-    if (dist > 0 && drawStart && drawCurrent) {
-      const pixelDist = distance(drawStart, drawCurrent);
+    if (dist > 0 && calibPoint1 && calibPoint2) {
+      const pixelDist = distance(calibPoint1, calibPoint2);
       setCalibration({
-        pointA: drawStart,
-        pointB: drawCurrent,
+        pointA: calibPoint1,
+        pointB: calibPoint2,
         realDistance: dist,
         pixelsPerMeter: pixelDist / dist
       });
       setShowCalibDialog(false);
       setCalibPoint1(null);
+      setCalibPoint2(null);
       setCalibDistance('');
+      setDrawStart(null);
+      setDrawCurrent(null);
       onModeChange?.('draw-room');
     }
   };

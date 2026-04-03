@@ -3,7 +3,7 @@
 
 import { puter } from '@heyputer/puter.js';
 
-const AI_MODEL = 'gpt-4.1-nano';
+const AI_MODEL = 'gemini-2.0-flash';
 
 /**
  * Analyze a floor plan image using Puter.js Vision AI

@@ -5,7 +5,7 @@ import { puter } from '@heyputer/puter.js';
 import { ecoBuildAPI } from './api';
 import { generateBoQAsync } from '../utils/boqCalculator';
 
-const AI_MODEL = 'gpt-4.1-nano';
+const AI_MODEL = 'gemini-2.0-flash';
 
 /**
  * Tool definitions - what the AI can do

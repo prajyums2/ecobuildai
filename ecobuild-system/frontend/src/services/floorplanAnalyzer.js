@@ -41,7 +41,7 @@ Respond ONLY with valid JSON in this exact format:
 
 If the image is not a floor plan or cannot be analyzed, respond with: {"error": "Could not analyze image", "rooms": [], "total_built_up_sqm": 0}`;
 
-    const response = await puter.ai.chat(prompt, dataUrl, { model: 'gpt-4.1-nano' });
+    const response = await puter.ai.chat(prompt, dataUrl, { model: 'gemini-2.0-flash' });
     const text = typeof response === 'string' ? response : response.message?.content || response;
 
     // Parse JSON from response

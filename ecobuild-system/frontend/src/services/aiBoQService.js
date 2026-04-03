@@ -4,7 +4,7 @@
 import { puter } from '@heyputer/puter.js';
 import { validateAIResponse } from './aiService';
 
-const AI_MODEL = 'gpt-4.1-nano';
+const AI_MODEL = 'gemini-2.0-flash';
 
 /**
  * AI Quantity Validator
