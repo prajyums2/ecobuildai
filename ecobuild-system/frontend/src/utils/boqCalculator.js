@@ -836,6 +836,16 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                               slabVolume + lintelVolume + sunshadeVolume + parapetVolume + staircaseVolume;
   
   // ===== OPENING CALCULATIONS (Doors, Windows, Ventilators) =====
+  // Standard Kerala residential opening sizes (IS 4362:1967 - Modular Co-ordination)
+  const openingSizes = {
+    mainDoor: { width: 1.0, height: 2.1, area: 2.1 },       // 1000×2100mm
+    internalDoor: { width: 0.8, height: 2.0, area: 1.6 },    // 800×2000mm
+    bathroomDoor: { width: 0.75, height: 2.0, area: 1.5 },   // 750×2000mm
+    window: { width: 1.2, height: 1.2, area: 1.44 },         // 1200×1200mm
+    ventilator: { width: 0.6, height: 0.6, area: 0.36 },     // 600×600mm
+    kitchenWindow: { width: 0.9, height: 0.9, area: 0.81 },  // 900×900mm
+  };
+
   // Use floor plan data if available, otherwise estimate
   let totalDoorArea, totalWindowArea, totalOpenings;
   
@@ -845,7 +855,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     totalWindowArea = fpTotalWindows * 1.44; // Average window area ~1.44 sqm
     totalOpenings = {
       mainDoors: Math.min(fpTotalDoors, 1),
-      internalDoors: Math.max(0, fpTotalDoors - 1 - (fpTotalWindows > 0 ? 0 : 0)),
+      internalDoors: Math.max(0, fpTotalDoors - 1),
       bathroomDoors: Math.floor(fpTotalDoors * 0.2),
       windows: fpTotalWindows,
       ventilators: Math.floor(fpTotalWindows * 0.2),
@@ -853,16 +863,6 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     };
     console.log('[BoQ] Using floor plan data for openings:', totalOpenings);
   } else {
-    // Standard Kerala residential opening sizes (IS 4362:1967 - Modular Co-ordination)
-    const openingSizes = {
-      mainDoor: { width: 1.0, height: 2.1, area: 2.1 },       // 1000×2100mm
-      internalDoor: { width: 0.8, height: 2.0, area: 1.6 },    // 800×2000mm
-      bathroomDoor: { width: 0.75, height: 2.0, area: 1.5 },   // 750×2000mm
-      window: { width: 1.2, height: 1.2, area: 1.44 },         // 1200×1200mm
-      ventilator: { width: 0.6, height: 0.6, area: 0.36 },     // 600×600mm
-      kitchenWindow: { width: 0.9, height: 0.9, area: 0.81 },  // 900×900mm
-    };
-
     // Estimate opening counts per floor based on building size
     const roomsPerFloor = footprintArea <= 120 ? 5 : footprintArea <= 180 ? 7 : footprintArea <= 250 ? 9 : 12;
     const bedrooms = footprintArea <= 120 ? 2 : footprintArea <= 180 ? 3 : footprintArea <= 250 ? 4 : 5;
@@ -1982,12 +1982,19 @@ export async function generateBoQAsync(project) {
     console.log(`  ${k}: ${v?.name} @ Rs${v?.rate}/${v?.unit}`);
   });
   
+  // Ensure project has bimData field (for older projects)
+  const projectWithBIM = {
+    ...project,
+    bimData: project?.bimData || { floorPlanData: {} }
+  };
+  
   try {
-    const result = generateBoQ(project, rates, materialSelections);
+    const result = generateBoQ(projectWithBIM, rates, materialSelections);
     console.log('[BoQ] Generated BoQ with', result.categories?.length || 0, 'categories, subTotal:', result.summary?.subTotal);
     return result;
   } catch (error) {
     console.error('[BoQ] generateBoQ failed:', error);
+    console.error('[BoQ] Error stack:', error.stack);
     // Return empty BoQ structure
     return {
       projectInfo: { name: project?.name || 'Untitled', date: new Date().toLocaleDateString('en-IN'), location: 'Kerala', builtUpArea: 0, numFloors: 0, totalArea: 0 },
