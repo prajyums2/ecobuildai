@@ -184,15 +184,16 @@ Include at least 5-10 suggestions across different categories.`;
               <FaSyncAlt className="mr-1" /> Refresh
             </button>
             {pendingCount > 0 && (
-            <div className="flex gap-2">
-              <button onClick={handleApplyAll} className="btn btn-primary text-sm">
-                <FaCheck className="mr-1" /> Apply All ({pendingCount})
-              </button>
-              <button onClick={handleRejectAll} className="btn btn-outline text-sm">
-                <FaTimes className="mr-1" /> Reject All
-              </button>
-            </div>
-          )}
+              <div className="flex gap-2">
+                <button onClick={handleApplyAll} className="btn btn-primary text-sm">
+                  <FaCheck className="mr-1" /> Apply All ({pendingCount})
+                </button>
+                <button onClick={handleRejectAll} className="btn btn-outline text-sm">
+                  <FaTimes className="mr-1" /> Reject All
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Stats */}
