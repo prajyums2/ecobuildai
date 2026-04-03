@@ -325,13 +325,14 @@ const CONSTANTS = {
   },
   
   // Steel percentages (% of concrete volume) - IS 456:2000, IS 13920:2016
+  // Calibrated for load-bearing residential (reduced by 15% from framed)
   // Converted to kg/m³: % * density = kg/m³
   steel_percentage: {
-    footing: 0.008,    // 0.8% = 0.008 * 7850 = 62.8 kg/m³
-    column: 0.015,     // 1.5% = 0.015 * 7850 = 117.75 kg/m³
-    beam: 0.012,       // 1.2% = 0.012 * 7850 = 94.2 kg/m³
-    slab: 0.008,       // 0.8% = 0.008 * 7850 = 62.8 kg/m³
-    lintel: 0.007,     // 0.7% = 0.007 * 7850 = 54.95 kg/m³
+    footing: 0.0068,   // 0.68% = 0.0068 * 7850 = 53.4 kg/m³ (was 0.8% = 62.8)
+    column: 0.015,     // 1.5% = 0.015 * 7850 = 117.75 kg/m³ (unchanged, not used for load-bearing)
+    beam: 0.012,       // 1.2% = 0.012 * 7850 = 94.2 kg/m³ (unchanged, not used for load-bearing)
+    slab: 0.0068,      // 0.68% = 0.0068 * 7850 = 53.4 kg/m³ (was 0.8% = 62.8)
+    lintel: 0.006,     // 0.6% = 0.006 * 7850 = 47.1 kg/m³ (was 0.7% = 55)
     sunshade: 0.006,   // 0.6% = 0.006 * 7850 = 47.1 kg/m³
   },
   
@@ -765,7 +766,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   let foundationVolume, numColumns, footingSize;
   if (structureType === 'load_bearing') {
     // Strip foundation under load-bearing walls - just wall thickness + small offset
-    const foundationWidth = 0.4; // 400mm wide (wall 230mm + 85mm each side offset)
+    const foundationWidth = 0.35; // 350mm wide (wall 230mm + 60mm each side offset)
     foundationVolume = buildingPerimeter * foundationWidth * foundationDepth;
     numColumns = 0;
     footingSize = 0;

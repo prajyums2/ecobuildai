@@ -89,7 +89,7 @@ export function ProjectProvider({ children }) {
       minRecycledContent: 10,
       // Structural Assumptions (per IS 456 / IS 875)
       structureType: 'load_bearing', // load_bearing | framed | mixed
-      slabThickness: 150, // mm - standard for residential
+      slabThickness: 125, // mm - standard for residential
       beamDepth: 450, // mm - typical for spans up to 6m
       columnSize: 300, // mm - standard column dimension
       steelRatio: 100, // kg/m³ - typical for RCC framed structures (IS 456)
