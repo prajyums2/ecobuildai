@@ -39,6 +39,8 @@ function BIMIntegration() {
   const [calibration, setCalibration] = useState({});
   const [canvasMode, setCanvasMode] = useState('calibrate');
   const [imageDimensions, setImageDimensions] = useState(null);
+  const [aiDetectedData, setAiDetectedData] = useState(null);
+  const [showAIDetection, setShowAIDetection] = useState(true);
   const imageRef = useRef(null);
 
   // Initialize floor data
@@ -88,23 +90,16 @@ function BIMIntegration() {
       const result = await analyzeFloorPlanVision(dataUrl, floorNum);
       const validated = validateFloorPlanData(result);
       
-      // Merge AI results with existing floor data
-      setFloorData(prev => {
-        const existing = prev[floorNum] || {};
-        return {
-          ...prev,
-          [floorNum]: {
-            ...existing,
-            rooms: validated.rooms?.length > 0 ? validated.rooms : existing.rooms,
-            doors: validated.doors?.length > 0 ? validated.doors : existing.doors,
-            windows: validated.windows?.length > 0 ? validated.windows : existing.windows,
-            structure_type: validated.structure_type || existing.structure_type,
-            total_built_up_sqm: validated.total_built_up_sqm || existing.total_built_up_sqm,
-            confidence: validated.confidence || existing.confidence,
-            notes: validated.notes || existing.notes
-          }
-        };
-      });
+      // Store AI detected data separately for overlay display
+      if (validated.rooms?.length > 0) {
+        setAiDetectedData({
+          rooms: validated.rooms,
+          doors: validated.doors || [],
+          windows: validated.windows || [],
+          walls: validated.walls || {},
+        });
+        setShowAIDetection(true);
+      }
       
       // Auto-detect structure type from first floor
       if (floorNum === 1 && validated.structure_type) {
@@ -252,46 +247,65 @@ function BIMIntegration() {
                   {imageDimensions && (
                     <div className="absolute inset-0 z-10">
                       <CanvasOverlay
-                      imageUrl={floorUrls[activeFloor]}
-                      imageDimensions={imageDimensions}
-                      calibration={calibration}
-                      setCalibration={setCalibration}
-                      rooms={currentFloor.rooms || []}
-                      setRooms={(updater) => {
-                        const newRooms = typeof updater === 'function' ? updater(currentFloor.rooms || []) : updater;
-                        const totalArea = newRooms.reduce((sum, r) => sum + (r.area_sqm || 0), 0);
-                        setFloorData(prev => ({
-                          ...prev,
-                          [activeFloor]: { ...prev[activeFloor], rooms: newRooms, total_built_up_sqm: totalArea }
-                        }));
-                      }}
-                      doors={currentFloor.doors || []}
-                      setDoors={(updater) => {
-                        const newDoors = typeof updater === 'function' ? updater(currentFloor.doors || []) : updater;
-                        setFloorData(prev => ({
-                          ...prev,
-                          [activeFloor]: { ...prev[activeFloor], doors: newDoors }
-                        }));
-                      }}
-                      windows={currentFloor.windows || []}
-                      setWindows={(updater) => {
-                        const newWindows = typeof updater === 'function' ? updater(currentFloor.windows || []) : updater;
-                        setFloorData(prev => ({
-                          ...prev,
-                          [activeFloor]: { ...prev[activeFloor], windows: newWindows }
-                        }));
-                      }}
-                      walls={currentFloor.walls || {}}
-                      setWalls={(updater) => {
-                        const newWalls = typeof updater === 'function' ? updater(currentFloor.walls || {}) : updater;
-                        setFloorData(prev => ({
-                          ...prev,
-                          [activeFloor]: { ...prev[activeFloor], walls: newWalls }
-                        }));
-                      }}
-                      mode={canvasMode}
-                      onModeChange={setCanvasMode}
-                    />
+                        imageUrl={floorUrls[activeFloor]}
+                        imageDimensions={imageDimensions}
+                        calibration={calibration}
+                        setCalibration={setCalibration}
+                        rooms={currentFloor.rooms || []}
+                        setRooms={(updater) => {
+                          const newRooms = typeof updater === 'function' ? updater(currentFloor.rooms || []) : updater;
+                          const totalArea = newRooms.reduce((sum, r) => sum + (r.area_sqm || 0), 0);
+                          setFloorData(prev => ({
+                            ...prev,
+                            [activeFloor]: { ...prev[activeFloor], rooms: newRooms, total_built_up_sqm: totalArea }
+                          }));
+                        }}
+                        doors={currentFloor.doors || []}
+                        setDoors={(updater) => {
+                          const newDoors = typeof updater === 'function' ? updater(currentFloor.doors || []) : updater;
+                          setFloorData(prev => ({
+                            ...prev,
+                            [activeFloor]: { ...prev[activeFloor], doors: newDoors }
+                          }));
+                        }}
+                        windows={currentFloor.windows || []}
+                        setWindows={(updater) => {
+                          const newWindows = typeof updater === 'function' ? updater(currentFloor.windows || []) : updater;
+                          setFloorData(prev => ({
+                            ...prev,
+                            [activeFloor]: { ...prev[activeFloor], windows: newWindows }
+                          }));
+                        }}
+                        walls={currentFloor.walls || {}}
+                        setWalls={(updater) => {
+                          const newWalls = typeof updater === 'function' ? updater(currentFloor.walls || {}) : updater;
+                          setFloorData(prev => ({
+                            ...prev,
+                            [activeFloor]: { ...prev[activeFloor], walls: newWalls }
+                          }));
+                        }}
+                        mode={canvasMode}
+                        onModeChange={setCanvasMode}
+                        aiDetectedData={showAIDetection ? aiDetectedData : null}
+                        showAIDetection={showAIDetection}
+                        onAcceptAIDetection={() => {
+                          if (aiDetectedData) {
+                            setFloorData(prev => ({
+                              ...prev,
+                              [activeFloor]: {
+                                ...prev[activeFloor],
+                                rooms: aiDetectedData.rooms || [],
+                                doors: aiDetectedData.doors || [],
+                                windows: aiDetectedData.windows || [],
+                                walls: aiDetectedData.walls || prev[activeFloor]?.walls || {},
+                                total_built_up_sqm: aiDetectedData.rooms?.reduce((s, r) => s + (r.area_sqm || 0), 0) || 0,
+                              }
+                            }));
+                          }
+                          setShowAIDetection(false);
+                        }}
+                        onRejectAIDetection={() => setShowAIDetection(false)}
+                      />
                     </div>
                   )}
                 </div>
@@ -362,11 +376,13 @@ function BIMIntegration() {
               How to Use
             </h3>
             <ol className="text-xs text-foreground-secondary space-y-1.5 list-decimal list-inside">
-              <li>Upload floor plan image</li>
-              <li>Click <strong>Set Scale</strong> ruler icon, then click two points on the image and enter real distance</li>
-              <li>Click <strong>+ Draw Room</strong> and drag to define rooms</li>
+              <li>Upload floor plan image (AI auto-detects rooms)</li>
+              <li>If AI detected rooms → click <strong>Accept</strong> or <strong>Dismiss</strong></li>
+              <li>Click <strong>📏 Set Scale</strong>, click two points, enter real distance</li>
+              <li>Click <strong>+ Draw Room</strong> and drag to draw rooms</li>
               <li>Click <strong>🚪</strong> or <strong>🪟</strong> to add doors/windows</li>
-              <li>Or use <strong>AI Auto-Detect</strong> by uploading a clear floor plan</li>
+              <li>Use <strong>Ctrl+Z/Y</strong> to undo/redo</li>
+              <li><strong>Alt+Drag</strong> to pan, <strong>Scroll</strong> to zoom</li>
             </ol>
           </div>
 
@@ -386,41 +402,6 @@ function BIMIntegration() {
               <option value="mixed">Mixed</option>
             </select>
           </div>
-
-          {/* AI Auto-Detect Button */}
-          {floorUrls[activeFloor] && !isCurrentFloorAnalyzed && (
-            <button
-              onClick={async () => {
-                setIsAnalyzing(true);
-                setAnalyzingFloor(activeFloor);
-                try {
-                  const dataUrl = await fileToDataUrl(floorFiles[activeFloor]);
-                  const result = await analyzeFloorPlanVision(dataUrl, activeFloor);
-                  const validated = validateFloorPlanData(result);
-                  setFloorData(prev => ({
-                    ...prev,
-                    [activeFloor]: {
-                      ...prev[activeFloor],
-                      rooms: validated.rooms || [],
-                      doors: validated.doors || [],
-                      windows: validated.windows || [],
-                      structure_type: validated.structure_type || prev[activeFloor]?.structure_type,
-                      total_built_up_sqm: validated.total_built_up_sqm || 0,
-                      confidence: validated.confidence || 0,
-                    }
-                  }));
-                } catch (err) {
-                  setError('AI detection failed. Use manual drawing tools.');
-                } finally {
-                  setIsAnalyzing(false);
-                  setAnalyzingFloor(null);
-                }
-              }}
-              className="w-full btn btn-outline text-sm"
-            >
-              <FaMagic className="mr-2" /> AI Auto-Detect Rooms
-            </button>
-          )}
         </div>
       </div>
     </div>
