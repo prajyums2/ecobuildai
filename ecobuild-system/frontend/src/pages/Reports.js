@@ -882,7 +882,7 @@ function MaterialSummaryTab({ boq, project, materialSelections }) {
     return materials;
   };
 
-  const materials = useMemo(() => extractMaterials(), [boq, materialSelections, lastUpdated]);
+  const materials = useMemo(() => extractMaterials(), [boq, materialSelections]);
   // Show ALL 5 categories, not just those with qty > 0
   const materialList = Object.values(materials);
   const materialListWithQty = materialList.filter((m) => m.qty > 0);
