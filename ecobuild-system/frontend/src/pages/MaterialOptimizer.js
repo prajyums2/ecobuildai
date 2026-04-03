@@ -737,30 +737,35 @@ function MaterialOptimizer() {
 
       {error && <div className="p-3 bg-error-bg border border-error rounded-lg text-error text-sm">{error}</div>}
 
-      {/* Optimization Results */}
-      {results && Object.keys(results).length > 0 && (
+      {/* Current Selections Summary */}
+      {Object.keys(selectedMaterials).length > 0 && (
         <div className="card">
           <div className="card-header">
-            <h4 className="font-semibold text-foreground">Optimization Results</h4>
-            <p className="text-xs text-foreground-secondary">Auto-selected best material per category</p>
+            <h4 className="font-semibold text-foreground">Current Selections</h4>
+            <p className="text-xs text-foreground-secondary">{Object.keys(selectedMaterials).length} material{Object.keys(selectedMaterials).length > 1 ? 's' : ''} selected</p>
           </div>
           <div className="card-body">
             <div className="space-y-3">
-              {Object.entries(results).map(([cat, mats]) => {
-                const top = mats[0];
+              {Object.entries(selectedMaterials).map(([cat, mat]) => {
+                const catConfig = CATEGORY_CONFIG[cat] || { icon: FaBuilding, color: 'gray', label: cat };
+                const Icon = catConfig.icon;
                 return (
                   <div key={cat} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">1</span>
+                      <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                        <Icon className="text-green-600 dark:text-green-400 text-sm" />
+                      </div>
                       <div>
-                        <span className="font-medium text-foreground capitalize">{cat}:</span>
-                        <span className="ml-2 text-foreground-secondary">{top?.name}</span>
-                        {top?.bisCode && <span className="block text-xs text-foreground-muted">{top.bisCode}</span>}
+                        <span className="font-medium text-foreground capitalize">{catConfig.label}:</span>
+                        <span className="ml-2 text-foreground-secondary">{mat?.name}</span>
+                        {mat?.bisCode && <span className="block text-xs text-foreground-muted">{mat.bisCode}</span>}
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm font-mono">₹{top?.rate}/{top?.unit}</span>
-                      <span className="text-sm text-foreground-muted">Score: {Math.round(top?.score)}</span>
+                      <span className="text-sm font-mono">₹{mat?.rate}/{mat?.unit}</span>
+                      <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full flex items-center gap-1">
+                        <FaCheck className="text-[10px]" /> Selected
+                      </span>
                     </div>
                   </div>
                 );
