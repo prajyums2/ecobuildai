@@ -240,17 +240,18 @@ function BIMIntegration() {
             <div className="relative">
               {/* Upload Area / Image Display */}
               {floorUrls[activeFloor] ? (
-                <div className="relative">
+                <div className="relative inline-block w-full">
                   <img 
                     ref={imageRef}
                     src={floorUrls[activeFloor]} 
                     alt={`Floor ${activeFloor}`} 
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg block"
                     onLoad={handleImageLoad}
                   />
                   {/* Canvas Overlay for interactive drawing */}
                   {imageDimensions && (
-                    <CanvasOverlay
+                    <div className="absolute inset-0 z-10">
+                      <CanvasOverlay
                       imageUrl={floorUrls[activeFloor]}
                       imageDimensions={imageDimensions}
                       calibration={calibration}
@@ -291,6 +292,7 @@ function BIMIntegration() {
                       mode={canvasMode}
                       onModeChange={setCanvasMode}
                     />
+                    </div>
                   )}
                 </div>
               ) : isAnalyzing && analyzingFloor === activeFloor ? (

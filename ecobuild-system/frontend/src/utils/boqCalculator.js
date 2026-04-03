@@ -934,7 +934,7 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                    totalOpenings.ventilators * 2 * 0.15 * 0.6; // ventilator jambs
 
   const internalPlasterArea = (netWallArea * 1.5) + jambArea; // Internal walls (both sides) + ceiling + jambs
-  const externalPlasterArea = (netWallArea * 0.3) + (doorArea * 0.1); // External walls + door soffits
+  const externalPlasterArea = (netWallArea * 0.3) + (totalDoorArea * 0.1); // External walls + door soffits
   
   // Resolve rates from optimizer selections, falling back to API/fallback rates
   const cementSelection = materialSelections.cement;

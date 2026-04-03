@@ -386,15 +386,19 @@ function CanvasOverlay({
   };
 
   return (
-    <div ref={containerRef} className="relative select-none" style={{ cursor: mode === 'calibrate' ? 'crosshair' : mode === 'draw-room' ? 'crosshair' : mode === 'add-door' || mode === 'add-window' ? 'crosshair' : 'default' }}>
+    <div 
+      ref={containerRef} 
+      className="absolute inset-0 select-none" 
+      style={{ width: '100%', height: '100%', cursor: mode === 'select' ? 'default' : 'crosshair' }}
+    >
       <canvas
         ref={canvasRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onDoubleClick={handleDoubleClick}
-        className="absolute inset-0 z-10"
-        style={{ touchAction: 'none' }}
+        className="absolute inset-0 w-full h-full"
+        style={{ touchAction: 'none', pointerEvents: 'auto' }}
       />
       
       {/* Calibration Dialog */}
