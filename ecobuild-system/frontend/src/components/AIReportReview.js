@@ -323,13 +323,13 @@ Include at least 5-10 suggestions across different categories.`;
 }
 
 function parseJSON(text) {
-  try { return JSON.parse(text); } catch {
+  try { return JSON.parse(text); } catch (e) {
     const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) { try { return JSON.parse(jsonMatch[1].trim()); } catch {} }
+    if (jsonMatch) { try { return JSON.parse(jsonMatch[1].trim()); } catch (e) {} }
     const objMatch = text.match(/\{[\s\S]*\}/);
-    if (objMatch) { try { return JSON.parse(objMatch[0]); } catch {} }
+    if (objMatch) { try { return JSON.parse(objMatch[0]); } catch (e) {} }
     const arrMatch = text.match(/\[[\s\S]*\]/);
-    if (arrMatch) { try { return JSON.parse(arrMatch[0]); } catch {} }
+    if (arrMatch) { try { return JSON.parse(arrMatch[0]); } catch (e) {} }
     return null;
   }
 }
