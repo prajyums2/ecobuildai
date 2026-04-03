@@ -1276,11 +1276,11 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   // Use optimizer-selected masonry material
   const masonryUnit = masonrySelection?.unit || 'nos';
   const masonryName = masonrySelection?.name || 'AAC blocks';
-  const masonryDesc = masonrySelection?.description || 'blocks in CM 1:4';
   const blockWastage = 0.05;
   
   // Calculate quantity based on unit type
   let masonryQuantity;
+  let masonryQty; // For mortar calculation
   if (masonryUnit === 'cft' || masonryUnit === 'cum') {
     // For stone/laterite masonry, use volume
     const wallThickness = 0.23; // 230mm wall
@@ -1288,10 +1288,13 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     if (masonryUnit === 'cft') {
       masonryQuantity = masonryQuantity * 35.315; // cum to cft
     }
+    // For mortar, still calculate based on block equivalent
+    const blockSize = '600x200x200';
+    masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
   } else {
     // For blocks/bricks, use count
     const blockSize = '600x200x200';
-    const masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
+    masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
     masonryQuantity = masonryQty.blocks;
   }
   
@@ -1916,7 +1919,6 @@ export async function generateBoQAsync(project) {
   const rates = await fetchMaterialRates();
   
   // ALWAYS read latest material selections from localStorage (source of truth)
-  // The optimizer saves directly to localStorage, which is more reliable than React state
   let materialSelections = {};
   try {
     const stored = localStorage.getItem('ecobuild-projects');
@@ -1943,7 +1945,19 @@ export async function generateBoQAsync(project) {
     console.log(`  ${k}: ${v?.name} @ Rs${v?.rate}/${v?.unit}`);
   });
   
-  return generateBoQ(project, rates, materialSelections);
+  try {
+    const result = generateBoQ(project, rates, materialSelections);
+    console.log('[BoQ] Generated BoQ with', result.categories?.length || 0, 'categories, subTotal:', result.summary?.subTotal);
+    return result;
+  } catch (error) {
+    console.error('[BoQ] generateBoQ failed:', error);
+    // Return empty BoQ structure
+    return {
+      projectInfo: { name: project?.name || 'Untitled', date: new Date().toLocaleDateString('en-IN'), location: 'Kerala', builtUpArea: 0, numFloors: 0, totalArea: 0 },
+      categories: [],
+      summary: { subTotal: 0, gstRate: 18, gstAmount: 0, grandTotal: 0 },
+    };
+  }
 }
 
 /**
