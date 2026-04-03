@@ -883,8 +883,11 @@ function MaterialSummaryTab({ boq, project, materialSelections }) {
   };
 
   const materials = useMemo(() => extractMaterials(), [boq, materialSelections]);
-  // Show ALL 5 categories, not just those with qty > 0
-  const materialList = Object.values(materials);
+  // Only show materials that were actually selected in the optimizer
+  const selectedKeys = Object.keys(materialSelections || {});
+  const materialList = Object.entries(materials)
+    .filter(([key]) => selectedKeys.includes(key))
+    .map(([_, mat]) => mat);
   const materialListWithQty = materialList.filter((m) => m.qty > 0);
   const totalMaterialCost = materialList.reduce((sum, m) => sum + (m.qty * m.rate), 0);
 
