@@ -21,6 +21,10 @@ import LLMSidebar from './components/LLMSidebar';
 function App() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [aiSidebarOpen, setAiSidebarOpen] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('ecobuild-sidebar-collapsed');
+    return saved === 'true';
+  });
 
   useEffect(() => {
     const hasSeenTutorial = localStorage.getItem('ecobuild-tutorial-seen');
@@ -28,7 +32,6 @@ function App() {
       setShowTutorial(true);
     }
 
-    // Listen for AI assistant toggle event
     const handleToggleAI = () => {
       setAiSidebarOpen(prev => !prev);
     };
@@ -36,6 +39,10 @@ function App() {
     window.addEventListener('toggleAIAssistant', handleToggleAI);
     return () => window.removeEventListener('toggleAIAssistant', handleToggleAI);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('ecobuild-sidebar-collapsed', sidebarCollapsed);
+  }, [sidebarCollapsed]);
 
   const handleTutorialComplete = () => {
     setShowTutorial(false);
@@ -58,7 +65,7 @@ function App() {
                   <OnboardingTutorial onComplete={handleTutorialComplete} />
                 )}
 
-                <Sidebar />
+                <Sidebar isCollapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(prev => !prev)} />
                 
                 <div className="flex-1 flex flex-col overflow-hidden">
                   <Header />
