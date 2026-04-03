@@ -54,6 +54,8 @@ function CanvasOverlay({
   // Use external zoom/pan from parent
   const zoom = externalZoom;
   const pan = externalPan;
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState(null);
   
   // Layer visibility
   const [showLayers, setShowLayers] = useState({
