@@ -1359,29 +1359,6 @@ function Reports() {
     }
   }, [project?.materialSelections, project?.buildingParams?.builtUpArea, project?.buildingParams?.numFloors, project?.location?.district]);
   
-  // Fallback: Try to get material selections from localStorage directly
-  const getMaterialSelectionsFromStorage = () => {
-    try {
-      const stored = localStorage.getItem('ecobuild-projects');
-      if (stored) {
-        const projects = JSON.parse(stored);
-        const currentId = localStorage.getItem('ecobuild-current-project-id');
-        const current = projects.find(p => p.id === currentId);
-        if (current?.materialSelections) {
-          console.log('=== FOUND MATERIALS IN LOCALSTORAGE ===');
-          console.log('materialSelections:', current.materialSelections);
-          return current.materialSelections;
-        }
-      }
-    } catch (e) {
-      console.error('Error reading from localStorage:', e);
-    }
-    return {};
-  };
-  
-  // Use material selections from project context OR localStorage fallback
-  const materialSelections = project?.materialSelections || getMaterialSelectionsFromStorage();
-
   // ============================================
   // CALCULATED VALUES (ACCURATE)
   // ============================================
