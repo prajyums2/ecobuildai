@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
+import { useMaterialSelections } from "../hooks/useMaterialSelections";
 import { useProject } from "../context/ProjectContext";
 import { useEngineer } from "../context/EngineerContext";
 import { ecoBuildAPI } from "../services/api";
@@ -85,7 +86,7 @@ function calculateGRIHAScore(project, boqCarbon) {
   else if (sustainabilityPriority === "medium") score += 3;
 
   // Materials & Resources (max 28 points)
-  const matSelections = project.materialSelections || {};
+  const matSelections = materialSelections || {};
   const hasLowCarbonMat = Object.values(matSelections).some(m => (m.carbon || 0) < 1);
   if (hasLowCarbonMat) score += 8;
   const hasRecycledMat = Object.values(matSelections).some(m => (m.recycled || 0) > 20);
@@ -125,7 +126,7 @@ function calculateIGBCScore(project, boqCarbon) {
   else if (sustainabilityPriority === "medium") score += 5;
 
   // Materials & Resources (max 25 points)
-  const matSelections = project.materialSelections || {};
+  const matSelections = materialSelections || {};
   const hasRecycledMat = Object.values(matSelections).some(m => (m.recycled || 0) > 20);
   if (hasRecycledMat) score += 10;
   if (sustainabilityPriority === "high") score += 10;
@@ -778,31 +779,11 @@ function MaterialSummaryTab({ boq, project }) {
       .replace(/Â/g, "");
   };
 
-  // Helper to get material selections with fallback
-  const getMaterialSelections = () => {
-    if (project && project.materialSelections && Object.keys(project.materialSelections).length > 0) {
-      return project.materialSelections;
-    }
-    // Fallback to localStorage
-    try {
-      const stored = localStorage.getItem('ecobuild-projects');
-      if (stored) {
-        const projects = JSON.parse(stored);
-        const currentId = localStorage.getItem('ecobuild-current-project-id');
-        const current = projects.find(p => p.id === currentId);
-        if (current?.materialSelections && Object.keys(current.materialSelections).length > 0) {
-          return current.materialSelections;
-        }
-      }
-    } catch (e) { console.error('Error:', e); }
-    return {};
-  };
-
-  // Extract material quantities from BoQ - only essential categories from optimizer
+  // Extract material quantities from BoQ - uses latest selections from hook
   const extractMaterials = () => {
     if (!boq || !boq.categories) return {};
 
-    const selectedMats = getMaterialSelections();
+    const selectedMats = materialSelections || {};
     
     const materials = {
       cement: {
@@ -901,7 +882,7 @@ function MaterialSummaryTab({ boq, project }) {
     return materials;
   };
 
-  const materials = useMemo(() => extractMaterials(), [boq, project?.materialSelections]);
+  const materials = useMemo(() => extractMaterials(), [boq, materialSelections, lastUpdated]);
   // Show ALL 5 categories, not just those with qty > 0
   const materialList = Object.values(materials);
   const materialListWithQty = materialList.filter((m) => m.qty > 0);
@@ -1341,9 +1322,12 @@ function Reports() {
   const [citations, setCitations] = useState(null);
   const [lastGeneratedState, setLastGeneratedState] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
+  
+  // Always use latest material selections from localStorage
+  const { selections: materialSelections, lastUpdated } = useMaterialSelections();
 
   const getCurrentState = () => ({
-    materials: JSON.stringify(project?.materialSelections || {}),
+    materials: JSON.stringify(materialSelections || {}),
     builtUpArea: project?.buildingParams?.builtUpArea,
     numFloors: project?.buildingParams?.numFloors,
     height: project?.buildingParams?.height,
@@ -1454,7 +1438,7 @@ function Reports() {
 
   // Calculate recycled content from actual material selections
   const calculateRecycledContent = () => {
-    const selections = project.materialSelections || {};
+    const selections = materialSelections || {};
     let recycledPercent = 0;
     let totalMaterials = 0;
 
@@ -1922,7 +1906,7 @@ function Reports() {
 
       csv += "*** MATERIAL SPECIFICATIONS ***\n";
       csv += "MEMBER,TYPE,GRADE,QUANTITY,UNIT,CARBON(kg),COST(Rs)\n";
-      Object.entries(project.materialSelections).forEach(([cat, mat]) => {
+      Object.entries(materialSelections).forEach(([cat, mat]) => {
         csv += `${cat.toUpperCase()},${mat.name},STD,${mat.quantity || 1},${mat.unit || "each"},${mat.embodied_carbon},${mat.cost_per_unit}\n`;
       });
 
@@ -2521,8 +2505,8 @@ function Reports() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(project.materialSelections).length > 0 ? (
-                    Object.entries(project.materialSelections).map(
+                  {Object.entries(materialSelections).length > 0 ? (
+                    Object.entries(materialSelections).map(
                       ([cat, mat], idx) => (
                         <tr key={idx}>
                           <td className="border border-black p-2">
@@ -3175,7 +3159,7 @@ function Reports() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(project.materialSelections || {}).map(
+                  {Object.entries(materialSelections || {}).map(
                     ([cat, mat]) => (
                       <tr key={cat}>
                         <td className="border border-black p-2 capitalize">
@@ -3200,8 +3184,8 @@ function Reports() {
                       </tr>
                     ),
                   )}
-                  {(!project.materialSelections ||
-                    Object.keys(project.materialSelections).length === 0) && (
+                  {(!materialSelections ||
+                    Object.keys(materialSelections).length === 0) && (
                     <tr>
                       <td
                         colSpan={5}

@@ -10,12 +10,21 @@ function AIReportReview({ boq, project, materialSelections, onApplyChanges }) {
   const [rejectedIds, setRejectedIds] = useState(new Set());
   const [error, setError] = useState(null);
   const hasAnalyzed = React.useRef(false);
+  const lastBoqKey = React.useRef(null);
 
+  // Re-analyze when BoQ changes significantly
   useEffect(() => {
-    if (!boq || hasAnalyzed.current) return;
-    hasAnalyzed.current = true;
-    analyzeReport();
-  }, []);
+    if (!boq) return;
+    
+    // Create a key from BoQ summary to detect changes
+    const boqKey = `${boq.summary?.subTotal}-${boq.summary?.grandTotal}-${JSON.stringify(materialSelections || {})}`;
+    
+    if (boqKey !== lastBoqKey.current) {
+      lastBoqKey.current = boqKey;
+      hasAnalyzed.current = false;
+      analyzeReport();
+    }
+  }, [boq, materialSelections]);
 
   const handleRefresh = () => {
     hasAnalyzed.current = false;

@@ -6,11 +6,20 @@ function AISustainabilitySuggestions({ project, boq, materialSelections, embodie
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [applied, setApplied] = useState(new Set());
+  const lastAnalysisKey = React.useRef(null);
 
+  // Re-analyze when BoQ or material selections change
   useEffect(() => {
     if (!project || !boq) return;
-    generateSuggestions();
-  }, [project, boq]);
+    
+    // Create a key that changes when materials or BoQ changes
+    const analysisKey = `${boq.summary?.grandTotal}-${JSON.stringify(materialSelections || {})}`;
+    
+    if (analysisKey !== lastAnalysisKey.current) {
+      lastAnalysisKey.current = analysisKey;
+      generateSuggestions();
+    }
+  }, [project, boq, materialSelections]);
 
   const generateSuggestions = async () => {
     setLoading(true);
