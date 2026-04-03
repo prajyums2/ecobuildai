@@ -41,7 +41,10 @@ function BIMIntegration() {
   const [imageDimensions, setImageDimensions] = useState(null);
   const [aiDetectedData, setAiDetectedData] = useState(null);
   const [showAIDetection, setShowAIDetection] = useState(true);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
+  const containerRef = useRef(null);
 
   // Initialize floor data
   useEffect(() => {
@@ -120,6 +123,16 @@ function BIMIntegration() {
         width: imageRef.current.clientWidth,
         height: imageRef.current.clientHeight
       });
+    }
+  };
+
+  const handleZoomIn = () => setZoom(z => Math.min(5, z + 0.2));
+  const handleZoomOut = () => setZoom(z => Math.max(0.5, z - 0.2));
+  const handleZoomReset = () => { setZoom(1); setPan({ x: 0, y: 0 }); };
+  const handleZoomInput = (value) => {
+    const val = parseInt(value);
+    if (!isNaN(val) && val >= 50 && val <= 500) {
+      setZoom(val / 100);
     }
   };
 
@@ -235,55 +248,62 @@ function BIMIntegration() {
             <div className="relative">
               {/* Upload Area / Image Display */}
               {floorUrls[activeFloor] ? (
-                <div className="relative inline-block w-full">
-                  <img 
-                    ref={imageRef}
-                    src={floorUrls[activeFloor]} 
-                    alt={`Floor ${activeFloor}`} 
-                    className="w-full rounded-lg block"
-                    onLoad={handleImageLoad}
-                  />
-                  {/* Canvas Overlay for interactive drawing */}
-                  {imageDimensions && (
-                    <div className="absolute inset-0 z-10">
-                      <CanvasOverlay
-                        imageUrl={floorUrls[activeFloor]}
-                        imageDimensions={imageDimensions}
-                        calibration={calibration}
-                        setCalibration={setCalibration}
-                        rooms={currentFloor.rooms || []}
-                        setRooms={(updater) => {
-                          const newRooms = typeof updater === 'function' ? updater(currentFloor.rooms || []) : updater;
-                          const totalArea = newRooms.reduce((sum, r) => sum + (r.area_sqm || 0), 0);
-                          setFloorData(prev => ({
-                            ...prev,
-                            [activeFloor]: { ...prev[activeFloor], rooms: newRooms, total_built_up_sqm: totalArea }
-                          }));
-                        }}
-                        doors={currentFloor.doors || []}
-                        setDoors={(updater) => {
-                          const newDoors = typeof updater === 'function' ? updater(currentFloor.doors || []) : updater;
-                          setFloorData(prev => ({
-                            ...prev,
-                            [activeFloor]: { ...prev[activeFloor], doors: newDoors }
-                          }));
-                        }}
-                        windows={currentFloor.windows || []}
-                        setWindows={(updater) => {
-                          const newWindows = typeof updater === 'function' ? updater(currentFloor.windows || []) : updater;
-                          setFloorData(prev => ({
-                            ...prev,
-                            [activeFloor]: { ...prev[activeFloor], windows: newWindows }
-                          }));
-                        }}
-                        walls={currentFloor.walls || {}}
-                        setWalls={(updater) => {
-                          const newWalls = typeof updater === 'function' ? updater(currentFloor.walls || {}) : updater;
-                          setFloorData(prev => ({
-                            ...prev,
-                            [activeFloor]: { ...prev[activeFloor], walls: newWalls }
-                          }));
-                        }}
+                <div className="relative" ref={containerRef} style={{ overflow: 'hidden', minHeight: '400px' }}>
+                  <div 
+                    className="transition-transform duration-100 ease-out origin-top-left"
+                    style={{ 
+                      transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
+                      width: '100%'
+                    }}
+                  >
+                    <img 
+                      ref={imageRef}
+                      src={floorUrls[activeFloor]} 
+                      alt={`Floor ${activeFloor}`} 
+                      className="w-full rounded-lg block"
+                      onLoad={handleImageLoad}
+                    />
+                    {/* Canvas Overlay for interactive drawing */}
+                    {imageDimensions && (
+                      <div className="absolute inset-0 z-10">
+                        <CanvasOverlay
+                          imageUrl={floorUrls[activeFloor]}
+                          imageDimensions={imageDimensions}
+                          calibration={calibration}
+                          setCalibration={setCalibration}
+                          rooms={currentFloor.rooms || []}
+                          setRooms={(updater) => {
+                            const newRooms = typeof updater === 'function' ? updater(currentFloor.rooms || []) : updater;
+                            const totalArea = newRooms.reduce((sum, r) => sum + (r.area_sqm || 0), 0);
+                            setFloorData(prev => ({
+                              ...prev,
+                              [activeFloor]: { ...prev[activeFloor], rooms: newRooms, total_built_up_sqm: totalArea }
+                            }));
+                          }}
+                          doors={currentFloor.doors || []}
+                          setDoors={(updater) => {
+                            const newDoors = typeof updater === 'function' ? updater(currentFloor.doors || []) : updater;
+                            setFloorData(prev => ({
+                              ...prev,
+                              [activeFloor]: { ...prev[activeFloor], doors: newDoors }
+                            }));
+                          }}
+                          windows={currentFloor.windows || []}
+                          setWindows={(updater) => {
+                            const newWindows = typeof updater === 'function' ? updater(currentFloor.windows || []) : updater;
+                            setFloorData(prev => ({
+                              ...prev,
+                              [activeFloor]: { ...prev[activeFloor], windows: newWindows }
+                            }));
+                          }}
+                          walls={currentFloor.walls || {}}
+                          setWalls={(updater) => {
+                            const newWalls = typeof updater === 'function' ? updater(currentFloor.walls || {}) : updater;
+                            setFloorData(prev => ({
+                              ...prev,
+                              [activeFloor]: { ...prev[activeFloor], walls: newWalls }
+                            }));
+                          }}
                         mode={canvasMode}
                         onModeChange={setCanvasMode}
                         aiDetectedData={showAIDetection ? aiDetectedData : null}
@@ -305,9 +325,14 @@ function BIMIntegration() {
                           setShowAIDetection(false);
                         }}
                         onRejectAIDetection={() => setShowAIDetection(false)}
+                        externalZoom={zoom}
+                        externalPan={pan}
+                        onZoomChange={setZoom}
+                        onPanChange={setPan}
                       />
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : isAnalyzing && analyzingFloor === activeFloor ? (
                 <div className="py-16 text-center">

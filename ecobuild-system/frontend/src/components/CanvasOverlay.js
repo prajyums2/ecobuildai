@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { 
   FaRuler, FaMousePointer, FaPlus, FaTrash, FaUndo, FaRedo, 
-  FaSave, FaEye, FaEyeSlash, FaSearchPlus, FaSearchMinus, FaExpand 
+  FaSave, FaEye, FaEyeSlash, FaSearchPlus, FaSearchMinus, FaExpand,
+  FaCheck, FaTimes,
 } from 'react-icons/fa';
 
 /**
@@ -23,10 +24,14 @@ function CanvasOverlay({
   mode = 'select',
   onModeChange,
   imageDimensions,
-  aiDetectedData = null, // { rooms, doors, windows, walls }
+  aiDetectedData = null,
   onAcceptAIDetection,
   onRejectAIDetection,
   showAIDetection = true,
+  externalZoom = 1,
+  externalPan = { x: 0, y: 0 },
+  onZoomChange,
+  onPanChange,
 }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -46,11 +51,9 @@ function CanvasOverlay({
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   
-  // Zoom and pan
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isPanning, setIsPanning] = useState(false);
-  const [panStart, setPanStart] = useState(null);
+  // Use external zoom/pan from parent
+  const zoom = externalZoom;
+  const pan = externalPan;
   
   // Layer visibility
   const [showLayers, setShowLayers] = useState({
@@ -563,10 +566,24 @@ function CanvasOverlay({
         <button onClick={handleUndo} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Undo (Ctrl+Z)" disabled={historyIndex <= 0}><FaUndo /></button>
         <button onClick={handleRedo} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Redo (Ctrl+Y)" disabled={historyIndex >= history.length - 1}><FaRedo /></button>
         <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
-        <button onClick={() => setZoom(z => Math.max(0.5, z - 0.2))} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Zoom Out"><FaSearchMinus /></button>
-        <span className="text-xs text-foreground-muted w-10 text-center">{Math.round(zoom * 100)}%</span>
-        <button onClick={() => setZoom(z => Math.min(5, z + 0.2))} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Zoom In"><FaSearchPlus /></button>
-        <button onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Fit to View"><FaExpand /></button>
+        <button onClick={() => onZoomChange?.(Math.max(0.5, externalZoom - 0.2))} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Zoom Out"><FaSearchMinus /></button>
+        <input 
+          type="number" 
+          value={Math.round(externalZoom * 100)} 
+          onChange={(e) => onZoomChange?.(parseInt(e.target.value) / 100)}
+          onBlur={(e) => {
+            const val = parseInt(e.target.value);
+            if (isNaN(val) || val < 50) onZoomChange?.(0.5);
+            else if (val > 500) onZoomChange?.(5);
+          }}
+          className="w-14 text-center text-xs bg-transparent text-foreground-muted focus:outline-none focus:ring-1 focus:ring-primary rounded"
+          min="50"
+          max="500"
+          step="10"
+          title="Zoom percentage"
+        />
+        <button onClick={() => onZoomChange?.(Math.min(5, externalZoom + 0.2))} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Zoom In"><FaSearchPlus /></button>
+        <button onClick={() => { onZoomChange?.(1); onPanChange?.({ x: 0, y: 0 }); }} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary transition-colors" title="Fit to View"><FaExpand /></button>
         <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
         <button onClick={() => setShowLayers(l => ({ ...l, rooms: !l.rooms }))} className={`p-2 rounded-lg transition-colors ${showLayers.rooms ? 'text-blue-500' : 'text-foreground-muted'}`} title="Toggle Rooms"><FaEye /></button>
         <button onClick={() => setShowLayers(l => ({ ...l, doors: !l.doors }))} className={`p-2 rounded-lg transition-colors ${showLayers.doors ? 'text-green-500' : 'text-foreground-muted'}`} title="Toggle Doors"><span className="text-xs">🚪</span></button>
