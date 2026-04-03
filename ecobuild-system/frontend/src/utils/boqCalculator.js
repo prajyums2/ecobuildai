@@ -713,7 +713,7 @@ export function calculatePaintQuantity(area, coats = 2) {
  * @param {Object} rates - Material rates (optional, defaults to FALLBACK_RATES)
  */
 export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections = {}) {
-  const { buildingParams, buildingClassification } = project;
+  const { buildingParams, buildingClassification, bimData } = project;
   
   // Calculate derived quantities
   const builtUpArea = buildingParams?.builtUpArea || 0;
@@ -722,14 +722,35 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const floorHeight = buildingParams?.height || 3.2;
   const buildingHeight = buildingParams?.height || (floorHeight * numFloors);
   
-  // Structure type: auto-detect if not set
+  // Get floor plan data if available
+  const floorPlanData = bimData?.floorPlanData || {};
+  const hasFloorPlan = Object.keys(floorPlanData).length > 0;
+  
+  // Calculate actual totals from floor plan
+  let fpTotalDoors = 0;
+  let fpTotalWindows = 0;
+  let fpTotalRoomArea = 0;
+  
+  if (hasFloorPlan) {
+    Object.values(floorPlanData).forEach(fd => {
+      fpTotalDoors += fd.doors?.length || 0;
+      fpTotalWindows += fd.windows?.length || 0;
+      fpTotalRoomArea += fd.total_built_up_sqm || 0;
+    });
+  }
+  
+  // Structure type: use floor plan detection or default
   let structureType = buildingParams?.structureType;
+  if (!structureType && hasFloorPlan) {
+    const firstFloor = floorPlanData[1];
+    structureType = firstFloor?.structure_type || 'load_bearing';
+  }
   if (!structureType) {
     const buildingType = buildingClassification?.mainUse || 'residential';
     structureType = (buildingType === 'residential' && numFloors <= 2) ? 'load_bearing' : 'framed';
   }
   
-  console.log('[BoQ] Generating with:', { builtUpArea, numFloors, totalArea, structureType });
+  console.log('[BoQ] Generating with:', { builtUpArea, numFloors, totalArea, structureType, hasFloorPlan });
   
   // Per floor footprint (assuming square building for estimation)
   const footprintArea = builtUpArea;
@@ -815,54 +836,66 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                               slabVolume + lintelVolume + sunshadeVolume + parapetVolume + staircaseVolume;
   
   // ===== OPENING CALCULATIONS (Doors, Windows, Ventilators) =====
-  // Standard Kerala residential opening sizes (IS 4362:1967 - Modular Co-ordination)
-  const openingSizes = {
-    mainDoor: { width: 1.0, height: 2.1, area: 2.1 },       // 1000×2100mm
-    internalDoor: { width: 0.8, height: 2.0, area: 1.6 },    // 800×2000mm
-    bathroomDoor: { width: 0.75, height: 2.0, area: 1.5 },   // 750×2000mm
-    window: { width: 1.2, height: 1.2, area: 1.44 },         // 1200×1200mm
-    ventilator: { width: 0.6, height: 0.6, area: 0.36 },     // 600×600mm
-    kitchenWindow: { width: 0.9, height: 0.9, area: 0.81 },  // 900×900mm
-  };
-
-  // Estimate opening counts per floor based on building size
-  // Typical 150 sqm house: 3 bed, 2 bath, 1 living, 1 kitchen, 1 dining = 8 rooms
-  // Typical 200 sqm house: 4 bed, 3 bath, 1 living, 1 kitchen, 1 dining = 10 rooms
-  const roomsPerFloor = footprintArea <= 120 ? 5 : footprintArea <= 180 ? 7 : footprintArea <= 250 ? 9 : 12;
-  const bedrooms = footprintArea <= 120 ? 2 : footprintArea <= 180 ? 3 : footprintArea <= 250 ? 4 : 5;
-  const bathrooms = footprintArea <= 120 ? 1 : footprintArea <= 180 ? 2 : footprintArea <= 250 ? 3 : 4;
-  const windowsPerRoom = 2; // Standard: 2 windows per room
-
-  const openingsPerFloor = {
-    mainDoors: 1,
-    internalDoors: bedrooms + 2, // bedrooms + living + kitchen
-    bathroomDoors: bathrooms,
-    windows: bedrooms * windowsPerRoom + 3, // bedroom windows + living/kitchen/dining windows
-    ventilators: bathrooms + 1, // bathroom + kitchen ventilators
-    kitchenWindows: 1,
-  };
-
-  // Total openings across all floors
-  const totalOpenings = {
-    mainDoors: openingsPerFloor.mainDoors,
-    internalDoors: openingsPerFloor.internalDoors * numFloors,
-    bathroomDoors: openingsPerFloor.bathroomDoors * numFloors,
-    windows: openingsPerFloor.windows * numFloors,
-    ventilators: openingsPerFloor.ventilators * numFloors,
-    kitchenWindows: openingsPerFloor.kitchenWindows * numFloors,
-  };
-
-  // Calculate total opening areas
-  const doorArea = (totalOpenings.mainDoors * openingSizes.mainDoor.area) +
-                   (totalOpenings.internalDoors * openingSizes.internalDoor.area) +
-                   (totalOpenings.bathroomDoors * openingSizes.bathroomDoor.area);
+  // Use floor plan data if available, otherwise estimate
+  let totalDoorArea, totalWindowArea, totalOpenings;
   
-  const windowArea = (totalOpenings.windows * openingSizes.window.area) +
-                     (totalOpenings.ventilators * openingSizes.ventilator.area) +
-                     (totalOpenings.kitchenWindows * openingSizes.kitchenWindow.area);
+  if (hasFloorPlan && fpTotalDoors > 0 && fpTotalWindows > 0) {
+    // Use actual floor plan data
+    totalDoorArea = fpTotalDoors * 1.6; // Average door area ~1.6 sqm
+    totalWindowArea = fpTotalWindows * 1.44; // Average window area ~1.44 sqm
+    totalOpenings = {
+      mainDoors: Math.min(fpTotalDoors, 1),
+      internalDoors: Math.max(0, fpTotalDoors - 1 - (fpTotalWindows > 0 ? 0 : 0)),
+      bathroomDoors: Math.floor(fpTotalDoors * 0.2),
+      windows: fpTotalWindows,
+      ventilators: Math.floor(fpTotalWindows * 0.2),
+      kitchenWindows: Math.min(1, fpTotalWindows),
+    };
+    console.log('[BoQ] Using floor plan data for openings:', totalOpenings);
+  } else {
+    // Standard Kerala residential opening sizes (IS 4362:1967 - Modular Co-ordination)
+    const openingSizes = {
+      mainDoor: { width: 1.0, height: 2.1, area: 2.1 },       // 1000×2100mm
+      internalDoor: { width: 0.8, height: 2.0, area: 1.6 },    // 800×2000mm
+      bathroomDoor: { width: 0.75, height: 2.0, area: 1.5 },   // 750×2000mm
+      window: { width: 1.2, height: 1.2, area: 1.44 },         // 1200×1200mm
+      ventilator: { width: 0.6, height: 0.6, area: 0.36 },     // 600×600mm
+      kitchenWindow: { width: 0.9, height: 0.9, area: 0.81 },  // 900×900mm
+    };
 
-  const totalOpeningArea = doorArea + windowArea;
+    // Estimate opening counts per floor based on building size
+    const roomsPerFloor = footprintArea <= 120 ? 5 : footprintArea <= 180 ? 7 : footprintArea <= 250 ? 9 : 12;
+    const bedrooms = footprintArea <= 120 ? 2 : footprintArea <= 180 ? 3 : footprintArea <= 250 ? 4 : 5;
+    const bathrooms = footprintArea <= 120 ? 1 : footprintArea <= 180 ? 2 : footprintArea <= 250 ? 3 : 4;
+    const windowsPerRoom = 2; // Standard: 2 windows per room
 
+    const openingsPerFloor = {
+      mainDoors: 1,
+      internalDoors: bedrooms + 2, // bedrooms + living + kitchen
+      bathroomDoors: bathrooms,
+      windows: bedrooms * windowsPerRoom + 3, // bedroom windows + living/kitchen/dining windows
+      ventilators: bathrooms + 1, // bathroom + kitchen ventilators
+      kitchenWindows: 1,
+    };
+    
+    totalOpenings = {
+      mainDoors: openingsPerFloor.mainDoors * numFloors,
+      internalDoors: openingsPerFloor.internalDoors * numFloors,
+      bathroomDoors: openingsPerFloor.bathroomDoors * numFloors,
+      windows: openingsPerFloor.windows * numFloors,
+      ventilators: openingsPerFloor.ventilators * numFloors,
+      kitchenWindows: openingsPerFloor.kitchenWindows * numFloors,
+    };
+    
+    totalDoorArea = (totalOpenings.mainDoors * openingSizes.mainDoor.area) +
+                    (totalOpenings.internalDoors * openingSizes.internalDoor.area) +
+                    (totalOpenings.bathroomDoors * openingSizes.bathroomDoor.area);
+    
+    totalWindowArea = (totalOpenings.windows * openingSizes.window.area) +
+                      (totalOpenings.ventilators * openingSizes.ventilator.area) +
+                      (totalOpenings.kitchenWindows * openingSizes.kitchenWindow.area);
+  }
+  
   // Wall area per sqm of floor area
   const wallAreaPerSqm = totalArea <= 300 ? 0.9 :
                          totalArea <= 800 ? 1.2 :
@@ -871,16 +904,19 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const totalWallArea = totalArea * wallAreaPerSqm;
   
   // Net wall area after deducting openings
-  const netWallArea = Math.max(0, totalWallArea - totalOpeningArea);
+  const netWallArea = Math.max(0, totalWallArea - totalDoorArea - totalWindowArea);
 
   // Lintel concrete above openings (150mm deep × 200mm wide, extends 150mm each side)
-  const totalDoorWidth = totalOpenings.mainDoors * openingSizes.mainDoor.width +
-                         totalOpenings.internalDoors * openingSizes.internalDoor.width +
-                         totalOpenings.bathroomDoors * openingSizes.bathroomDoor.width;
-  const totalWindowWidth = totalOpenings.windows * openingSizes.window.width +
-                           totalOpenings.ventilators * openingSizes.ventilator.width +
-                           totalOpenings.kitchenWindows * openingSizes.kitchenWindow.width;
-  const totalLintelLength = (totalDoorWidth + totalWindowWidth) * 1.3; // 30% extra for overlap
+  let totalLintelLength;
+  if (hasFloorPlan && fpTotalDoors > 0) {
+    // Use actual floor plan data
+    totalLintelLength = (fpTotalDoors * 1.0 + fpTotalWindows * 1.2) * 1.3; // 30% extra for overlap
+  } else {
+    // Estimate from opening counts
+    totalLintelLength = (totalOpenings.mainDoors * 1.0 + totalOpenings.internalDoors * 0.8 + 
+                        totalOpenings.bathroomDoors * 0.75 + totalOpenings.windows * 1.2 + 
+                        totalOpenings.ventilators * 0.6 + totalOpenings.kitchenWindows * 0.9) * 1.3;
+  }
   const lintelVolumeOpenings = totalLintelLength * 0.15 * 0.2; // 150mm × 200mm lintel
   // Add to existing lintel volume
   const totalLintelVolume = lintelVolume + lintelVolumeOpenings;
