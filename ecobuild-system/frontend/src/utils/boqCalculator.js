@@ -760,12 +760,12 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
                        11.1;
   
   // Foundation volume — calibrated from real Kerala residential buildings
-  // Load-bearing: strip foundation under walls
+  // Load-bearing: strip foundation under walls (narrower, just below wall)
   // Framed: isolated footings with grade beams
   let foundationVolume, numColumns, footingSize;
   if (structureType === 'load_bearing') {
-    // Strip foundation under load-bearing walls
-    const foundationWidth = 0.8; // 800mm wide strip
+    // Strip foundation under load-bearing walls - just wall thickness + small offset
+    const foundationWidth = 0.4; // 400mm wide (wall 230mm + 85mm each side offset)
     foundationVolume = buildingPerimeter * foundationWidth * foundationDepth;
     numColumns = 0;
     footingSize = 0;
@@ -905,13 +905,29 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const concreteSelection = materialSelections.concrete;
   const masonrySelection = materialSelections.masonry;
   const aggregatesSelection = materialSelections.aggregates;
+  const flooringSelection = materialSelections.flooring;
+  const paintSelection = materialSelections.paint;
+  const doorSelection = materialSelections.door;
+  const windowSelection = materialSelections.window;
 
-  const resolvedCementRate = cementSelection?.rate || rates?.cement?.opc_53?.rate || 420;
-  const resolvedSteelRate = steelSelection?.rate || rates?.steel?.tmt_fe500?.rate || 72;
-  const resolvedConcreteRate = concreteSelection?.rate || rates?.concrete?.m25?.rate || 7200;
-  const resolvedBlockRate = masonrySelection?.rate || rates?.blocks?.aac_200?.rate || 78;
-  const resolvedSandRate = aggregatesSelection?.rate || rates?.aggregate?.msand?.rate || 58;
-  const resolvedAggregateRate = aggregatesSelection?.rate || rates?.aggregate?.aggregate_20mm?.rate || 42;
+  const resolvedCementRate = cementSelection?.rate || 420;
+  const resolvedSteelRate = steelSelection?.rate || 68;
+  const resolvedConcreteRate = concreteSelection?.rate || 5500;
+  const resolvedBlockRate = masonrySelection?.rate || 40;
+  const resolvedSandRate = aggregatesSelection?.rate || 58;
+  const resolvedAggregateRate = aggregatesSelection?.rate || 42;
+  const resolvedFlooringRate = flooringSelection?.rate || 140;
+  const resolvedPaintRate = paintSelection?.rate || 305;
+  const resolvedDoorRate = doorSelection?.rate || 8500;
+  const resolvedWindowRate = windowSelection?.rate || 550;
+  
+  console.log('[BoQ] Resolved rates from optimizer:', {
+    cement: resolvedCementRate,
+    steel: resolvedSteelRate,
+    concrete: resolvedConcreteRate,
+    masonry: resolvedBlockRate,
+    aggregates: resolvedAggregateRate
+  });
   
   // Total plaster area (already calculated above with opening deductions)
   const totalPlasterArea = internalPlasterArea + externalPlasterArea;
@@ -1257,18 +1273,35 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     subTotal: 0,
   };
   
-  // AAC Blocks
-  const blockWastage = (rates?.blocks?.aac_blocks_600x200x200?.wastage || 0.05);
-  const blockSize = '600x200x200';
-  const masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
+  // Use optimizer-selected masonry material
+  const masonryUnit = masonrySelection?.unit || 'nos';
+  const masonryName = masonrySelection?.name || 'AAC blocks';
+  const masonryDesc = masonrySelection?.description || 'blocks in CM 1:4';
+  const blockWastage = 0.05;
+  
+  // Calculate quantity based on unit type
+  let masonryQuantity;
+  if (masonryUnit === 'cft' || masonryUnit === 'cum') {
+    // For stone/laterite masonry, use volume
+    const wallThickness = 0.23; // 230mm wall
+    masonryQuantity = netWallArea * wallThickness;
+    if (masonryUnit === 'cft') {
+      masonryQuantity = masonryQuantity * 35.315; // cum to cft
+    }
+  } else {
+    // For blocks/bricks, use count
+    const blockSize = '600x200x200';
+    const masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
+    masonryQuantity = masonryQty.blocks;
+  }
   
   addBoQItem(masonryWork, {
     sno: 1,
-    description: 'Providing and laying AAC blocks of size 600x200x200mm in CM 1:4 including curing',
-    quantity: applyWastage(masonryQty.blocks, blockWastage),
-    unit: 'nos',
+    description: `Providing and laying ${masonryName} in CM 1:4 including curing`,
+    quantity: applyWastage(masonryQuantity, blockWastage),
+    unit: masonryUnit,
     rate: resolvedBlockRate,
-    remarks: `Raw: ${masonryQty.blocks} nos + ${(blockWastage * 100).toFixed(0)}% breakage`,
+    remarks: `Raw: ${Math.round(masonryQuantity)} ${masonryUnit} + ${(blockWastage * 100).toFixed(0)}% wastage`,
   });
   
   // Mortar for masonry

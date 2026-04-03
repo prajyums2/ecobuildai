@@ -804,24 +804,12 @@ function MaterialSummaryTab({ boq, project }) {
 
     const selectedMats = getMaterialSelections();
     
-    // Helper to resolve rate: optimizer selection > BoQ item rate > fallback
-    const resolveRate = (category, fallback, boqCatName) => {
-      if (selectedMats[category]?.rate) return selectedMats[category].rate;
-      if (boq && boq.categories) {
-        const cat = boq.categories.find(c => c.name === boqCatName);
-        if (cat?.items?.length > 0) {
-          return Math.round(cat.items[0].rate);
-        }
-      }
-      return fallback;
-    };
-    
     const materials = {
       cement: {
         name: selectedMats.cement?.name || "Cement",
         unit: selectedMats.cement?.unit || "bags",
         qty: 0,
-        rate: resolveRate('cement', 370, 'Concrete Work'),
+        rate: selectedMats.cement?.rate || 370,
         supplier: findSupplier(["cement", "ppc", "opc", "ultratech", "acc"]),
         category: "Cement",
       },
@@ -829,15 +817,15 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.steel?.name || "TMT Steel Bars",
         unit: selectedMats.steel?.unit || "kg",
         qty: 0,
-        rate: resolveRate('steel', 72, 'Reinforcement Steel'),
+        rate: selectedMats.steel?.rate || 68,
         supplier: findSupplier(["steel", "tmt", "tata", "jsw"]),
         category: "Steel",
       },
       concrete: {
-        name: selectedMats.concrete?.name || "Ready Mix Concrete",
+        name: selectedMats.concrete?.name || "Concrete",
         unit: selectedMats.concrete?.unit || "cum",
         qty: 0,
-        rate: resolveRate('concrete', 5500, 'Concrete Work'),
+        rate: selectedMats.concrete?.rate || 5500,
         supplier: findSupplier(["concrete", "rmc", "ready mix"]),
         category: "Concrete",
       },
@@ -845,7 +833,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.masonry?.name || "Blocks/Bricks",
         unit: selectedMats.masonry?.unit || "nos",
         qty: 0,
-        rate: resolveRate('masonry', 52, 'Masonry Work'),
+        rate: selectedMats.masonry?.rate || 40,
         supplier: findSupplier(["block", "brick", "aac", "fly ash"]),
         category: "Masonry",
       },
@@ -853,7 +841,7 @@ function MaterialSummaryTab({ boq, project }) {
         name: selectedMats.aggregates?.name || "Aggregates",
         unit: selectedMats.aggregates?.unit || "cft",
         qty: 0,
-        rate: resolveRate('aggregates', 42, 'Concrete Work'),
+        rate: selectedMats.aggregates?.rate || 42,
         supplier: findSupplier(["aggregate", "sand", "m-sand"]),
         category: "Aggregates",
       },
