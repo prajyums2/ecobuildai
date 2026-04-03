@@ -853,10 +853,10 @@ function MaterialSummaryTab({ boq, project }) {
       const catName = category.name?.toLowerCase() || "";
       
       category.items.forEach((item) => {
-        const desc = item.description?.toLowerCase() || "";
         const remarks = item.remarks?.toLowerCase() || "";
+        const quantity = parseFloat(item.quantity) || 0;
         
-        // Cement bags from remarks
+        // Cement bags from remarks (concrete + plastering + masonry)
         const cementMatch = remarks.match(/cement:\s*([\d,.]+)\s*bags/i);
         if (cementMatch) {
           materials.cement.qty += parseFloat(cementMatch[1].replace(/,/g, "")) || 0;
@@ -873,19 +873,19 @@ function MaterialSummaryTab({ boq, project }) {
           materials.aggregates.qty += parseFloat(aggMatch[1].replace(/,/g, "")) || 0;
         }
         
-        // Steel from reinforcement category
-        if (catName.includes("steel") && item.unit === "kg") {
-          materials.steel.qty += parseFloat(item.quantity) || 0;
+        // Steel from reinforcement category (all items in kg, exclude binding wire and cover blocks)
+        if (catName.includes("steel") && item.unit === "kg" && !item.description?.toLowerCase().includes("binding wire") && !item.description?.toLowerCase().includes("cover block")) {
+          materials.steel.qty += quantity;
         }
         
-        // Concrete volume from concrete work
+        // Concrete volume from concrete work (all items in cum)
         if (catName.includes("concrete") && item.unit === "cum") {
-          totalConcreteCum += parseFloat(item.quantity) || 0;
+          totalConcreteCum += quantity;
         }
         
-        // Blocks from masonry
-        if (catName.includes("masonry") && desc.includes("block") && item.unit === "nos") {
-          materials.masonry.qty += parseFloat(item.quantity) || 0;
+        // Masonry from Masonry Work category (first item is blocks/bricks)
+        if (catName.includes("masonry") && item.sno === 1) {
+          materials.masonry.qty += quantity;
         }
       });
     });
@@ -902,7 +902,9 @@ function MaterialSummaryTab({ boq, project }) {
   };
 
   const materials = useMemo(() => extractMaterials(), [boq, project?.materialSelections]);
-  const materialList = Object.values(materials).filter((m) => m.qty > 0);
+  // Show ALL 5 categories, not just those with qty > 0
+  const materialList = Object.values(materials);
+  const materialListWithQty = materialList.filter((m) => m.qty > 0);
   const totalMaterialCost = materialList.reduce((sum, m) => sum + (m.qty * m.rate), 0);
 
   if (!boq || !boq.categories) {
@@ -937,7 +939,7 @@ function MaterialSummaryTab({ boq, project }) {
             <span className="text-sm text-blue-100">Total Materials</span>
           </div>
           <p className="text-2xl font-bold">{materialList.length}</p>
-          <p className="text-xs text-blue-100 mt-1">From optimizer selections</p>
+          <p className="text-xs text-blue-100 mt-1">{materialListWithQty.length} with quantities</p>
         </div>
         <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-5 shadow-lg">
           <div className="flex items-center gap-3 mb-3">
@@ -964,10 +966,11 @@ function MaterialSummaryTab({ boq, project }) {
           const colors = categoryColors[catKey] || categoryColors.cement;
           const Icon = getCategoryIcon(catKey);
           const amount = mat.qty * mat.rate;
-          const pctOfTotal = ((amount / totalMaterialCost) * 100).toFixed(1);
+          const pctOfTotal = totalMaterialCost > 0 ? ((amount / totalMaterialCost) * 100).toFixed(1) : '0.0';
+          const hasQty = mat.qty > 0;
 
           return (
-            <div key={idx} className={`bg-white dark:bg-gray-800 rounded-xl shadow-md border ${colors.border} overflow-hidden hover:shadow-lg transition-shadow`}>
+            <div key={idx} className={`bg-white dark:bg-gray-800 rounded-xl shadow-md border ${colors.border} overflow-hidden hover:shadow-lg transition-shadow ${!hasQty ? 'opacity-60' : ''}`}>
               <div className={`bg-gradient-to-r ${colors.bg} p-4`}>
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-white/20 rounded-lg text-white"><Icon className="text-lg" /></div>

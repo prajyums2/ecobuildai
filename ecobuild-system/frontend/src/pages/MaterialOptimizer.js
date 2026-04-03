@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProject } from '../context/ProjectContext';
 import { ecoBuildAPI } from '../services/api';
-import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar, FaRecycle, FaBolt, FaShieldAlt, FaFire, FaTint, FaThermometerHalf, FaBuilding, FaIndustry, FaHammer } from 'react-icons/fa';
+import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar, FaRecycle, FaBolt, FaShieldAlt, FaFire, FaTint, FaThermometerHalf, FaBuilding, FaIndustry, FaHammer, FaMagic, FaLightbulb, FaTruck, FaCubes, FaLayerGroup } from 'react-icons/fa';
 
 const OPTIMIZATION_MODES = [
   { id: 'sustainability', label: 'Sustainability', description: '70% eco-weight', icon: FaLeaf },
@@ -16,15 +16,110 @@ const AHP_WEIGHT_PROFILES = {
   balanced: { cost: 0.33, strength: 0.34, sustainability: 0.33 },
 };
 
-const ESSENTIAL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates'];
+const ALL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates'];
 
+// Category metadata for professional UI
 const CATEGORY_CONFIG = {
-  cement: { icon: FaBuilding, color: 'amber', label: 'Cement' },
-  steel: { icon: FaHammer, color: 'slate', label: 'Steel' },
-  concrete: { icon: FaBuilding, color: 'blue', label: 'Concrete' },
-  masonry: { icon: FaIndustry, color: 'orange', label: 'Masonry' },
-  aggregates: { icon: FaTint, color: 'teal', label: 'Aggregates' },
+  cement: { 
+    icon: FaBuilding, 
+    color: 'amber', 
+    label: 'Cement',
+    description: 'Binding agent for concrete, mortar, plaster',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'hybrid'],
+  },
+  steel: { 
+    icon: FaHammer, 
+    color: 'slate', 
+    label: 'Steel',
+    description: 'Reinforcement bars for RCC elements',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  concrete: { 
+    icon: FaCubes, 
+    color: 'blue', 
+    label: 'Ready-Mix Concrete',
+    description: 'Factory-produced concrete delivered to site',
+    purchaseType: 'direct',
+    applicableMethods: ['rmc', 'hybrid'],
+  },
+  masonry: { 
+    icon: FaIndustry, 
+    color: 'orange', 
+    label: 'Masonry Units',
+    description: 'Blocks, bricks, or stone for walls',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  aggregates: { 
+    icon: FaTint, 
+    color: 'teal', 
+    label: 'Aggregates',
+    description: 'Sand, stone, and recycled aggregates',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'hybrid'],
+  },
 };
+
+// Smart category recommendations based on project parameters
+function getRecommendedCategories(buildingParams) {
+  const floors = buildingParams?.numFloors || 1;
+  const area = buildingParams?.builtUpArea || 0;
+  const structureType = buildingParams?.structureType || 'load_bearing';
+  const buildingType = buildingParams?.buildingType || 'residential';
+  
+  // Determine construction method
+  let constructionMethod;
+  if (floors >= 4 || area > 500 || structureType === 'framed') {
+    constructionMethod = 'rmc';
+  } else if (floors <= 2 && structureType === 'load_bearing') {
+    constructionMethod = 'site-mix';
+  } else {
+    constructionMethod = 'hybrid';
+  }
+  
+  // Recommend categories based on construction method
+  const recommendations = {};
+  
+  ALL_CATEGORIES.forEach(cat => {
+    const config = CATEGORY_CONFIG[cat];
+    const isApplicable = config.applicableMethods.includes(constructionMethod);
+    
+    // Steel and masonry are always recommended
+    if (cat === 'steel' || cat === 'masonry') {
+      recommendations[cat] = { recommended: true, priority: 'high', reason: 'Essential for all construction types' };
+    }
+    // For site-mix: cement + aggregates, not RMC
+    else if (constructionMethod === 'site-mix' && (cat === 'cement' || cat === 'aggregates')) {
+      recommendations[cat] = { recommended: true, priority: 'high', reason: 'Required for on-site concrete mixing' };
+    }
+    // For RMC: concrete, not cement/aggregates
+    else if (constructionMethod === 'rmc' && cat === 'concrete') {
+      recommendations[cat] = { recommended: true, priority: 'high', reason: 'Ready-mix concrete is economical for large projects' };
+    }
+    // For hybrid: all categories
+    else if (constructionMethod === 'hybrid') {
+      recommendations[cat] = { recommended: true, priority: cat === 'concrete' ? 'medium' : 'high', reason: 'Hybrid construction uses both methods' };
+    }
+    // Not recommended
+    else {
+      recommendations[cat] = { recommended: false, priority: 'low', reason: getNotRecommendedReason(cat, constructionMethod) };
+    }
+  });
+  
+  return { recommendations, constructionMethod };
+}
+
+function getNotRecommendedReason(category, method) {
+  if (method === 'site-mix' && category === 'concrete') {
+    return 'RMC is uneconomical for small projects; use site-mix instead';
+  }
+  if (method === 'rmc' && (category === 'cement' || category === 'aggregates')) {
+    return 'Materials are included in RMC price; separate purchase not needed';
+  }
+  return 'Not applicable for this construction type';
+}
 
 function MaterialOptimizer() {
   const navigate = useNavigate();
@@ -32,18 +127,34 @@ function MaterialOptimizer() {
   const [mode, setMode] = useState('balanced');
   const [dbMaterials, setDbMaterials] = useState({});
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState(ESSENTIAL_CATEGORIES);
+  const [selectedCategories, setSelectedCategories] = useState(ALL_CATEGORIES);
   const [selectedMaterials, setSelectedMaterials] = useState({});
   const [loading, setLoading] = useState(true);
   const [optimizing, setOptimizing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [ahpMode, setAhpMode] = useState('simple');
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'table'
+  const [viewMode, setViewMode] = useState('cards');
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [showRecommendation, setShowRecommendation] = useState(true);
+
+  // Smart category recommendations
+  const { recommendations, constructionMethod } = useMemo(
+    () => getRecommendedCategories(project?.buildingParams || {}),
+    [project?.buildingParams]
+  );
+
+  const constructionMethodLabel = {
+    'site-mix': 'Site-Mix Construction',
+    'rmc': 'Ready-Mix Concrete',
+    'hybrid': 'Hybrid Construction',
+  }[constructionMethod] || 'Standard Construction';
 
   useEffect(() => {
     fetchMaterialsFromDB();
+    // Auto-select recommended categories
+    const recommendedCats = ALL_CATEGORIES.filter(cat => recommendations[cat]?.recommended);
+    setSelectedCategories(recommendedCats);
   }, []);
 
   const fetchMaterialsFromDB = async () => {
@@ -55,7 +166,7 @@ function MaterialOptimizer() {
       const grouped = {};
       mats.forEach(mat => {
         const cat = (mat.category || 'other').toLowerCase();
-        if (!ESSENTIAL_CATEGORIES.includes(cat)) return;
+        if (!ALL_CATEGORIES.includes(cat)) return;
 
         if (!grouped[cat]) grouped[cat] = [];
 
@@ -82,9 +193,7 @@ function MaterialOptimizer() {
       });
 
       setDbMaterials(grouped);
-      const availableCats = Object.keys(grouped).filter(cat => grouped[cat].length > 0);
-      setCategories(availableCats);
-      setSelectedCategories(availableCats);
+      setCategories(ALL_CATEGORIES.filter(cat => grouped[cat]?.length > 0));
     } catch (err) {
       console.error('Failed to fetch materials:', err);
       setError('Failed to load materials from database');
@@ -274,34 +383,116 @@ function MaterialOptimizer() {
         </div>
       </div>
 
+      {/* Construction Method Banner */}
+      {showRecommendation && (
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                <FaMagic className="text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  Smart Recommendations
+                  <span className="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full">
+                    {constructionMethodLabel}
+                  </span>
+                </h3>
+                <p className="text-sm text-foreground-secondary mt-1">
+                  {constructionMethod === 'site-mix' 
+                    ? 'For your 2-floor load-bearing design, we recommend optimizing materials for on-site mixing. Ready-mix concrete is uneconomical at this scale.'
+                    : constructionMethod === 'rmc'
+                    ? 'For your multi-story design, ready-mix concrete is recommended for quality and efficiency. Site-mix materials are included in RMC pricing.'
+                    : 'Your project benefits from both site-mix and ready-mix methods. We recommend optimizing all material categories.'}
+                </p>
+              </div>
+            </div>
+            <button onClick={() => setShowRecommendation(false)} className="text-foreground-secondary hover:text-foreground p-1">
+              <FaArrowRight className="text-sm" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Category Selection */}
       <div className="card">
-        <div className="card-header">
-          <h3 className="font-semibold text-foreground">Material Categories</h3>
+        <div className="card-header flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-foreground">Material Categories</h3>
+            <p className="text-xs text-foreground-secondary mt-0.5">
+              {selectedCategories.length} of {categories.length} selected for optimization
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                const recommended = categories.filter(cat => recommendations[cat]?.recommended);
+                setSelectedCategories(recommended);
+              }}
+              className="text-xs px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex items-center gap-1"
+            >
+              <FaLightbulb className="text-[10px]" /> Auto-Select Recommended
+            </button>
+            <button
+              onClick={() => setSelectedCategories(categories)}
+              className="text-xs px-3 py-1.5 bg-gray-50 dark:bg-gray-700 text-foreground-secondary rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              Select All
+            </button>
+          </div>
         </div>
         <div className="card-body">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {categories.map((catId) => {
               const catConfig = CATEGORY_CONFIG[catId] || { icon: FaBuilding, color: 'gray', label: catId };
               const Icon = catConfig.icon;
               const isSelected = selectedCategories.includes(catId);
+              const rec = recommendations[catId] || {};
               const matCount = dbMaterials[catId]?.length || 0;
+              
               return (
                 <button
                   key={catId}
                   onClick={() => setSelectedCategories(prev =>
                     prev.includes(catId) ? prev.filter(id => id !== catId) : [...prev, catId]
                   )}
-                  className={`p-3 rounded-lg border-2 transition-all text-left ${isSelected ? 'border-primary bg-primary-bg' : 'border-border hover:border-primary/50'}`}
+                  className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                    isSelected 
+                      ? rec.priority === 'high' 
+                        ? 'border-primary bg-primary-bg shadow-sm' 
+                        : 'border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 opacity-60 hover:opacity-80'
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <Icon className="text-primary" />
-                      <span className="font-medium text-foreground text-sm capitalize">{catConfig.label}</span>
+                  {/* Recommendation Badge */}
+                  {rec.recommended && (
+                    <span className={`absolute -top-2 -right-2 text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                      rec.priority === 'high' 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-yellow-500 text-white'
+                    }`}>
+                      Recommended
+                    </span>
+                  )}
+                  
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`p-2 rounded-lg ${
+                      isSelected ? 'bg-primary/20 text-primary' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
+                    }`}>
+                      <Icon className="text-sm" />
                     </div>
-                    {isSelected && <FaCheck className="text-primary text-xs" />}
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-foreground text-sm block truncate">{catConfig.label}</span>
+                      <span className="text-xs text-foreground-secondary">{matCount} materials</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-foreground-secondary">{matCount} materials</p>
+                  
+                  {isSelected && (
+                    <div className="flex items-center gap-1 mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <FaCheck className="text-primary text-xs" />
+                      <span className="text-xs text-foreground-muted truncate">{catConfig.description}</span>
+                    </div>
+                  )}
                 </button>
               );
             })}
