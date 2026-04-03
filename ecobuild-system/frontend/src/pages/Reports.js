@@ -61,7 +61,7 @@ import {
 // ============================================
 
 // Calculate GRIHA score based on project parameters
-function calculateGRIHAScore(project, boqCarbon) {
+function calculateGRIHAScore(project, boqCarbon, materialSelections) {
   let score = 0;
 
   const hasRWH = project.buildingParams?.hasRainwaterHarvesting;
@@ -104,7 +104,7 @@ function calculateGRIHAScore(project, boqCarbon) {
 }
 
 // Calculate IGBC score based on project parameters
-function calculateIGBCScore(project, boqCarbon) {
+function calculateIGBCScore(project, boqCarbon, materialSelections) {
   let score = 0;
 
   const plotArea = project.buildingParams?.plotArea || 200;
@@ -1377,12 +1377,12 @@ function Reports() {
 
   // Calculate GRIHA/IGBC scores
   const grihaScore = useMemo(
-    () => calculateGRIHAScore(project, embodiedCarbon.total),
-    [project, embodiedCarbon.total],
+    () => calculateGRIHAScore(project, embodiedCarbon.total, materialSelections),
+    [project, embodiedCarbon.total, materialSelections],
   );
   const igbcScore = useMemo(
-    () => calculateIGBCScore(project, embodiedCarbon.total),
-    [project, embodiedCarbon.total],
+    () => calculateIGBCScore(project, embodiedCarbon.total, materialSelections),
+    [project, embodiedCarbon.total, materialSelections],
   );
 
   const grihaRating = getGRIHARating(grihaScore);
