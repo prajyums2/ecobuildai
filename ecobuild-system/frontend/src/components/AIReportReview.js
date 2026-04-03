@@ -8,17 +8,27 @@ function AIReportReview({ boq, project, materialSelections, onApplyChanges }) {
   const [appliedIds, setAppliedIds] = useState(new Set());
   const [rejectedIds, setRejectedIds] = useState(new Set());
   const [error, setError] = useState(null);
+  const hasAnalyzed = React.useRef(false);
 
   useEffect(() => {
-    if (!boq) return;
+    if (!boq || hasAnalyzed.current) return;
+    hasAnalyzed.current = true;
     analyzeReport();
-  }, [boq]);
+  }, []);
+
+  const handleRefresh = () => {
+    hasAnalyzed.current = false;
+    setAppliedIds(new Set());
+    setRejectedIds(new Set());
+    analyzeReport();
+  };
 
   const analyzeReport = async () => {
     setLoading(true);
     setSuggestions([]);
     setAppliedIds(new Set());
     setRejectedIds(new Set());
+    hasAnalyzed.current = true;
 
     const prompt = `You are an expert construction cost consultant and quantity surveyor analyzing a BoQ for a project in Kerala, India.
 
@@ -168,7 +178,11 @@ Include at least 5-10 suggestions across different categories.`;
               <p className="text-sm text-foreground-secondary">{suggestions.length} suggestions found</p>
             </div>
           </div>
-          {pendingCount > 0 && (
+          <div className="flex items-center gap-2">
+            <button onClick={handleRefresh} className="btn btn-outline text-sm" title="Re-analyze report">
+              <FaSyncAlt className="mr-1" /> Refresh
+            </button>
+            {pendingCount > 0 && (
             <div className="flex gap-2">
               <button onClick={handleApplyAll} className="btn btn-primary text-sm">
                 <FaCheck className="mr-1" /> Apply All ({pendingCount})
