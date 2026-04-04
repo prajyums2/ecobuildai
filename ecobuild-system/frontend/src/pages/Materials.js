@@ -43,16 +43,18 @@ import {
 } from "react-icons/fa";
 
 const MATERIAL_CATEGORIES = [
-  { id: "Concrete", label: "Concrete & RCC" },
-  { id: "Cement", label: "Cement & Binders" },
-  { id: "Steel", label: "Steel & Reinforcement" },
-  { id: "Blocks/Bricks", label: "Blocks & Bricks" },
-  { id: "Aggregates", label: "Aggregates & Sand" },
-  { id: "Masonry", label: "Masonry Systems" },
-  { id: "Flooring", label: "Flooring & Tiles" },
-  { id: "Timber", label: "Timber & Wood" },
-  { id: "Hardwood", label: "Hardwood" },
-  { id: "Softwood", label: "Softwood" },
+  { id: "cement", label: "Cement" },
+  { id: "steel", label: "Steel" },
+  { id: "concrete", label: "Concrete" },
+  { id: "masonry", label: "Masonry" },
+  { id: "aggregates", label: "Aggregates" },
+  { id: "mortar", label: "Mortar" },
+  { id: "flooring", label: "Flooring" },
+  { id: "finish", label: "Finishes" },
+  { id: "door", label: "Doors" },
+  { id: "window", label: "Windows" },
+  { id: "timber", label: "Timber" },
+  { id: "plumbing", label: "Plumbing" },
 ];
 
 const UNIT_TYPES = [

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProject } from '../context/ProjectContext';
 import { ecoBuildAPI } from '../services/api';
-import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar, FaRecycle, FaBolt, FaShieldAlt, FaFire, FaTint, FaThermometerHalf, FaBuilding, FaIndustry, FaHammer, FaMagic, FaLightbulb, FaTruck, FaCubes, FaLayerGroup } from 'react-icons/fa';
+import { FaSearch, FaLeaf, FaArrowRight, FaSpinner, FaCheck, FaInfoCircle, FaChartBar, FaStar, FaRecycle, FaBolt, FaShieldAlt, FaFire, FaTint, FaThermometerHalf, FaBuilding, FaIndustry, FaHammer, FaMagic, FaLightbulb, FaTruck, FaCubes, FaLayerGroup, FaPaintRoller, FaDoorOpen, FaWindowMaximize, FaTree, FaFaucet } from 'react-icons/fa';
 
 const OPTIMIZATION_MODES = [
   { id: 'sustainability', label: 'Sustainability', description: '70% eco-weight', icon: FaLeaf },
@@ -16,7 +16,7 @@ const AHP_WEIGHT_PROFILES = {
   balanced: { cost: 0.33, strength: 0.34, sustainability: 0.33 },
 };
 
-const ALL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates'];
+const ALL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates', 'mortar', 'flooring', 'finish', 'door', 'window', 'timber', 'plumbing'];
 
 // Category metadata for professional UI
 const CATEGORY_CONFIG = {
@@ -59,6 +59,62 @@ const CATEGORY_CONFIG = {
     description: 'Sand, stone, and recycled aggregates',
     purchaseType: 'direct',
     applicableMethods: ['site-mix', 'hybrid'],
+  },
+  mortar: {
+    icon: FaTint,
+    color: 'gray',
+    label: 'Mortar',
+    description: 'Cement mortar for plastering and masonry',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'hybrid'],
+  },
+  flooring: {
+    icon: FaLayerGroup,
+    color: 'purple',
+    label: 'Flooring',
+    description: 'Tiles, marble, granite, and other flooring',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  finish: {
+    icon: FaPaintRoller,
+    color: 'pink',
+    label: 'Finishes',
+    description: 'Paint, waterproofing, and adhesives',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  door: {
+    icon: FaDoorOpen,
+    color: 'brown',
+    label: 'Doors',
+    description: 'Interior and exterior doors',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  window: {
+    icon: FaWindowMaximize,
+    color: 'cyan',
+    label: 'Windows',
+    description: 'UPVC, aluminium, and wood windows',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  timber: {
+    icon: FaTree,
+    color: 'green',
+    label: 'Timber',
+    description: 'Wood, plywood, and engineered wood',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
+  },
+  plumbing: {
+    icon: FaFaucet,
+    color: 'blue',
+    label: 'Plumbing',
+    description: 'Pipes, fittings, and sanitary fixtures',
+    purchaseType: 'direct',
+    applicableMethods: ['site-mix', 'rmc', 'hybrid'],
   },
 };
 

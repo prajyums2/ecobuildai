@@ -1486,7 +1486,7 @@ MATERIALS_DATA = [
     # ========================================================================
     {
         "name": "Cement Mortar CM 1:4",
-        "category": "masonry",
+        "category": "mortar",
         "subcategory": "Cement Mortar",
         "description": "Cement mortar 1:4 ratio for plastering and pointing",
         "financial_properties": {
@@ -1536,7 +1536,7 @@ MATERIALS_DATA = [
     },
     {
         "name": "Cement Mortar CM 1:6",
-        "category": "masonry",
+        "category": "mortar",
         "subcategory": "Cement Mortar",
         "description": "Cement mortar 1:6 ratio for masonry work",
         "financial_properties": {
@@ -2146,7 +2146,7 @@ MATERIALS_DATA = [
     },
     {
         "name": "UPVC Window System",
-        "category": "door",
+        "category": "window",
         "subcategory": "UPVC Doors/Windows",
         "description": "White UPVC sliding windows with glass, energy efficient",
         "financial_properties": {
@@ -2920,7 +2920,7 @@ MATERIALS_DATA = [
     # IS 1172:1993 - Water Supply Requirements
     {
         "name": "HDPE Water Supply Pipes (IS 4984)",
-        "category": "finish",
+        "category": "plumbing",
         "subcategory": "Plumbing Pipes",
         "description": "HDPE pipes for potable water supply, IS 4984:2016 compliant",
         "financial_properties": {
