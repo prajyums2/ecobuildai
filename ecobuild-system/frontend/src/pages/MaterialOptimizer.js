@@ -16,7 +16,7 @@ const AHP_WEIGHT_PROFILES = {
   balanced: { cost: 0.33, strength: 0.34, sustainability: 0.33 },
 };
 
-const ALL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates', 'mortar', 'flooring', 'finish', 'door', 'window', 'timber', 'plumbing'];
+const ALL_CATEGORIES = ['cement', 'steel', 'concrete', 'masonry', 'aggregates'];
 
 // Category metadata for professional UI
 const CATEGORY_CONFIG = {

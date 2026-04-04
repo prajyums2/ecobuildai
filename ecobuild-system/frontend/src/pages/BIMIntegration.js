@@ -39,10 +39,11 @@ function BIMIntegration() {
   const [calibration, setCalibration] = useState({});
   const [canvasMode, setCanvasMode] = useState('calibrate');
   const [imageDimensions, setImageDimensions] = useState(null);
-  const [aiDetectedData, setAiDetectedData] = useState(null);
-  const [showAIDetection, setShowAIDetection] = useState(true);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzingFloor, setAnalyzingFloor] = useState(null);
+  const [error, setError] = useState(null);
   const imageRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -93,15 +94,22 @@ function BIMIntegration() {
       const result = await analyzeFloorPlanVision(dataUrl, floorNum);
       const validated = validateFloorPlanData(result);
       
-      // Store AI detected data separately for overlay display
+      // AI detection: immediately draw elements on canvas (industry standard: immediate editable results)
       if (validated.rooms?.length > 0) {
-        setAiDetectedData({
-          rooms: validated.rooms,
-          doors: validated.doors || [],
-          windows: validated.windows || [],
-          walls: validated.walls || {},
-        });
-        setShowAIDetection(true);
+        setFloorData(prev => ({
+          ...prev,
+          [floorNum]: {
+            ...prev[floorNum],
+            rooms: validated.rooms || [],
+            doors: validated.doors || [],
+            windows: validated.windows || [],
+            walls: validated.walls || prev[floorNum]?.walls || {},
+            structure_type: validated.structure_type || prev[floorNum]?.structure_type,
+            total_built_up_sqm: validated.total_built_up_sqm || 0,
+            confidence: validated.confidence || 0,
+            notes: validated.notes || '',
+          }
+        }));
       }
       
       // Auto-detect structure type from first floor
@@ -249,6 +257,7 @@ function BIMIntegration() {
               {/* Upload Area / Image Display */}
               {floorUrls[activeFloor] ? (
                 <div className="relative" ref={containerRef} style={{ overflow: 'hidden', minHeight: '400px' }}>
+                  {/* Zoomed content: image + canvas only */}
                   <div 
                     className="transition-transform duration-100 ease-out origin-top-left"
                     style={{ 
@@ -304,32 +313,13 @@ function BIMIntegration() {
                               [activeFloor]: { ...prev[activeFloor], walls: newWalls }
                             }));
                           }}
-                        mode={canvasMode}
-                        onModeChange={setCanvasMode}
-                        aiDetectedData={showAIDetection ? aiDetectedData : null}
-                        showAIDetection={showAIDetection}
-                        onAcceptAIDetection={() => {
-                          if (aiDetectedData) {
-                            setFloorData(prev => ({
-                              ...prev,
-                              [activeFloor]: {
-                                ...prev[activeFloor],
-                                rooms: aiDetectedData.rooms || [],
-                                doors: aiDetectedData.doors || [],
-                                windows: aiDetectedData.windows || [],
-                                walls: aiDetectedData.walls || prev[activeFloor]?.walls || {},
-                                total_built_up_sqm: aiDetectedData.rooms?.reduce((s, r) => s + (r.area_sqm || 0), 0) || 0,
-                              }
-                            }));
-                          }
-                          setShowAIDetection(false);
-                        }}
-                        onRejectAIDetection={() => setShowAIDetection(false)}
-                        externalZoom={zoom}
-                        externalPan={pan}
-                        onZoomChange={setZoom}
-                        onPanChange={setPan}
-                      />
+                          mode={canvasMode}
+                          onModeChange={setCanvasMode}
+                          externalZoom={zoom}
+                          externalPan={pan}
+                          onZoomChange={setZoom}
+                          onPanChange={setPan}
+                        />
                       </div>
                     )}
                   </div>

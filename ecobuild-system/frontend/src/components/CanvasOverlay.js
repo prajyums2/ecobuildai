@@ -24,10 +24,6 @@ function CanvasOverlay({
   mode = 'select',
   onModeChange,
   imageDimensions,
-  aiDetectedData = null,
-  onAcceptAIDetection,
-  onRejectAIDetection,
-  showAIDetection = true,
   externalZoom = 1,
   externalPan = { x: 0, y: 0 },
   onZoomChange,
@@ -63,7 +59,6 @@ function CanvasOverlay({
     doors: true,
     windows: true,
     walls: true,
-    aiDetection: true,
   });
 
   const canvas = canvasRef.current;
@@ -154,25 +149,6 @@ function CanvasOverlay({
 
     const w = imageDimensions?.width || 0;
     const h = imageDimensions?.height || 0;
-
-    // Draw AI detection overlay (semi-transparent)
-    if (showAIDetection && showLayers.aiDetection && aiDetectedData?.rooms?.length > 0) {
-      aiDetectedData.rooms.forEach((room, idx) => {
-        if (room.corners && room.corners.length >= 2) {
-          ctx.beginPath();
-          ctx.moveTo(room.corners[0].x, room.corners[0].y);
-          room.corners.forEach(c => ctx.lineTo(c.x, c.y));
-          ctx.closePath();
-          ctx.fillStyle = 'rgba(139, 92, 246, 0.15)';
-          ctx.fill();
-          ctx.strokeStyle = '#8B5CF6';
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([4, 4]);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
-      });
-    }
 
     // Draw calibration points
     if (mode === 'calibrate') {
@@ -340,7 +316,7 @@ function CanvasOverlay({
     }
 
     ctx.restore();
-  }, [ctx, canvas, rooms, doors, windows, calibration, drawStart, drawCurrent, calibPoint1, calibPoint2, isDrawing, mode, selectedElement, pixelsToMeters, zoom, pan, showLayers, aiDetectedData, showAIDetection, imageDimensions]);
+  }, [ctx, canvas, rooms, doors, windows, calibration, drawStart, drawCurrent, calibPoint1, calibPoint2, isDrawing, mode, selectedElement, pixelsToMeters, zoom, pan, showLayers, imageDimensions]);
 
   const handleMouseDown = (e) => {
     if (e.button === 1 || (e.button === 0 && e.altKey)) {
@@ -481,16 +457,6 @@ function CanvasOverlay({
     }
   };
 
-  const handleAcceptAI = () => {
-    if (aiDetectedData) {
-      setRooms(aiDetectedData.rooms || []);
-      setDoors(aiDetectedData.doors || []);
-      setWindows(aiDetectedData.windows || []);
-      saveToHistory(aiDetectedData.rooms || [], aiDetectedData.doors || [], aiDetectedData.windows || []);
-      onAcceptAIDetection?.();
-    }
-  };
-
   const pointInPolygon = (point, polygon) => {
     let inside = false;
     for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
@@ -545,19 +511,8 @@ function CanvasOverlay({
         </div>
       )}
 
-      {/* AI Detection Banner */}
-      {showAIDetection && aiDetectedData?.rooms?.length > 0 && (
-        <div className="absolute top-4 right-4 z-30 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded-lg p-3 max-w-xs">
-          <p className="text-xs font-medium text-purple-700 dark:text-purple-300 mb-2">AI detected {aiDetectedData.rooms.length} rooms</p>
-          <div className="flex gap-2">
-            <button onClick={handleAcceptAI} className="text-xs px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700">Accept</button>
-            <button onClick={onRejectAIDetection} className="text-xs px-3 py-1 bg-gray-200 dark:bg-gray-700 text-foreground-secondary rounded hover:bg-gray-300">Dismiss</button>
-          </div>
-        </div>
-      )}
-
-      {/* Toolbar */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex items-center gap-1 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-1.5">
+      {/* Toolbar - Fixed position, not zoomed */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex items-center gap-1 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-1.5" style={{ transform: `translateX(-50%) scale(${1/externalZoom})` }}>
         <button onClick={() => onModeChange?.('calibrate')} className={`p-2 rounded-lg transition-colors ${mode === 'calibrate' ? 'bg-blue-500 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary'}`} title="Set Scale (S)"><FaRuler /></button>
         <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
         <button onClick={() => onModeChange?.('draw-room')} className={`p-2 rounded-lg transition-colors ${mode === 'draw-room' ? 'bg-blue-500 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground-secondary'}`} title="Draw Room (R)" disabled={!calibration?.pixelsPerMeter}><FaPlus /></button>
