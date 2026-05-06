@@ -1,206 +1,96 @@
 /**
- * Floorplan Analyzer Service - Powered by Puter.js Vision AI
- * Analyzes floorplan images using AI vision to detect rooms, dimensions, and quantities
+ * Floor Plan Analyzer - Professional AI-Powered Analysis
+ * Uses Puter.js Gemini 2.5 Flash for comprehensive floor plan analysis
+ * Detects: walls, rooms, doors, windows, scale, structure type
  */
 
 import { puter } from '@heyputer/puter.js';
 
-/**
- * Analyze a floorplan image using Puter.js AI vision
- * @param {File} file - The floorplan image file
- * @param {number} numFloors - Number of floors
- * @returns {Promise<Object>} - Analysis results
- */
-export async function analyzeFloorplan(file, numFloors = 2) {
-  try {
-    // Convert file to data URL for Puter.js vision
-    const dataUrl = await fileToDataUrl(file);
-
-    const prompt = `You are a civil engineering assistant analyzing an architectural floor plan image. Identify and list:
-
-1. All rooms visible (bedrooms, bathrooms, kitchen, living room, dining, etc.)
-2. Approximate dimensions of each room in meters (estimate from the drawing if a scale is visible, otherwise make reasonable estimates for a residential building)
-3. Total built-up area estimate in square meters
-4. Number of floors (if indicated, otherwise use ${numFloors})
-5. Wall thickness estimates (typically 230mm for external, 115mm for internal)
-6. Count of doors and windows
-
-Respond ONLY with valid JSON in this exact format:
-{
-  "rooms": [
-    {"name": "Living Room", "length_m": 4.5, "width_m": 3.5, "area_sqm": 15.75},
-    {"name": "Bedroom 1", "length_m": 3.5, "width_m": 3.0, "area_sqm": 10.5}
-  ],
-  "total_built_up_sqm": 120,
-  "num_floors": ${numFloors},
-  "wall_thickness_mm": 230,
-  "doors": 6,
-  "windows": 8,
-  "notes": "Any additional observations"
-}
-
-If the image is not a floor plan or cannot be analyzed, respond with: {"error": "Could not analyze image", "rooms": [], "total_built_up_sqm": 0}`;
-
-    const response = await puter.ai.chat(prompt, dataUrl, { model: 'gemini-2.0-flash' });
-    const text = typeof response === 'string' ? response : response.message?.content || response;
-
-    // Parse JSON from response
-    const parsed = parseFloorplanJSON(text);
-
-    if (parsed.error) {
-      return buildEmptyResult(parsed.error);
-    }
-
-    // Calculate material quantities from detected area
-    const totalArea = parsed.total_built_up_sqm || 0;
-    const floors = parsed.num_floors || numFloors;
-    const totalBuiltUp = totalArea * floors;
-
-    return {
-      dimensions: {
-        totalArea: totalArea > 0 ? totalArea : null,
-        length: null,
-        width: null,
-      },
-      rooms: parsed.rooms || [],
-      quantities: totalBuiltUp > 0 ? calculateQuantities(totalBuiltUp) : {},
-      confidence: parsed.rooms?.length > 0 ? 0.85 : 0.3,
-      scale: {
-        factor: null,
-        method: 'AI Vision (Puter.js)',
-        pixelsPerMeter: null,
-      },
-      raw: parsed,
-    };
-  } catch (error) {
-    console.error('Floorplan analysis error:', error);
-    return buildEmptyResult(error.message);
-  }
-}
+const AI_MODEL = 'google/gemini-2.5-flash';
 
 /**
- * Calculate material quantities from total built-up area
- * Based on Kerala construction norms and IS codes
+ * Complete floor plan analysis - single AI call
+ * Returns all structural data needed for BoQ calculations
  */
-function calculateQuantities(totalArea) {
-  return {
-    concrete: Math.round(totalArea * 0.12),       // cum
-    steel: Math.round(totalArea * 12),             // kg
-    blocks: Math.round(totalArea * 7.5),           // nos (AAC)
-    aggregate: Math.round(totalArea * 20),         // cft
-    sand: Math.round(totalArea * 15),              // cft
-    cement: Math.round(totalArea * 0.8),           // bags
-  };
-}
-
-/**
- * Convert File to Data URL
- */
-function fileToDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-/**
- * Parse JSON from AI response text
- */
-function parseFloorplanJSON(text) {
-  try {
-    // Try direct parse
-    return JSON.parse(text);
-  } catch {
-    // Try to extract JSON from markdown code blocks
-    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) {
-      try {
-        return JSON.parse(jsonMatch[1].trim());
-      } catch {
-        // Try to find JSON object in text
-        const objMatch = text.match(/\{[\s\S]*\}/);
-        if (objMatch) {
-          try {
-            return JSON.parse(objMatch[0]);
-          } catch {
-            return { error: 'Could not parse AI response', rooms: [] };
-          }
-        }
-      }
-    }
-    return { error: 'Could not parse AI response', rooms: [] };
-  }
-}
-
-/**
- * Build empty result for when analysis fails
- */
-function buildEmptyResult(errorMessage) {
-  return {
-    dimensions: { totalArea: null, length: null, width: null },
+export async function analyzeFloorPlanComplete(imageDataUrl, floorNumber = 1) {
+  const result = {
     rooms: [],
-    quantities: {},
-    confidence: 0,
-    scale: null,
-    error: errorMessage,
-  };
-}
-
-/**
- * Calibrate floorplan scale (kept for backward compatibility)
- */
-export async function calibrateFloorplanScale(pixelDistance, realDistance) {
-  return {
-    success: true,
-    scale_factor: realDistance / pixelDistance,
-    message: 'Scale calibrated locally',
-  };
-}
-
-/**
- * Reset floorplan scale calibration
- */
-export async function resetFloorplanCalibration() {
-  return { success: true, message: 'Calibration reset' };
-}
-
-/**
- * Get sample analysis for testing
- */
-export async function getSampleAnalysis() {
-  return {
-    dimensions: { totalArea: 120 },
-    rooms: [
-      { name: 'Living Room', length_m: 5.0, width_m: 4.0, area_sqm: 20 },
-      { name: 'Bedroom 1', length_m: 3.5, width_m: 3.0, area_sqm: 10.5 },
-      { name: 'Bedroom 2', length_m: 3.0, width_m: 3.0, area_sqm: 9 },
-      { name: 'Kitchen', length_m: 3.0, width_m: 2.5, area_sqm: 7.5 },
-    ],
-    quantities: {
-      concrete: 29,
-      steel: 2880,
-      blocks: 1800,
-      aggregate: 4800,
-      sand: 3600,
-      cement: 192,
+    walls: {
+      external: { total_length_m: 0, thickness_mm: 230, count: 0 },
+      internal: { total_length_m: 0, thickness_mm: 115, count: 0 },
     },
-    confidence: 0.9,
+    doors: [],
+    windows: [],
+    scale: { detected: false, pixelsPerMeter: 0 },
+    structure_type: 'load_bearing',
+    total_built_up_sqm: 0,
+    building_dimensions: { width_m: 0, length_m: 0 },
+    confidence: 0,
+    notes: '',
   };
+
+  try {
+    const prompt = "You are an expert architectural floor plan analyzer. Analyze this floor plan image and extract ALL structural and spatial information needed for construction cost estimation.\n\nReturn ONLY valid JSON in this exact format:\n{\n  \"rooms\": [\n    {\"name\": \"Living Room\", \"corners\": [[x1,y1],[x2,y2],[x3,y3],[x4,y4]], \"area_sqm\": 20.0}\n  ],\n  \"walls\": {\n    \"external\": {\"total_length_m\": 38.5, \"thickness_mm\": 230, \"count\": 8},\n    \"internal\": {\"total_length_m\": 24.0, \"thickness_mm\": 115, \"count\": 6}\n  },\n  \"doors\": [\n    {\"x\": 150, \"y\": 200, \"width_m\": 1.0, \"height_m\": 2.1, \"type\": \"main\"}\n  ],\n  \"windows\": [\n    {\"x\": 100, \"y\": 50, \"width_m\": 1.2, \"height_m\": 1.2, \"type\": \"standard\"}\n  ],\n  \"scale\": {\n    \"detected\": true,\n    \"pixelDistance\": 150,\n    \"realDistance\": 5.0,\n    \"unit\": \"meters\",\n    \"pixelsPerMeter\": 30.0\n  },\n  \"structure_type\": \"load_bearing\",\n  \"total_built_up_sqm\": 150,\n  \"building_dimensions\": {\"width_m\": 12.0, \"length_m\": 12.5},\n  \"confidence\": 0.85\n}\n\nCRITICAL RULES:\n1. ALL coordinates must be in IMAGE PIXEL coordinates (0,0 = top-left)\n2. Room corners: 4 corners of each room rectangle, clockwise order\n3. Include ALL rooms, even small ones (bathrooms, closets, storage)\n4. Walls: estimate total external and internal wall lengths in meters\n5. External walls typically 230mm, internal walls 115mm\n6. If no scale visible, set \"detected\": false and estimate dimensions\n7. structure_type: \"load_bearing\" if no columns, \"framed\" if columns visible\n8. Door types: \"main\", \"internal\", \"bathroom\"\n9. Window types: \"standard\", \"ventilator\"\n10. Return ONLY JSON, no other text";
+
+    const timeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('AI analysis timed out after 30 seconds')), 30000)
+    );
+
+    const response = await Promise.race([
+      puter.ai.chat(prompt, imageDataUrl, { model: AI_MODEL }),
+      timeout
+    ]);
+
+    const text = typeof response === 'string' ? response : response.message?.content || response;
+    const parsed = parseJSON(text);
+
+    if (parsed) {
+      result.rooms = parsed.rooms || [];
+      result.doors = parsed.doors || [];
+      result.windows = parsed.windows || [];
+      result.walls = parsed.walls || result.walls;
+      result.scale = parsed.scale || result.scale;
+      result.structure_type = parsed.structure_type || 'load_bearing';
+      result.total_built_up_sqm = parsed.total_built_up_sqm || 0;
+      result.building_dimensions = parsed.building_dimensions || {};
+      result.confidence = parsed.confidence || 0;
+    }
+
+    return result;
+  } catch (error) {
+    console.error('[FloorPlanAnalyzer] Analysis failed:', error.message);
+    result.notes = 'Analysis failed: ' + error.message + '. Use manual mode.';
+    return result;
+  }
 }
 
 /**
- * Classify room based on dimensions
+ * AI-based scale detection from dimension annotations
  */
-export function classifyRoom(length, width, area) {
-  if (area > 30) return 'Living Room';
-  if (area > 20) return 'Master Bedroom';
-  if (area > 15) return 'Bedroom';
-  if (area > 10) return 'Study/Office';
-  if (area > 8) return 'Kitchen';
-  if (area > 5) return 'Bathroom';
-  return 'Store/Utility';
+export async function detectScaleFromImage(imageDataUrl) {
+  try {
+    const prompt = "Look at this floor plan image. Find any dimension annotations, scale bars, or measurements written on the drawing. For each dimension found, return the pixel distance and real-world measurement. Return ONLY valid JSON: {\"detected\": true, \"annotations\": [{\"pixelDistance\": 150, \"realDistance\": 5.0, \"unit\": \"meters\", \"text\": \"5000\"}], \"pixelsPerMeter\": 30.0, \"confidence\": 0.9}. If no dimensions visible: {\"detected\": false, \"annotations\": [], \"pixelsPerMeter\": 0, \"confidence\": 0}. Return ONLY JSON.";
+
+    const response = await puter.ai.chat(prompt, imageDataUrl, { model: AI_MODEL });
+    const text = typeof response === 'string' ? response : response.message?.content || response;
+    return parseJSON(text) || { detected: false, annotations: [], pixelsPerMeter: 0, confidence: 0 };
+  } catch (error) {
+    console.error('[FloorPlanAnalyzer] Scale detection failed:', error.message);
+    return { detected: false, annotations: [], pixelsPerMeter: 0, confidence: 0, error: error.message };
+  }
 }
 
-export default analyzeFloorplan;
+function parseJSON(text) {
+  try { return JSON.parse(text); } catch (e) {
+    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) { try { return JSON.parse(jsonMatch[1].trim()); } catch (e) {} }
+    const objMatch = text.match(/\{[\s\S]*\}/);
+    if (objMatch) { try { return JSON.parse(objMatch[0]); } catch (e) {} }
+    return null;
+  }
+}
+
+export default {
+  analyzeFloorPlanComplete,
+  detectScaleFromImage,
+};

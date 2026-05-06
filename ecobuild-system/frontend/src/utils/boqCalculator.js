@@ -722,20 +722,28 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const floorHeight = buildingParams?.height || 3.2;
   const buildingHeight = buildingParams?.height || (floorHeight * numFloors);
   
-  // Get floor plan data if available
+  // Check if floor plan data is available
   const floorPlanData = bimData?.floorPlanData || {};
   const hasFloorPlan = Object.keys(floorPlanData).length > 0;
   
   // Calculate actual totals from floor plan
+  let fpTotalRooms = 0;
   let fpTotalDoors = 0;
   let fpTotalWindows = 0;
+  let fpTotalWallLength = 0;
   let fpTotalRoomArea = 0;
+  let fpWallData = null;
   
   if (hasFloorPlan) {
     Object.values(floorPlanData).forEach(fd => {
+      fpTotalRooms += fd.rooms?.length || 0;
       fpTotalDoors += fd.doors?.length || 0;
       fpTotalWindows += fd.windows?.length || 0;
+      fpTotalWallLength += fd.walls?.total_length_m || 0;
       fpTotalRoomArea += fd.total_built_up_sqm || 0;
+      if (fd.walls?.wallData) {
+        fpWallData = fd.walls.wallData;
+      }
     });
   }
   
@@ -1315,17 +1323,34 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
   const masonryName = masonrySelection?.name || 'AAC blocks';
   const blockWastage = 0.05;
   
+  // Use actual wall data from BIM if available, otherwise estimate
+  let actualWallVolume = 0;
+  let actualWallArea = 0;
+  
+  if (hasFloorPlan && fpWallData) {
+    // Use detected wall data
+    const wallHeight = buildingParams?.floorHeight || 3.2;
+    const extThickness = (currentFloor?.walls?.external_thickness_mm || fpWallData.suggestedExternalThickness_mm || 230) / 1000;
+    const intThickness = (currentFloor?.walls?.internal_thickness_mm || fpWallData.suggestedInternalThickness_mm || 115) / 1000;
+    
+    actualWallVolume = fpWallData.totalWallVolume_m3 || 0;
+    actualWallArea = (fpWallData.totalExternalLength_m + fpWallData.totalInternalLength_m || 0) * wallHeight * 2; // Both sides
+    
+    // Recalculate with opening deductions
+    const openingDeduction = (totalDoorArea + totalWindowArea) * ((extThickness + intThickness) / 2);
+    actualWallVolume = Math.max(0, actualWallVolume - openingDeduction);
+  }
+  
   // Calculate quantity based on unit type
   let masonryQuantity;
   let masonryQty; // For mortar calculation
   if (masonryUnit === 'cft' || masonryUnit === 'cum') {
     // For stone/laterite masonry, use volume
-    const wallThickness = 0.23; // 230mm wall
-    masonryQuantity = netWallArea * wallThickness;
+    const wallThickness = actualWallVolume > 0 ? actualWallVolume / (netWallArea || 1) : 0.23;
+    masonryQuantity = actualWallVolume > 0 ? actualWallVolume : netWallArea * wallThickness;
     if (masonryUnit === 'cft') {
       masonryQuantity = masonryQuantity * 35.315; // cum to cft
     }
-    // For mortar, still calculate based on block equivalent
     const blockSize = '600x200x200';
     masonryQty = calculateMasonryQuantity(netWallArea, blockSize);
   } else {
@@ -1364,23 +1389,27 @@ export function generateBoQ(project, rates = FALLBACK_RATES, materialSelections 
     subTotal: 0,
   };
   
+  // Use actual wall area from BIM if available
+  const plasterInternalArea = actualWallArea > 0 ? actualWallArea / 2 : internalPlasterArea;
+  const plasterExternalArea = actualWallArea > 0 ? actualWallArea / 2 : externalPlasterArea;
+  
   // Internal plaster
-  const internalPlaster = calculatePlasterQuantity(internalPlasterArea, 'internal');
+  const internalPlaster = calculatePlasterQuantity(plasterInternalArea, 'internal');
   addBoQItem(plastering, {
     sno: 1,
     description: 'Providing and applying 15mm thick internal plaster in CM 1:4 including curing',
-    quantity: internalPlasterArea.toFixed(2),
+    quantity: plasterInternalArea.toFixed(2),
     unit: 'sqm',
     rate: rates?.plastering?.internal_15mm?.rate || 185,
     remarks: `Cement: ${internalPlaster.cement_bags} bags, Sand: ${internalPlaster.sand_cft.toFixed(2)} cft`,
   });
   
   // External plaster
-  const externalPlaster = calculatePlasterQuantity(externalPlasterArea, 'external');
+  const externalPlaster = calculatePlasterQuantity(plasterExternalArea, 'external');
   addBoQItem(plastering, {
     sno: 2,
     description: 'Providing and applying 20mm thick external plaster in CM 1:4 including curing and finishing',
-    quantity: externalPlasterArea.toFixed(2),
+    quantity: plasterExternalArea.toFixed(2),
     unit: 'sqm',
     rate: rates?.plastering?.external_20mm?.rate || 225,
     remarks: `Cement: ${externalPlaster.cement_bags} bags, Sand: ${externalPlaster.sand_cft.toFixed(2)} cft`,
