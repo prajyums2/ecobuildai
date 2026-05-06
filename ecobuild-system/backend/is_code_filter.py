@@ -1,6 +1,5 @@
 # EcoBuild System - IS Code Compliance Filter
 # Pre-AHP gate that eliminates materials failing IS code requirements
-# Ensures 95+ accuracy by enforcing Indian Standards
 
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass

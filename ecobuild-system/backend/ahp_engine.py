@@ -87,26 +87,6 @@ class AHPEngine:
                 'aesthetics': 0.10,           # Part of Sustainability
                 'is_code_compliance': 0.15   # Part of Sustainability
             }
-        elif self.mode == OptimizationMode.LUXURY:
-            return {
-                'embodied_carbon': 0.10,
-                'recycled_content': 0.05,
-                'cost': 0.10,
-                'durability': 0.25,
-                'thermal_performance': 0.10,
-                'aesthetics': 0.20,
-                'is_code_compliance': 0.20
-            }
-        else:  # BALANCED
-            return {
-                'embodied_carbon': 0.15,
-                'recycled_content': 0.10,
-                'cost': 0.20,
-                'durability': 0.15,
-                'thermal_performance': 0.10,
-                'aesthetics': 0.10,
-                'is_code_compliance': 0.20
-            }
     
     def _load_materials(self) -> Dict[str, Material]:
         """Load materials from MongoDB database"""
